@@ -1,20 +1,19 @@
 import { useState, type FormEvent } from 'react'
+import { useI18n } from './i18n/I18nProvider'
 
-/** FormSubmit uç noktası (aktivasyon e-postasındaki anahtar). */
-const FORMSUBMIT_FORM_KEY = '80fc6912d4d806ef01cb00e00eda0672'
-
-const SUBMIT_ERROR_SHORT = 'Gönderilemedi. Lütfen tekrar deneyin.'
-
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-}
+const FORM_RECIPIENT_EMAIL = 'boostetmarketing@proton.me'
 
 type FormSubmitJson = {
   success?: string | boolean
   message?: string
 }
 
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
 export function ContactForm() {
+  const { t } = useI18n()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -35,11 +34,11 @@ export function ContactForm() {
     const msg = message.trim()
 
     if (!n || !em || !msg) {
-      setErrorMessage('Ad soyad, e-posta ve mesaj zorunludur.')
+      setErrorMessage(t('form.errRequired'))
       return
     }
     if (!isValidEmail(em)) {
-      setErrorMessage('Geçerli bir e-posta adresi girin.')
+      setErrorMessage(t('form.errEmail'))
       return
     }
 
@@ -52,7 +51,7 @@ export function ContactForm() {
           : ''
 
       const res = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBMIT_FORM_KEY)}`,
+        `https://formsubmit.co/ajax/${encodeURIComponent(FORM_RECIPIENT_EMAIL)}`,
         {
           method: 'POST',
           headers: {
@@ -65,10 +64,9 @@ export function ContactForm() {
             message: msg,
             telefon: phone.trim() || '—',
             mesaj: msg,
-            _subject: 'Meridian Trade - Iletisim formu',
+            _subject: t('form.emailSubject'),
             _replyto: em,
             _url: formPageUrl,
-            /** Aynı bildirimin kopyası kullanıcının adresine gider (AJAX ile _autoresponse desteklenmiyor). */
             _cc: em,
             _template: 'table',
             _captcha: 'false',
@@ -80,7 +78,7 @@ export function ContactForm() {
       try {
         data = (await res.json()) as FormSubmitJson
       } catch {
-        setErrorMessage(SUBMIT_ERROR_SHORT)
+        setErrorMessage(t('form.errSubmit'))
         setStatus('idle')
         return
       }
@@ -91,7 +89,7 @@ export function ContactForm() {
         data.success === 'false'
 
       if (failed) {
-        setErrorMessage(SUBMIT_ERROR_SHORT)
+        setErrorMessage(t('form.errSubmit'))
         setStatus('idle')
         return
       }
@@ -102,7 +100,7 @@ export function ContactForm() {
       setPhone('')
       setMessage('')
     } catch {
-      setErrorMessage(SUBMIT_ERROR_SHORT)
+      setErrorMessage(t('form.errSubmit'))
       setStatus('idle')
     }
   }
@@ -110,13 +108,13 @@ export function ContactForm() {
   if (status === 'success') {
     return (
       <div className="lp-form-success" role="status">
-        <p className="lp-form-success-title">Mesajınız gönderildi</p>
+        <p className="lp-form-success-title">{t('form.successTitle')}</p>
         <button
           type="button"
           className="lp-btn lp-btn-outline-light lp-btn-header"
           onClick={() => setStatus('idle')}
         >
-          Yeni mesaj
+          {t('form.newMessage')}
         </button>
       </div>
     )
@@ -125,7 +123,7 @@ export function ContactForm() {
   return (
     <form className="lp-form" onSubmit={handleSubmit} noValidate>
       <div className="lp-field lp-field--honeypot" aria-hidden="true">
-        <label htmlFor="contact-company">Şirket</label>
+        <label htmlFor="contact-company">{t('form.honeypotLabel')}</label>
         <input
           id="contact-company"
           type="text"
@@ -138,7 +136,7 @@ export function ContactForm() {
       </div>
 
       <div className="lp-field">
-        <label htmlFor="contact-name">Ad soyad *</label>
+        <label htmlFor="contact-name">{t('form.name')}</label>
         <input
           id="contact-name"
           type="text"
@@ -152,7 +150,7 @@ export function ContactForm() {
       </div>
 
       <div className="lp-field">
-        <label htmlFor="contact-email">E-posta *</label>
+        <label htmlFor="contact-email">{t('form.email')}</label>
         <input
           id="contact-email"
           type="email"
@@ -166,7 +164,7 @@ export function ContactForm() {
       </div>
 
       <div className="lp-field">
-        <label htmlFor="contact-phone">Telefon</label>
+        <label htmlFor="contact-phone">{t('form.phone')}</label>
         <input
           id="contact-phone"
           type="tel"
@@ -179,7 +177,7 @@ export function ContactForm() {
       </div>
 
       <div className="lp-field">
-        <label htmlFor="contact-message">Mesajınız *</label>
+        <label htmlFor="contact-message">{t('form.message')}</label>
         <textarea
           id="contact-message"
           name="mesaj"
@@ -202,7 +200,7 @@ export function ContactForm() {
         className="lp-btn lp-btn-primary lp-btn-lg lp-form-submit"
         disabled={status === 'loading'}
       >
-        {status === 'loading' ? 'Gönderiliyor…' : 'Gönder'}
+        {status === 'loading' ? t('form.submitting') : t('form.submit')}
       </button>
     </form>
   )

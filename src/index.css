@@ -16,10 +16,10 @@ html {
   --bg: #f8fafc;
   --surface: #ffffff;
   --border: #e2e8f0;
-  --accent: #0d9488;
-  --accent-hover: #0f766e;
-  --accent-muted: rgba(13, 148, 136, 0.12);
-  --accent-glow: rgba(13, 148, 136, 0.35);
+  --accent: #d4af37;
+  --accent-hover: #b8941f;
+  --accent-muted: rgba(212, 175, 55, 0.14);
+  --accent-glow: rgba(212, 175, 55, 0.38);
   --hero-bg: #0a0f1a;
   --hero-surface: rgba(255, 255, 255, 0.04);
   --hero-border: rgba(255, 255, 255, 0.08);
@@ -53,8 +53,8 @@ html {
     --bg: #0f1419;
     --surface: #151b24;
     --border: #2d3748;
-    --accent-muted: rgba(45, 212, 191, 0.12);
-    --accent-glow: rgba(45, 212, 191, 0.25);
+    --accent-muted: rgba(244, 228, 188, 0.1);
+    --accent-glow: rgba(212, 175, 55, 0.28);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 12px 40px -12px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 24px 64px -16px rgba(0, 0, 0, 0.5);
