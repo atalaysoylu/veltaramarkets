@@ -1,0 +1,179 @@
+.lp-pay-banner {
+  background: #000000;
+  padding: clamp(40px, 6vw, 56px) 0;
+  border-block: 1px solid #262626;
+}
+
+.lp-pay-banner__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.lp-pay-banner__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 14px;
+  width: 100%;
+  max-width: 920px;
+}
+
+.lp-pay-banner__grid > li {
+  margin: 0;
+  flex: 0 1 auto;
+}
+
+.lp-pay-banner__card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(140px, 42vw);
+  min-height: 56px;
+  padding: 12px 18px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+@media (min-width: 640px) {
+  .lp-pay-banner__card {
+    min-width: 132px;
+    min-height: 60px;
+    padding: 14px 20px;
+  }
+}
+
+.lp-pay-banner__card:hover {
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+.lp-pay-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Bank transfer */
+.lp-pay-logo--bank {
+  flex-direction: row;
+  gap: 6px;
+}
+
+.lp-pay-logo__bank-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.lp-pay-logo__bank-line {
+  display: block;
+  width: 22px;
+  height: 4px;
+  border-radius: 1px;
+}
+
+.lp-pay-logo__bank-line--red {
+  background: #e11d48;
+}
+
+.lp-pay-logo__bank-line--blue {
+  background: #2563eb;
+}
+
+.lp-pay-logo__bank-text {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #1d4ed8;
+  line-height: 1.15;
+  max-width: 7.5em;
+}
+
+@media (min-width: 640px) {
+  .lp-pay-logo__bank-text {
+    font-size: 0.6rem;
+  }
+}
+
+/* Skrill */
+.lp-pay-logo--skrill {
+  font-family: var(--sans, system-ui, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: #861657;
+}
+
+/* Visa */
+.lp-pay-logo--visa {
+  font-family: var(--sans, system-ui, sans-serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: #1a1f71;
+}
+
+/* Apple Pay */
+.lp-pay-logo--apple {
+  gap: 4px;
+  color: #000000;
+}
+
+.lp-pay-logo__apple-mark {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.lp-pay-logo__apple-pay-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.lp-pay-logo__apple-pay {
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* Google Pay */
+.lp-pay-logo--gpay {
+  gap: 6px;
+}
+
+.lp-pay-logo__g {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.lp-pay-logo__gpay-text {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #5f6368;
+  letter-spacing: -0.02em;
+}
+
+/* Disclaimer */
+.lp-pay-banner__note {
+  margin: 0;
+  max-width: 48ch;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #888888;
+}

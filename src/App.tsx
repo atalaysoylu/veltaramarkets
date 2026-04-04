@@ -1,5 +1,10 @@
 import { useState } from 'react'
 import { ContactForm } from './ContactForm'
+import { HeroBanner } from './HeroBanner'
+import { formatTemplate, useI18n } from './i18n/I18nProvider'
+import { LogoMark } from './LogoMark'
+import { MarketsProductsSection } from './MarketsProductsSection'
+import { PaymentMethodsBanner } from './PaymentMethodsBanner'
 import './App.css'
 
 const FORM_SECTION_ID = 'analiz'
@@ -90,30 +95,61 @@ function CloseIcon() {
   )
 }
 
+function LanguageSwitch() {
+  const { locale, setLocale, t } = useI18n()
+  return (
+    <div
+      className="lp-lang"
+      role="group"
+      aria-label={t('lang.switch')}
+    >
+      <button
+        type="button"
+        className={locale === 'tr' ? 'is-active' : ''}
+        onClick={() => setLocale('tr')}
+        aria-pressed={locale === 'tr'}
+      >
+        {t('lang.tr')}
+      </button>
+      <button
+        type="button"
+        className={locale === 'en' ? 'is-active' : ''}
+        onClick={() => setLocale('en')}
+        aria-pressed={locale === 'en'}
+      >
+        {t('lang.en')}
+      </button>
+    </div>
+  )
+}
+
 export default function App() {
+  const { t } = useI18n()
   const [navOpen, setNavOpen] = useState(false)
+  const year = new Date().getFullYear()
 
   return (
     <div className="landing">
       <header className="lp-header">
         <div className="lp-header-inner">
           <a href={`#${FORM_SECTION_ID}`} className="lp-logo">
-            <span className="lp-logo-mark" aria-hidden />
-            <span className="lp-logo-text">Meridian Trade</span>
+            <LogoMark className="lp-logo-mark" />
+            <span className="lp-logo-text">Veltara Markets</span>
           </a>
           <div className="lp-header-end">
-            <nav className="lp-nav" aria-label="Ana menü">
-              <a href={`#${FORM_SECTION_ID}`}>Hizmetler</a>
-              <a href={`#${FORM_SECTION_ID}`}>Süreç</a>
-              <a href={`#${FORM_SECTION_ID}`}>Yorumlar</a>
-              <a href={`#${FORM_SECTION_ID}`}>Ücretsiz analiz</a>
+            <nav className="lp-nav" aria-label={t('nav.ariaMain')}>
+              <a href={`#${FORM_SECTION_ID}`}>{t('nav.services')}</a>
+              <a href={`#${FORM_SECTION_ID}`}>{t('nav.process')}</a>
+              <a href={`#${FORM_SECTION_ID}`}>{t('nav.reviews')}</a>
+              <a href={`#${FORM_SECTION_ID}`}>{t('nav.freeAnalysis')}</a>
             </nav>
             <div className="lp-header-actions">
+              <LanguageSwitch />
               <a href={`#${FORM_SECTION_ID}`} className="lp-btn lp-btn-ghost lp-btn-header">
-                Daha fazla bilgi
+                {t('header.moreInfo')}
               </a>
               <a href={`#${FORM_SECTION_ID}`} className="lp-btn lp-btn-primary lp-btn-header">
-                Ücretsiz analiz
+                {t('nav.freeAnalysis')}
               </a>
               <button
                 type="button"
@@ -124,11 +160,11 @@ export default function App() {
               >
                 {navOpen ? (
                   <>
-                    <CloseIcon /> <span className="sr-only">Menüyü kapat</span>
+                    <CloseIcon /> <span className="sr-only">{t('header.menuClose')}</span>
                   </>
                 ) : (
                   <>
-                    <MenuIcon /> <span className="sr-only">Menüyü aç</span>
+                    <MenuIcon /> <span className="sr-only">{t('header.menuOpen')}</span>
                   </>
                 )}
               </button>
@@ -140,120 +176,72 @@ export default function App() {
           className={`lp-mobile-nav ${navOpen ? 'is-open' : ''}`}
           hidden={!navOpen}
         >
+          <div className="lp-mobile-nav__lang">
+            <LanguageSwitch />
+          </div>
           <a href={`#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
-            Hizmetler
+            {t('nav.services')}
           </a>
           <a href={`#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
-            Süreç
+            {t('nav.process')}
           </a>
           <a href={`#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
-            Yorumlar
+            {t('nav.reviews')}
           </a>
           <a href={`#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
-            Ücretsiz analiz
+            {t('nav.freeAnalysis')}
           </a>
         </div>
       </header>
 
       <main id="top">
-        <section className="lp-hero">
-          <div className="lp-hero-grid" aria-hidden />
-          <div className="lp-hero-glow" aria-hidden />
-          <div className="lp-container lp-hero-inner">
-            <p className="lp-eyebrow">Profesyonel yatırım danışmanlığı</p>
-            <h1 className="lp-hero-title">
-              Akıllı yatırımla geleceğinizi inşa edin
-            </h1>
-            <p className="lp-hero-lead">
-              Finansal özgürlüğe giden yolda size rehberlik ediyoruz. Güvenli ve
-              sürdürülebilir yatırım stratejileri için portföyünüzü birlikte
-              şekillendirelim — risk profilinize uygun, şeffaf bir planla ilerleyin.
-            </p>
-            <div className="lp-hero-perf" role="group" aria-label="Örnek portföy göstergeleri">
-              <div className="lp-perf-card">
-                <span className="lp-perf-label">Örnek yıllık getiri*</span>
-                <span className="lp-perf-value">+24,5%</span>
-                <span className="lp-perf-hint">Portföy performansı</span>
-              </div>
-              <div className="lp-perf-card">
-                <span className="lp-perf-label">Risk skoru hedefi</span>
-                <span className="lp-perf-value lp-perf-value--muted">Düşük</span>
-                <span className="lp-perf-hint">Profilize göre ayarlanır</span>
-              </div>
-            </div>
-            <div className="lp-hero-cta">
-              <a href={`#${FORM_SECTION_ID}`} className="lp-btn lp-btn-primary lp-btn-lg">
-                Ücretsiz analiz al
-              </a>
-              <a href={`#${FORM_SECTION_ID}`} className="lp-btn lp-btn-outline-light lp-btn-lg">
-                Hizmetleri keşfet
-              </a>
-            </div>
-            <ul className="lp-hero-badges">
-              <li>Kişiselleştirilmiş portföy önerileri</li>
-              <li>Risk odaklı değerlendirme</li>
-              <li>Güncel piyasa analizi</li>
-            </ul>
-            <p className="lp-hero-footnote">
-              * Geçmiş performans gelecek getiriyi garanti etmez; örnek gösterge niteliğindedir.
-            </p>
-          </div>
-        </section>
+        <HeroBanner formSectionId={FORM_SECTION_ID} />
+        <MarketsProductsSection formSectionId={FORM_SECTION_ID} />
 
-        <section className="lp-stats" aria-label="Öne çıkan rakamlar">
+        <section className="lp-stats" aria-label={t('stats.aria')}>
           <div className="lp-container lp-stats-grid">
             <div>
               <span className="lp-stat-value">10K+</span>
-              <span className="lp-stat-label">Mutlu yatırımcı</span>
+              <span className="lp-stat-label">{t('stats.happyInvestors')}</span>
             </div>
             <div>
               <span className="lp-stat-value">%87</span>
-              <span className="lp-stat-label">Hedeflenen memnuniyet oranı**</span>
+              <span className="lp-stat-label">{t('stats.satisfaction')}</span>
             </div>
             <div>
               <span className="lp-stat-value">5+</span>
-              <span className="lp-stat-label">Yıllık deneyim</span>
+              <span className="lp-stat-label">{t('stats.yearsExp')}</span>
             </div>
             <div>
               <span className="lp-stat-value">₺50M+</span>
-              <span className="lp-stat-label">Yönetilen portföy hacmi***</span>
+              <span className="lp-stat-label">{t('stats.portfolioVol')}</span>
             </div>
           </div>
         </section>
+
+        <PaymentMethodsBanner />
 
         <section id="hizmetler" className="lp-section">
           <div className="lp-container">
             <header className="lp-section-head">
-              <h2>Hizmetlerimiz</h2>
-              <p>
-                Profesyonel yatırım danışmanlığı ile finansal hedeflerinize
-                ulaşmanız için portföyünüzü analiz eder, stratejinizi netleştiririz.
-              </p>
+              <h2>{t('services.title')}</h2>
+              <p className="lp-preline">{t('services.intro')}</p>
             </header>
             <div className="lp-cards lp-cards--three">
               <article className="lp-card">
                 <IconShield />
-                <h3>Güvenli yatırım</h3>
-                <p>
-                  Risk analizleri ve senaryo çalışmaları ile size uygun, güvenli
-                  yatırım stratejileri öneriyoruz.
-                </p>
+                <h3>{t('services.card1Title')}</h3>
+                <p className="lp-preline">{t('services.card1Body')}</p>
               </article>
               <article className="lp-card">
                 <IconChart />
-                <h3>Portföy analizi</h3>
-                <p>
-                  Varlık dağılımınızı ve getiri-risk dengenizi inceleyerek
-                  kişiselleştirilmiş portföy optimizasyonu sunuyoruz.
-                </p>
+                <h3>{t('services.card2Title')}</h3>
+                <p className="lp-preline">{t('services.card2Body')}</p>
               </article>
               <article className="lp-card">
                 <IconGlobe />
-                <h3>Çeşitlendirme</h3>
-                <p>
-                  Dengeli risk dağılımı ile uzun vadeli hedeflerinize uygun,
-                  çeşitlendirilmiş yapı kurmanıza yardımcı oluyoruz.
-                </p>
+                <h3>{t('services.card3Title')}</h3>
+                <p className="lp-preline">{t('services.card3Body')}</p>
               </article>
             </div>
           </div>
@@ -262,42 +250,29 @@ export default function App() {
         <section id="surec" className="lp-section lp-section-alt">
           <div className="lp-container">
             <header className="lp-section-head">
-              <h2>Ücretsiz yatırım analizi nasıl işler?</h2>
-              <p>
-                Bilgilerinizi paylaşın; size özel yatırım stratejinizi oluşturmak
-                için kısa bir değerlendirme yapalım.
-              </p>
+              <h2>{t('process.title')}</h2>
+              <p className="lp-preline">{t('process.intro')}</p>
             </header>
             <ol className="lp-steps">
               <li>
                 <span className="lp-step-num">01</span>
-                <strong>Form ve ön görüşme</strong>
-                <span>
-                  Yaklaşık 3 dakikada temel bilgilerinizi iletirsiniz; ekibimiz
-                  24 saat içinde size döner.
-                </span>
+                <strong>{t('process.step1Title')}</strong>
+                <span className="lp-preline">{t('process.step1Body')}</span>
               </li>
               <li>
                 <span className="lp-step-num">02</span>
-                <strong>Kişisel risk profili</strong>
-                <span>
-                  Risk toleransınızı ve vade tercihinizi birlikte netleştiririz.
-                </span>
+                <strong>{t('process.step2Title')}</strong>
+                <span className="lp-preline">{t('process.step2Body')}</span>
               </li>
               <li>
                 <span className="lp-step-num">03</span>
-                <strong>Yatırım stratejisi</strong>
-                <span>
-                  Hedeflerinize uygun portföy önerisi ve öncelikli adımları özetleriz.
-                </span>
+                <strong>{t('process.step3Title')}</strong>
+                <span className="lp-preline">{t('process.step3Body')}</span>
               </li>
               <li>
                 <span className="lp-step-num">04</span>
-                <strong>Danışmanlık ve rapor</strong>
-                <span>
-                  30 dakikalık ücretsiz telefon danışmanlığı ve güncel piyasa
-                  değerlendirme özeti sunarız.
-                </span>
+                <strong>{t('process.step4Title')}</strong>
+                <span className="lp-preline">{t('process.step4Body')}</span>
               </li>
             </ol>
           </div>
@@ -306,74 +281,60 @@ export default function App() {
         <section id="yorumlar" className="lp-section">
           <div className="lp-container">
             <header className="lp-section-head">
-              <h2>Müşteri yorumları</h2>
-              <p>
-                Danışmanlık sürecine katılan yatırımcılarımızın deneyimlerinden
-                kısa kesitler.
-              </p>
+              <h2>{t('testimonials.title')}</h2>
+              <p className="lp-preline">{t('testimonials.intro')}</p>
             </header>
             <div className="lp-testimonials">
               <figure className="lp-t-card">
-                <blockquote>
-                  “İki yıl içinde hedeflerime yaklaşmamda ciddi katkı sağladılar.
-                  Şeffaf iletişim ve düzenli portföy takibi benim için çok değerli.”
-                </blockquote>
+                <blockquote className="lp-preline">{t('testimonials.q1')}</blockquote>
                 <figcaption>
-                  <span className="lp-t-name">Ahmet Yılmaz</span>
+                  <span className="lp-t-name">{t('testimonials.name1')}</span>
                 </figcaption>
               </figure>
               <figure className="lp-t-card">
-                <blockquote>
-                  “Güvenli yatırım stratejileri ve risk odaklı yaklaşım sayesinde
-                  planıma daha güvenle bağlı kaldım.”
-                </blockquote>
+                <blockquote className="lp-preline">{t('testimonials.q2')}</blockquote>
                 <figcaption>
-                  <span className="lp-t-name">Fatma Demir</span>
+                  <span className="lp-t-name">{t('testimonials.name2')}</span>
                 </figcaption>
               </figure>
             </div>
             <div className="lp-trust-note">
               <IconBolt />
-              <p>
-                Meridian Trade olarak veri güvenliğine ve düzenlemelere uygun
-                süreçlere önem veriyoruz; tüm görüşmeler gizlilik çerçevesindedir.
-              </p>
+              <p className="lp-preline">{t('testimonials.trust')}</p>
             </div>
           </div>
         </section>
 
         <section className="lp-cta lp-cta--extended">
           <div className="lp-container lp-cta-inner">
-            <h2>Ücretsiz yatırım analizi</h2>
-            <p>
-              Size özel yatırım stratejinizi oluşturmak için aşağıdaki formu doldurun.
-            </p>
-            <ul className="lp-benefits" aria-label="Analiz sonrası size sunulanlar">
+            <h2>{t('cta.title')}</h2>
+            <p>{t('cta.intro')}</p>
+            <ul className="lp-benefits" aria-label={t('cta.benefitsAria')}>
               <li>
-                <strong>Kişisel risk profili</strong>
-                <span>Size özel risk toleransınızı belirleriz.</span>
+                <strong>{t('cta.b1Title')}</strong>
+                <span>{t('cta.b1Text')}</span>
               </li>
               <li>
-                <strong>Yatırım stratejisi</strong>
-                <span>Hedeflerinize uygun portföy önerisi.</span>
+                <strong>{t('cta.b2Title')}</strong>
+                <span>{t('cta.b2Text')}</span>
               </li>
               <li>
-                <strong>Ücretsiz danışmanlık</strong>
-                <span>30 dakikalık telefon danışmanlığı.</span>
+                <strong>{t('cta.b3Title')}</strong>
+                <span>{t('cta.b3Text')}</span>
               </li>
               <li>
-                <strong>Piyasa analizi</strong>
-                <span>Güncel piyasa değerlendirme özeti.</span>
+                <strong>{t('cta.b4Title')}</strong>
+                <span>{t('cta.b4Text')}</span>
               </li>
             </ul>
             <dl className="lp-analiz-meta">
               <div>
-                <dt>Form süresi</dt>
-                <dd>~3 dakika</dd>
+                <dt>{t('cta.formDuration')}</dt>
+                <dd>{t('cta.formDurationVal')}</dd>
               </div>
               <div>
-                <dt>Geri dönüş</dt>
-                <dd>24 saat içinde</dd>
+                <dt>{t('cta.response')}</dt>
+                <dd>{t('cta.responseVal')}</dd>
               </div>
             </dl>
             <div
@@ -390,40 +351,33 @@ export default function App() {
       <footer className="lp-footer">
         <div className="lp-container lp-footer-grid">
           <div>
-            <span className="lp-footer-brand">Meridian Trade</span>
-            <p className="lp-footer-tag">
-              Profesyonel yatırım danışmanlığı ve portföy analizi.
-            </p>
+            <span className="lp-footer-brand">Veltara Markets</span>
+            <p className="lp-footer-tag">{t('footer.tagline')}</p>
           </div>
           <div className="lp-footer-links">
-            <span className="lp-footer-col-title">Şirket</span>
-            <a href={`#${FORM_SECTION_ID}`}>Hakkımızda</a>
-            <a href={`#${FORM_SECTION_ID}`}>Ücretsiz analiz</a>
-            <a href={`#${FORM_SECTION_ID}`}>Referanslar</a>
+            <span className="lp-footer-col-title">{t('footer.colCompany')}</span>
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.about')}</a>
+            <a href={`#${FORM_SECTION_ID}`}>{t('nav.freeAnalysis')}</a>
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.references')}</a>
           </div>
           <div className="lp-footer-links">
-            <span className="lp-footer-col-title">Yasal</span>
-            <a href={`#${FORM_SECTION_ID}`}>Kullanım koşulları</a>
-            <a href={`#${FORM_SECTION_ID}`}>Gizlilik</a>
-            <a href={`#${FORM_SECTION_ID}`}>Çerez politikası</a>
+            <span className="lp-footer-col-title">{t('footer.colLegal')}</span>
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.terms')}</a>
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.privacy')}</a>
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.cookies')}</a>
           </div>
         </div>
         <div className="lp-container lp-footer-disclaimer">
-          <p>
-            ** Memnuniyet ve başarı oranı ifadeleri hedef veya anket sonuçlarına
-            dayanabilir; sonuçlar kişiye göre değişir.
+          <p className="lp-preline">{t('footer.disc1')}</p>
+          <p className="lp-preline">{t('footer.disc2')}</p>
+          <p className="lp-preline">
+            {t('footer.disc3Before')}
+            <a href={`#${FORM_SECTION_ID}`}>{t('footer.disc3Link')}</a>
+            {t('footer.disc3After')}
           </p>
-          <p>
-            *** Yönetilen portföy hacmi örnek veya hedef büyüklüğü olabilir;
-            güncel rakamlar için iletişime geçin.
+          <p className="lp-footer-copy">
+            {formatTemplate(t('footer.copy'), { year })}
           </p>
-          <p>
-            Yatırım araçları risk içerir; sermaye kaybı yaşanabilir. Bu site
-            kişisel yatırım tavsiyesi teşkil etmez. Meridian Trade örnek bir
-            markadır; iletişim için{' '}
-            <a href={`#${FORM_SECTION_ID}`}>yukarıdaki formu</a> kullanabilirsiniz.
-          </p>
-          <p className="lp-footer-copy">© {new Date().getFullYear()} Meridian Trade. Tüm hakları saklıdır.</p>
         </div>
       </footer>
     </div>
