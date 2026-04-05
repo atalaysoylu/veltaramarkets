@@ -27,43 +27,34 @@ export const tr = {
   },
   hero: {
     ariaCarousel: 'Öne Çıkan Mesajlar',
-    statInvestors: 'Aktif Yatırımcı',
-    statYears: 'Yıl Deneyim',
-    statReply: 'Geri Dönüş',
-    ctaPrimary: 'Hemen Başlayın',
+    headlineBefore: 'We Set ',
+    headlineBlue: 'The Standard.',
+    ctaJoin: "Veltara Markets'e Katılın",
     ctaSecondary: 'Ücretsiz Analiz',
-    trust1: 'Şeffaf Ücret Yapısı',
-    trust2: 'Risk Odaklı Planlama',
-    trust3: '7/24 Destek',
     prevSlide: 'Önceki Slayt',
     nextSlide: 'Sonraki Slayt',
     pickSlide: 'Slayt Seç',
     slideN: 'Slayt {n}',
-    paused: 'Duraklatıldı',
+    feat1Num: '10K+',
+    feat1Lbl: 'Aktif Müşteri',
+    feat2Num: '1000+',
+    feat2Lbl: 'İşlem Ürünü',
+    feat3Num: 'Çoklu',
+    feat3Lbl: 'Düzenleyici Lisans',
+    feat4Num: '190+',
+    feat4Lbl: 'Ülkeye Hizmet',
     slides: [
       {
-        eyebrow: 'Dünya Piyasaları',
-        titleBefore: 'Piyasalara ',
-        titleEm: 'Profesyonel',
-        titleAfter: ' Mesafede Olun',
         lead:
-          'Hisse, endeks ve döviz gibi varlıklarda şeffaf danışmanlık ve portföy odaklı yaklaşım — kurumsal broker sitelerinde gördüğünüz netlik ve güven hissi.',
+          'Küresel piyasalarda şeffaf danışmanlık ve portföy odaklı yaklaşım. Kurumsal kalitede netlik ve güven.',
       },
       {
-        eyebrow: 'Hız ve Şeffaflık',
-        titleBefore: 'Stratejinizi ',
-        titleEm: 'Veriyle',
-        titleAfter: ' Güçlendirin',
         lead:
-          'Risk profilinize uygun senaryolar, düzenli değerlendirme ve anlaşılır raporlama. Yatırım kararlarınızı tek başınıza değil, bir plan çerçevesinde alın.',
+          'Risk profilinize uygun senaryolar ve anlaşılır raporlama ile yatırım kararlarınızı bir plan çerçevesinde alın.',
       },
       {
-        eyebrow: 'Veltara Markets',
-        titleBefore: 'Geleceğe ',
-        titleEm: 'Bugünden',
-        titleAfter: ' Konum Alın',
         lead:
-          'Ücretsiz analiz formu ile hedeflerinizi paylaşın; size özel özet ve görüşme için en kısa sürede dönüş yapalım.',
+          'Ücretsiz analiz formu ile hedeflerinizi paylaşın; kısa sürede size özel özet ve görüşme için dönüş yapalım.',
       },
     ],
   },
@@ -75,19 +66,6 @@ export const tr = {
     portfolioVol: 'Yönetilen Portföy Hacmi***',
   },
   markets: {
-    title: 'Küresel Piyasalarda Çeşitli Ürünlerle İşlem',
-    subtitleBefore: 'Tüm değerler yalnızca referans içindir; güncel kotasyonlar için\nMT4/MT5 veya ',
-    subtitleAfter: ' mobil uygulamasını\nkontrol edin.',
-    colSymbol: 'Sembol',
-    colSpread: 'Spread',
-    colSell: 'Satış',
-    colBuy: 'Alış',
-    colChange: 'Değişim',
-    colProduct: 'Ürün',
-    colDetailSr: 'Detay',
-    rowAria: '{symbol} — İletişim Formuna Git',
-    foot:
-      '* Fiyatlar yalnızca gösterim amaçlıdır; gerçek işlem koşulları platform\nüzerinden geçerlidir.',
     category: {
       metals: 'Metaller',
       stocks: 'Hisseler',
@@ -98,11 +76,92 @@ export const tr = {
       etf: 'ETF',
     },
   },
+  topTraded: {
+    sectionTitle: 'En Çok İşlem Yapılan Ürünler ve Spreadler',
+    sectionSubtitle:
+      'Kategoriye göre gezinin; sembol, gösterim spreadi ve ürün grubu tek bakışta.\nTüm değerler yalnızca referans içindir.',
+    navAria: 'Ürün kategorileri',
+    colSymbol: 'Sembol',
+    colSpread: 'Spread',
+    colProduct: 'Ürün',
+    colDetailSr: 'Detay',
+    rowAria: '{symbol} — İletişim formuna git',
+    foot: '* Fiyatlandırma yalnızca gösterim amaçlıdır.',
+    nav: {
+      mostTraded: 'En çok işlem yapılan',
+      commodities: 'Emtialar',
+      indices: 'Endeksler',
+      forex: 'Forex',
+      etf: 'ETF',
+      metals: 'Metaller',
+      stocks: 'Hisse senetleri',
+    },
+  },
   payment: {
     aria: 'Desteklenen Ödeme Yöntemleri',
     note: '*Veltara Markets birden fazla küresel ödeme yöntemi ile çalışır.',
     bankLabel: 'Banka Havalesi',
     bankText: 'BANK TRANSFER',
+  },
+  ticker: {
+    aria: 'Piyasa ve platform etiketleri, kaydırılan şerit',
+  },
+  brokerFeats: {
+    aria: 'Öne Çıkan İşlem ve Hizmet Özellikleri',
+    items: [
+      {
+        title: 'Ultra Hızlı İşlem',
+        body: 'Emir ve taleplerinizi hızlı ve güvenilir biçimde işleme almayı hedefliyoruz.',
+      },
+      {
+        title: 'Rekabetçi Spreadler',
+        body: 'Düşük maliyetli işlem için şeffaf ve rekabetçi fiyat yapısı sunuyoruz.',
+      },
+      {
+        title: 'Esnek Kaldıraç',
+        body: 'Stratejinize uygun risk ve pozisyon büyüklüğü tercihlerini birlikte değerlendiriyoruz.',
+        note: '*Şartlar ve düzenleyici gerekliliklere tabidir.',
+      },
+      {
+        title: 'Kolay İşlemler',
+        body: 'Tanınmış yöntemlerle hızlı ve sorunsuz fonlama ile çekim süreçleri.',
+      },
+      {
+        title: '7/24 Çok Dilli Destek',
+        body: 'İhtiyaç duyduğunuz her an, tercih ettiğiniz dilde yardım alın.',
+      },
+      {
+        title: 'Uyumluluk Odaklı Süreçler',
+        body: 'Veltara Markets; veri güvenliği, şeffaflık ve düzenlemelere uygun süreçlere önem verir.',
+      },
+    ],
+  },
+  globalAwards: {
+    aria: 'Küresel ödüller ve tanınma',
+    headingCyan: 'Küresel Ödüllere',
+    headingNavy: 'Sahip Lider Broker',
+    items: [
+      {
+        lines: ['EN İYİ FOREX SPREADLERİ', 'MONEY EXPO MEXICO'],
+        year: '2023',
+      },
+      {
+        lines: ['YILIN EN İYİ', 'FOREX BROKERI'],
+        year: '2024',
+      },
+      {
+        lines: ['YILIN EN İYİ FOREX', 'LİKİDİTE SAĞLAYICISI'],
+        year: '2024',
+      },
+      {
+        lines: ['EN İYİ AFFİLİATE', 'FOREX BROKERI'],
+        year: '2024',
+      },
+      {
+        lines: ['YILIN EN GÜVENİLİR', 'BROKERI'],
+        year: '2024',
+      },
+    ],
   },
   services: {
     title: 'Hizmetlerimiz',
@@ -185,14 +244,73 @@ export const tr = {
     terms: 'Kullanım Koşulları',
     privacy: 'Gizlilik',
     cookies: 'Çerez Politikası',
-    disc1:
-      '** Memnuniyet ve başarı oranı ifadeleri hedef veya anket sonuçlarına\ndayanabilir; sonuçlar kişiye göre değişir.',
-    disc2:
-      '*** Yönetilen portföy hacmi örnek veya hedef büyüklüğü olabilir;\ngüncel rakamlar için iletişime geçin.',
-    disc3Before:
-      'Yatırım araçları risk içerir; sermaye kaybı yaşanabilir. Bu site\nkişisel yatırım tavsiyesi teşkil etmez. Veltara Markets örnek bir\nmarkadır; iletişim için ',
-    disc3Link: 'yukarıdaki formu',
-    disc3After: ' kullanabilirsiniz.',
+    licenses: {
+      aria: 'Düzenleyici lisanslar ve borsa üyelikleri',
+      title: 'Lisanslar ve ortaklar',
+      items: [
+        {
+          id: 'fca',
+          alt: 'FCA — Birleşik Krallık Financial Conduct Authority düzenleyicisi',
+          caption: 'FCA · UK',
+        },
+        {
+          id: 'cysec',
+          alt: 'CySEC — Kıbrıs Menkul Kıymetler ve Borsa Komisyonu',
+          caption: 'CySEC · Kıbrıs',
+        },
+        {
+          id: 'asic',
+          alt: 'ASIC — Avustralya Menkul Kıymetler ve Yatırım Komisyonu',
+          caption: 'ASIC · Avustralya',
+        },
+        {
+          id: 'finma',
+          alt: 'FINMA — İsviçre Finansal Piyasa Denetleme Otoritesi',
+          caption: 'FINMA · İsviçre',
+        },
+        {
+          id: 'nasdaq',
+          alt: 'Nasdaq — Küresel borsa ve piyasa altyapısı',
+          caption: 'NASDAQ · ABD',
+        },
+        {
+          id: 'bist',
+          alt: 'Borsa İstanbul — Türkiye menkul kıymetler borsası',
+          caption: 'BIST · Türkiye',
+        },
+      ],
+    },
+    riskLegal: {
+      aria: 'Risk uyarısı, bölgesel kısıtlamalar ve düzenleyici bilgiler',
+      sections: [
+        {
+          title: 'RİSK UYARISI',
+          paragraphs: [
+            "Döviz (Forex) ve Fark Sözleşmeleri (CFD'ler) gibi kaldıraçlı türev ürünlerin ticareti yüksek düzeyde risk içerir ve ilk yatırdığınız tutarı aşan kayıplarla sonuçlanabilir. Bu ürünler her yatırımcıya uygun olmayabilir. Kaldıraç hem potansiyel karı hem de zararı artırır. Bu enstrümanların alım satımını yaparken, dayanak varlıkların sahibi olmazsınız veya bunlar üzerinde herhangi bir hakka sahip olmazsınız. Geçmiş performans gelecekteki sonuçların göstergesi değildir.",
+            'Herhangi bir yatırım kararı vermeden önce yatırım hedeflerinizi, bilginizi, deneyiminizi ve finansal durumunuzu dikkatlice değerlendirmelisiniz. Yalnızca yeterli bilgi ve deneyime sahipseniz Forex ve CFD ticareti yapmalısınız. Veltara Markets, ticaretten kaynaklanan herhangi bir kayıptan sorumlu değildir ve tüm ticaret faaliyetleri, risk size ait olmak üzere gerçekleştirilir.',
+            'Bu web sitesinde sağlanan içerik yalnızca genel bilgilendirme amaçlıdır ve bireysel mali durumunuzu, yatırım hedeflerinizi veya risk toleransınızı dikkate almaz. CFD ticaretiyle ilgili risklerin tam olarak anlaşıldığından emin olmak için web sitemizde bulunan yasal belgeleri incelemelisiniz. Gerekirse devam etmeden önce kalifiye profesyonellerden bağımsız tavsiye alın.',
+          ],
+        },
+        {
+          title: 'BÖLGESEL KISITLAMALAR',
+          paragraphs: [
+            'Bu web sitesi, Amerika Birleşik Devletleri ve FATF "kara listesinde" veya diğer önemli küresel yaptırım listelerinde listelenen yargı bölgeleri dahil ancak bunlarla sınırlı olmamak üzere belirli yargı bölgelerinin vatandaşı veya mukimi olan herhangi bir kişi veya kuruluşa dağıtılmak veya bu kişiler tarafından kullanılmak üzere tasarlanmamıştır. Ayrıca bu tür bir dağıtımın veya kullanımın yerel yasa veya düzenlemeleri ihlal edeceği herhangi bir yargı bölgesinde dağıtım veya kullanıma yönelik değildir.',
+          ],
+        },
+        {
+          title: 'REGÜLATÖR BİLGİLERİ',
+          paragraphs: [
+            "Veltara Markets, her biri yerel düzenlemelere uygun olarak belirli finansal hizmetler sağlama yetkisine sahip, çeşitli yargı bölgelerinde düzenlenmiş ve lisanslı kuruluşlardan oluşan bir ağı temsil eden markadır. Kayıt olduktan sonra, tüm ticari faaliyetlerin ilgili düzenleyici makam tarafından yönetilmesini sağlayacak şekilde konumunuza bağlı olarak uygun kuruluşa atanacaksınız. İlgili otoriteler lisans sahiplerine menkul kıymet veya yatırım tacirliği lisansı vermiş olsa da Veltara Markets'ın sunduğu ürün veya hizmetleri onaylamamaktadır.",
+            "Veltara Markets Global Financial Consultation & Financial Analysis L.L.C, Birleşik Arap Emirlikleri Sermaye Piyasası Otoritesi (CMA) tarafından düzenlenen ve 20200000241 numaralı lisansa sahip bir Kategori 5 lisans kuruluşudur. Bu lisans, şirketin BAE içinde Tanıtım ve Aracılık Tanıtımı ile ilgili düzenlenmiş faaliyetleri yürütmesine izin verir. Kayıtlı ofisi Level 2, Office 203, ONE CENTRAL, OFFICES 4, DWTC, Dubai, P.O. Box 129621, UAE adresindedir. Şirketin aracılık hizmeti sunma veya müşteri işlemlerini yürütme yetkisi bulunmamaktadır.",
+            "Veltara Markets Prime Global Pty Ltd, ACN 156005668 ve AFSL No. 421210 ile Avustralya Menkul Kıymetler ve Yatırım Komisyonu (ASIC) tarafından denetlenmektedir. Kayıtlı ofisi Level 35, 31 Market Street, Sydney, NSW 2000, Avustralya'da bulunmaktadır.",
+            "Veltara Markets International Pty Ltd, FSP No. 52464 ve Kayıt No. 2022/435897/07 ile Güney Afrika Finansal Sektör Davranış Otoritesi (FSCA) tarafından denetlenmektedir. Kayıtlı ofisi 18 Cavendish Yolu, Claremont, Cape Town, Batı Kap, 7708, Güney Afrika.",
+            "Veltara Markets Limited, SD049 Lisans No. ve 8427362-1 Kayıt No. ile Seyşeller Finansal Hizmetler Otoritesi (FSA) tarafından denetlenmektedir. Kayıtlı ofisi Suite 3, Global Village, Jivan's Complex, Mont Fleuri, Mahe, Seychelles adresinde bulunmaktadır.",
+            "Veltara Markets Financial Markets Limited, 212229 GBC Şirket Numarası ve GB24203371 Lisans Numarası ile Mauritius Finansal Hizmetler Komisyonu (FSC) tarafından denetlenmektedir. Kayıtlı ofisi Suite 201, 2nd Floor, The Catalyst, 40 Silicon Avenue, Ebene Cybercity, Mauritius adresinde bulunmaktadır.",
+            "Kıbrıs Cumhuriyeti'nde HE421001 kayıt numarasıyla kayıtlı ve kayıtlı adresi 160 Archiepiskopou Makariou III, 1. Kat, 3026 Limasol, Kıbrıs olan Veltara Markets (CY) Limited, Veltara Markets şirketler grubu içindeki lisanslı ve düzenlenmiş kuruluşlar için ödeme hizmetlerini kolaylaştırmaktadır. Bu kuruluş düzenlenmiş finansal ürünler sunmamakta veya ticaret hizmetleri sağlamamaktadır.",
+          ],
+        },
+      ],
+    },
     copy: '© {year} Veltara Markets. Tüm Hakları Saklıdır.',
   },
 }
@@ -225,43 +343,34 @@ export const en = {
   },
   hero: {
     ariaCarousel: 'Featured messages',
-    statInvestors: 'Active investors',
-    statYears: 'Years experience',
-    statReply: 'Response time',
-    ctaPrimary: 'Get Started',
+    headlineBefore: 'We Set ',
+    headlineBlue: 'The Standard.',
+    ctaJoin: 'Join Veltara Markets',
     ctaSecondary: 'Free Analysis',
-    trust1: 'Transparent pricing',
-    trust2: 'Risk-focused planning',
-    trust3: '24/7 support',
     prevSlide: 'Previous slide',
     nextSlide: 'Next slide',
     pickSlide: 'Choose slide',
     slideN: 'Slide {n}',
-    paused: 'Paused',
+    feat1Num: '450,000+',
+    feat1Lbl: 'Active Clients',
+    feat2Num: '1000+',
+    feat2Lbl: 'Trading Products',
+    feat3Num: 'Multiple',
+    feat3Lbl: 'Regulatory Licenses',
+    feat4Num: '190+',
+    feat4Lbl: 'Countries Serviced',
     slides: [
       {
-        eyebrow: 'Global markets',
-        titleBefore: 'Keep a ',
-        titleEm: 'professional',
-        titleAfter: ' distance to the markets',
         lead:
-          'Transparent advisory and a portfolio-first mindset across equities, indices, and FX — the clarity and confidence you expect from institutional-grade broker experiences.',
+          'Transparent advisory and a portfolio-first approach across global markets — clarity and confidence at institutional quality.',
       },
       {
-        eyebrow: 'Speed & transparency',
-        titleBefore: 'Strengthen your strategy with ',
-        titleEm: 'data',
-        titleAfter: '',
         lead:
-          'Scenarios aligned with your risk profile, regular reviews, and clear reporting. Make investment decisions within a plan — not in isolation.',
+          'Scenarios aligned with your risk profile, regular reviews, and clear reporting. Invest within a plan, not in isolation.',
       },
       {
-        eyebrow: 'Veltara Markets',
-        titleBefore: 'Secure your future ',
-        titleEm: 'starting today',
-        titleAfter: '',
         lead:
-          'Share your goals via our free analysis form; we will get back to you as soon as possible with a tailored summary and next steps.',
+          'Share your goals via our free analysis form; we will respond with a tailored summary and next steps.',
       },
     ],
   },
@@ -273,19 +382,6 @@ export const en = {
     portfolioVol: 'Assets under advisory***',
   },
   markets: {
-    title: 'Trade diverse products across global markets',
-    subtitleBefore: 'All figures are indicative only; for live quotes check\nMT4/MT5 or the ',
-    subtitleAfter: '\nmobile app.',
-    colSymbol: 'Symbol',
-    colSpread: 'Spread',
-    colSell: 'Sell',
-    colBuy: 'Buy',
-    colChange: 'Change',
-    colProduct: 'Product',
-    colDetailSr: 'Details',
-    rowAria: '{symbol} — Go to contact form',
-    foot:
-      '* Prices are for display only; actual trading conditions apply on the platform.',
     category: {
       metals: 'Metals',
       stocks: 'Stocks',
@@ -296,11 +392,92 @@ export const en = {
       etf: 'ETF',
     },
   },
+  topTraded: {
+    sectionTitle: 'Most traded instruments and spreads',
+    sectionSubtitle:
+      'Browse by category; symbol, indicative spread, and product group at a glance.\nAll figures are for reference only.',
+    navAria: 'Product categories',
+    colSymbol: 'Symbol',
+    colSpread: 'Spread',
+    colProduct: 'Product',
+    colDetailSr: 'Details',
+    rowAria: '{symbol} — Go to contact form',
+    foot: '* Pricing is for indicative purposes only.',
+    nav: {
+      mostTraded: 'Most traded',
+      commodities: 'Commodities',
+      indices: 'Indices',
+      forex: 'Forex',
+      etf: 'ETF',
+      metals: 'Metals',
+      stocks: 'Stocks',
+    },
+  },
   payment: {
     aria: 'Supported payment methods',
     note: '*Veltara Markets works with multiple global payment methods.',
     bankLabel: 'Bank transfer',
     bankText: 'BANK TRANSFER',
+  },
+  ticker: {
+    aria: 'Scrolling strip of market and platform labels',
+  },
+  brokerFeats: {
+    aria: 'Highlighted trading and service features',
+    items: [
+      {
+        title: 'Ultra-Fast Execution',
+        body: 'We aim to process your orders quickly and reliably.',
+      },
+      {
+        title: 'Competitive Spreads',
+        body: 'Transparent, competitive pricing designed for cost-efficient trading.',
+      },
+      {
+        title: 'Flexible Leverage',
+        body: 'Review risk and position size preferences that fit your strategy.',
+        note: '*Subject to terms and regulatory requirements.',
+      },
+      {
+        title: 'Easy Transactions',
+        body: 'Fast, straightforward deposits and withdrawals with familiar methods.',
+      },
+      {
+        title: '24/7 Multilingual Support',
+        body: 'Get help in your preferred language whenever you need it.',
+      },
+      {
+        title: 'Compliance-Focused Operations',
+        body: 'Veltara Markets prioritises data security, transparency, and regulatory alignment.',
+      },
+    ],
+  },
+  globalAwards: {
+    aria: 'Global awards and recognition',
+    headingCyan: 'Global Award-Winning',
+    headingNavy: 'Leading Broker',
+    items: [
+      {
+        lines: ['BEST FOREX SPREADS', 'MONEY EXPO MEXICO'],
+        year: '2023',
+      },
+      {
+        lines: ['BEST FOREX BROKER', 'OF THE YEAR'],
+        year: '2024',
+      },
+      {
+        lines: ['TOP FOREX LIQUIDITY', 'PROVIDER OF THE YEAR'],
+        year: '2024',
+      },
+      {
+        lines: ['BEST AFFILIATE', 'FOREX BROKER'],
+        year: '2024',
+      },
+      {
+        lines: ['THE MOST TRUSTED BROKER', 'OF THE YEAR'],
+        year: '2024',
+      },
+    ],
   },
   services: {
     title: 'Our services',
@@ -383,14 +560,73 @@ export const en = {
     terms: 'Terms of use',
     privacy: 'Privacy',
     cookies: 'Cookie policy',
-    disc1:
-      '** Satisfaction and performance statements may reflect targets or\nsurvey results; outcomes vary by individual.',
-    disc2:
-      '*** Assets under advisory may be illustrative or target figures;\ncontact us for current numbers.',
-    disc3Before:
-      'Investments involve risk; you may lose capital. This site does not\nconstitute personal investment advice. Veltara Markets is a sample\nbrand; to get in touch use the ',
-    disc3Link: 'form above',
-    disc3After: '.',
+    licenses: {
+      aria: 'Regulatory licences and exchange memberships',
+      title: 'Licences & partners',
+      items: [
+        {
+          id: 'fca',
+          alt: 'FCA — UK Financial Conduct Authority',
+          caption: 'FCA · UK',
+        },
+        {
+          id: 'cysec',
+          alt: 'CySEC — Cyprus Securities and Exchange Commission',
+          caption: 'CySEC · Cyprus',
+        },
+        {
+          id: 'asic',
+          alt: 'ASIC — Australian Securities and Investments Commission',
+          caption: 'ASIC · Australia',
+        },
+        {
+          id: 'finma',
+          alt: 'FINMA — Swiss Financial Market Supervisory Authority',
+          caption: 'FINMA · Switzerland',
+        },
+        {
+          id: 'nasdaq',
+          alt: 'Nasdaq — Global exchange and market technology',
+          caption: 'NASDAQ · US',
+        },
+        {
+          id: 'bist',
+          alt: 'Borsa Istanbul — Turkish stock exchange',
+          caption: 'BIST · Türkiye',
+        },
+      ],
+    },
+    riskLegal: {
+      aria: 'Risk warning, regional restrictions, and regulatory disclosures',
+      sections: [
+        {
+          title: 'RISK WARNING',
+          paragraphs: [
+            'Trading leveraged derivative products such as foreign exchange (Forex) and contracts for difference (CFDs) involves a high level of risk and may result in losses exceeding your initial deposit. These products may not be suitable for all investors. Leverage magnifies both potential profits and losses. When trading these instruments, you do not own the underlying assets or hold any rights in them. Past performance is not indicative of future results.',
+            'You should carefully assess your investment objectives, knowledge, experience, and financial situation before making any investment decision. You should only trade Forex and CFDs if you have sufficient knowledge and experience. Veltara Markets is not liable for any losses arising from trading, and all trading activity is undertaken at your own risk.',
+            'The content provided on this website is for general information only and does not take into account your individual financial situation, investment objectives, or risk tolerance. You should review the legal documents on our website to ensure you fully understand the risks associated with CFD trading. Where appropriate, seek independent advice from qualified professionals before proceeding.',
+          ],
+        },
+        {
+          title: 'REGIONAL RESTRICTIONS',
+          paragraphs: [
+            'This website is not intended for distribution to, or use by, any person or entity who is a citizen or resident of certain jurisdictions, including but not limited to the United States and jurisdictions listed on the FATF “blacklist” or other major global sanctions lists, or for distribution or use in any jurisdiction where such distribution or use would contravene local laws or regulations.',
+          ],
+        },
+        {
+          title: 'REGULATORY INFORMATION',
+          paragraphs: [
+            'Veltara Markets is a brand representing a network of regulated and licensed entities across various jurisdictions, each authorised to provide certain financial services in line with local regulations. After registration, you will be assigned to the appropriate entity based on your location so that your trading activities are overseen by the relevant regulator. Even where authorities have granted securities or investment dealer licences to licence holders, they do not endorse the products or services offered by Veltara Markets.',
+            'Veltara Markets Global Financial Consultation & Financial Analysis L.L.C is a Category 5 licensed firm regulated by the UAE Capital Markets Authority (CMA) under licence number 20200000241. This licence permits regulated promotional and introducing activities within the UAE. Its registered office is at Level 2, Office 203, ONE CENTRAL, OFFICES 4, DWTC, Dubai, P.O. Box 129621, UAE. The company is not authorised to provide brokerage services or execute client transactions.',
+            'Veltara Markets Prime Global Pty Ltd (ACN 156005668, AFSL No. 421210) is regulated by the Australian Securities and Investments Commission (ASIC). Registered office: Level 35, 31 Market Street, Sydney, NSW 2000, Australia.',
+            'Veltara Markets International Pty Ltd (FSP No. 52464, Registration No. 2022/435897/07) is regulated by the Financial Sector Conduct Authority (FSCA) of South Africa. Registered office: 18 Cavendish Road, Claremont, Cape Town, Western Cape, 7708, South Africa.',
+            'Veltara Markets Limited (Licence No. SD049, Registration No. 8427362-1) is regulated by the Financial Services Authority (FSA) of Seychelles. Registered office: Suite 3, Global Village, Jivan’s Complex, Mont Fleuri, Mahé, Seychelles.',
+            'Veltara Markets Financial Markets Limited (GBC Company No. 212229, Licence No. GB24203371) is regulated by the Financial Services Commission (FSC) of Mauritius. Registered office: Suite 201, 2nd Floor, The Catalyst, 40 Silicon Avenue, Ebene Cybercity, Mauritius.',
+            'Veltara Markets (CY) Limited, registered in the Republic of Cyprus under number HE421001 with registered address at 160 Archiepiskopou Makariou III, 1st Floor, 3026 Limassol, Cyprus, facilitates payment services for licensed and regulated entities within the Veltara Markets group. This entity does not offer regulated financial products or provide trading services.',
+          ],
+        },
+      ],
+    },
     copy: '© {year} Veltara Markets. All rights reserved.',
   },
 } satisfies Messages

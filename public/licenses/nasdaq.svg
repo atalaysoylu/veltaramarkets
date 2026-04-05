@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" fill="none" aria-hidden="true">
+  <rect x="1" y="1" width="198" height="54" rx="8" stroke="rgba(13,110,253,0.4)" stroke-width="1.2" fill="rgba(13,110,253,0.08)"/>
+  <text x="100" y="30" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="16" font-weight="800" fill="#93c5fd" letter-spacing="0.14em">NASDAQ</text>
+  <text x="100" y="46" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="7.5" letter-spacing="0.12em" fill="#94a3b8">GLOBAL MARKETS</text>
+</svg>

@@ -3,8 +3,13 @@ import { ContactForm } from './ContactForm'
 import { HeroBanner } from './HeroBanner'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { LogoMark } from './LogoMark'
-import { MarketsProductsSection } from './MarketsProductsSection'
+import { MostTradedSpreadBanner } from './MostTradedSpreadBanner'
 import { PaymentMethodsBanner } from './PaymentMethodsBanner'
+import { BrokerFeaturesSection } from './BrokerFeaturesSection'
+import { GlobalAwardsBanner } from './GlobalAwardsBanner'
+import { FooterLicenses } from './FooterLicenses'
+import { FooterRiskBlock } from './FooterRiskBlock'
+import { TickerBanner } from './TickerBanner'
 import './App.css'
 
 const FORM_SECTION_ID = 'analiz'
@@ -196,7 +201,7 @@ export default function App() {
 
       <main id="top">
         <HeroBanner formSectionId={FORM_SECTION_ID} />
-        <MarketsProductsSection formSectionId={FORM_SECTION_ID} />
+        <MostTradedSpreadBanner formSectionId={FORM_SECTION_ID} />
 
         <section className="lp-stats" aria-label={t('stats.aria')}>
           <div className="lp-container lp-stats-grid">
@@ -220,6 +225,12 @@ export default function App() {
         </section>
 
         <PaymentMethodsBanner />
+
+        <TickerBanner />
+
+        <BrokerFeaturesSection />
+
+        <GlobalAwardsBanner />
 
         <section id="hizmetler" className="lp-section">
           <div className="lp-container">
@@ -367,14 +378,13 @@ export default function App() {
             <a href={`#${FORM_SECTION_ID}`}>{t('footer.cookies')}</a>
           </div>
         </div>
-        <div className="lp-container lp-footer-disclaimer">
-          <p className="lp-preline">{t('footer.disc1')}</p>
-          <p className="lp-preline">{t('footer.disc2')}</p>
-          <p className="lp-preline">
-            {t('footer.disc3Before')}
-            <a href={`#${FORM_SECTION_ID}`}>{t('footer.disc3Link')}</a>
-            {t('footer.disc3After')}
-          </p>
+        <div className="lp-container lp-footer-licenses-wrap">
+          <FooterLicenses />
+        </div>
+        <div className="lp-container lp-footer-risk-wrap">
+          <FooterRiskBlock />
+        </div>
+        <div className="lp-container lp-footer-copy-wrap">
           <p className="lp-footer-copy">
             {formatTemplate(t('footer.copy'), { year })}
           </p>
