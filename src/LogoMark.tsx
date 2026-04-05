@@ -1,4 +1,4 @@
-/** Altın hedef / radar çizgeleri — referans görseldeki finans logosu estetiğine yakın. */
+/** Lacivert–mavi hedef / radar çizgileri; hero birincil renk ile uyumlu */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg
@@ -12,23 +12,23 @@ export function LogoMark({ className }: { className?: string }) {
     >
       <defs>
         <linearGradient
-          id="veltara-gold"
+          id="veltara-brand"
           x1="4"
           y1="4"
           x2="28"
           y2="28"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#9a7b1a" />
-          <stop offset="0.45" stopColor="#f0d78c" />
-          <stop offset="1" stopColor="#b8922e" />
+          <stop stopColor="#0c1e3c" />
+          <stop offset="0.45" stopColor="#1d4ed8" />
+          <stop offset="1" stopColor="#3b82f6" />
         </linearGradient>
       </defs>
       <circle
         cx="16"
         cy="16"
         r="12.5"
-        stroke="url(#veltara-gold)"
+        stroke="url(#veltara-brand)"
         strokeWidth="2"
         strokeDasharray="19 11"
         strokeLinecap="round"
@@ -38,7 +38,7 @@ export function LogoMark({ className }: { className?: string }) {
         cx="16"
         cy="16"
         r="8.5"
-        stroke="url(#veltara-gold)"
+        stroke="url(#veltara-brand)"
         strokeWidth="1.75"
         strokeDasharray="14 10"
         strokeLinecap="round"
@@ -48,16 +48,16 @@ export function LogoMark({ className }: { className?: string }) {
         cx="16"
         cy="16"
         r="5"
-        stroke="url(#veltara-gold)"
+        stroke="url(#veltara-brand)"
         strokeWidth="1.5"
         strokeDasharray="10 9"
         strokeLinecap="round"
         transform="rotate(-18 16 16)"
       />
-      <circle cx="16" cy="16" r="2.25" fill="url(#veltara-gold)" />
+      <circle cx="16" cy="16" r="2.25" fill="url(#veltara-brand)" />
       <path
         d="M16 16L8.5 8.5"
-        stroke="url(#veltara-gold)"
+        stroke="url(#veltara-brand)"
         strokeWidth="2.25"
         strokeLinecap="round"
       />

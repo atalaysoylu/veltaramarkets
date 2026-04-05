@@ -1,7 +1,17 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   /* Yapışkan header + #analiz hedefinde formun tam görünmesi için */
   scroll-padding-top: 88px;
+  width: 100%;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -16,11 +26,24 @@ html {
   --bg: #f8fafc;
   --surface: #ffffff;
   --border: #e2e8f0;
-  --accent: #d4af37;
-  --accent-hover: #b8941f;
-  --accent-muted: rgba(212, 175, 55, 0.14);
-  --accent-glow: rgba(212, 175, 55, 0.38);
-  --hero-bg: #0a0f1a;
+
+  /* Hero banner ile aynı birincil mavi; PuPrime tarzı lacivert derinlik */
+  --brand-primary: #0d6efd;
+  --brand-primary-hover: #3d8bfd;
+  --brand-primary-strong: #0b5ed7;
+  --brand-on-primary: #ffffff;
+  --brand-muted: rgba(13, 110, 253, 0.14);
+  --brand-ring: rgba(13, 110, 253, 0.42);
+  --brand-glow: rgba(13, 110, 253, 0.38);
+  --brand-link-on-dark: #93c5fd;
+  --brand-link-on-dark-hover: #bfdbfe;
+
+  --accent: var(--brand-primary);
+  --accent-hover: var(--brand-primary-strong);
+  --accent-muted: var(--brand-muted);
+  --accent-glow: var(--brand-glow);
+
+  --hero-bg: #070d16;
   --hero-surface: rgba(255, 255, 255, 0.04);
   --hero-border: rgba(255, 255, 255, 0.08);
   --hero-text: #94a3b8;
@@ -53,8 +76,8 @@ html {
     --bg: #0f1419;
     --surface: #151b24;
     --border: #2d3748;
-    --accent-muted: rgba(244, 228, 188, 0.1);
-    --accent-glow: rgba(212, 175, 55, 0.28);
+    --accent-muted: rgba(96, 165, 250, 0.12);
+    --accent-glow: rgba(59, 130, 246, 0.3);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 12px 40px -12px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 24px 64px -16px rgba(0, 0, 0, 0.5);
@@ -66,11 +89,23 @@ html {
   max-width: 100%;
   margin: 0;
   min-height: 100svh;
-  box-sizing: border-box;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  min-width: 0;
+  width: 100%;
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+main {
+  display: block;
+  width: 100%;
+  min-width: 0;
 }
 
 p {

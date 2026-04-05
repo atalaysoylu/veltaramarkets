@@ -1,0 +1,64 @@
+/* Lacivert zemin; vurgu hero / birincil mavi ile hizalı */
+.lp-broker-feats {
+  --bf-bg: var(--hero-bg, #070d16);
+  --bf-accent: var(--brand-primary-hover, #3d8bfd);
+  --bf-accent-dim: var(--brand-primary, #0d6efd);
+  background: var(--bf-bg);
+  padding: clamp(72px, 11vw, 120px) 0;
+  border-block: 1px solid rgba(13, 110, 253, 0.15);
+}
+
+.lp-broker-feats__inner {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.lp-broker-feats__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(40px, 7vw, 56px);
+}
+
+.lp-broker-feats__block {
+  margin: 0;
+  padding: 0;
+  max-width: 38rem;
+}
+
+.lp-broker-feats__title {
+  font-family: var(--heading, system-ui, sans-serif);
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: var(--bf-accent);
+  text-shadow: 0 0 28px rgba(13, 110, 253, 0.22);
+}
+
+.lp-broker-feats__body {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  line-height: 1.65;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.lp-broker-feats__note {
+  margin: 12px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+  font-style: italic;
+}
+
+@media (prefers-color-scheme: dark) {
+  .lp-broker-feats {
+    border-block-color: rgba(59, 130, 246, 0.2);
+  }
+}
