@@ -70,9 +70,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const m = translations[locale].meta
     document.documentElement.lang = m.htmlLang
-    document.title = m.pageTitle
-    const desc = document.querySelector('meta[name="description"]')
-    if (desc) desc.setAttribute('content', m.pageDescription)
   }, [locale])
 
   const messages = translations[locale]

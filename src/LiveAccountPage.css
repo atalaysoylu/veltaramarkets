@@ -1,0 +1,621 @@
+/* StarTrader tarzı: koyu zemin, teal vurgu, split kart */
+/* Canlı hesap: footer daha az dikey yer kaplasın */
+.lp-live-account-page .lp-footer {
+  padding: 18px 0 max(12px, env(safe-area-inset-bottom, 0px));
+}
+
+.lp-live-account-page .lp-footer-grid {
+  padding-bottom: 14px;
+  gap: 24px;
+}
+
+.lp-live-account-page .lp-footer-licenses-wrap,
+.lp-live-account-page .lp-footer-risk-wrap {
+  padding-top: 0;
+}
+
+.lp-live-account-page .lp-footer-copy-wrap {
+  padding-top: 8px;
+}
+
+.lp-live-account-page.landing {
+  --live-teal: #14b8a6;
+  --live-teal-dim: rgba(20, 184, 166, 0.35);
+  --live-teal-glow: rgba(20, 184, 166, 0.12);
+  --live-navy: #0a0e1a;
+  --live-navy-mid: #0f1624;
+  --live-card: #e4e6eb;
+  --live-form-surface: #ffffff;
+  --live-text: #1e293b;
+  --live-text-muted: #64748b;
+  --live-border: #cbd5e1;
+  background: var(--live-navy);
+  color: var(--hero-text);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-live-account-page .lp-live-account-main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 8px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.lp-live-account-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      -28deg,
+      transparent,
+      transparent 48px,
+      rgba(255, 255, 255, 0.02) 48px,
+      rgba(255, 255, 255, 0.02) 49px
+    ),
+    radial-gradient(ellipse 80% 60% at 20% 80%, var(--live-teal-glow), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(20, 184, 166, 0.06), transparent 45%),
+    linear-gradient(165deg, var(--live-navy) 0%, var(--live-navy-mid) 50%, #0a1628 100%);
+  pointer-events: none;
+}
+
+.lp-live-account-outer {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100% - 40px));
+}
+
+@media (max-width: 640px) {
+  .lp-live-account-outer {
+    width: min(1100px, calc(100% - 28px));
+  }
+}
+
+.lp-live-split-card {
+  display: grid;
+  grid-template-columns: 0.95fr 1.1fr;
+  gap: 0;
+  align-items: stretch;
+  width: 100%;
+  max-height: min(680px, calc(100svh - 120px));
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.08),
+    0 24px 48px -12px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 900px) {
+  .lp-live-split-card {
+    grid-template-columns: 1fr;
+    max-height: none;
+    border-radius: 18px;
+  }
+
+  .lp-live-account-page .lp-live-account-main {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 12px 0 24px;
+  }
+}
+
+/* Sol panel */
+.lp-live-aside {
+  position: relative;
+  background: var(--live-card);
+  color: var(--live-text);
+  padding: 20px 22px 24px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .lp-live-aside {
+    padding: 22px 20px 20px;
+  }
+}
+
+.lp-live-aside-title {
+  font-family: var(--heading, inherit);
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.lp-live-aside-title-accent {
+  color: var(--live-teal);
+}
+
+.lp-live-aside-lead {
+  margin: 0 0 16px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--live-text-muted);
+  max-width: 38ch;
+}
+
+.lp-live-aside-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.lp-live-aside-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.lp-live-aside-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  color: var(--live-teal);
+  opacity: 0.95;
+}
+
+.lp-live-aside-list strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.lp-live-aside-list p {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--live-text-muted);
+}
+
+.lp-live-aside-deco {
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  width: 220px;
+  height: 220px;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .lp-live-aside-deco {
+    display: none;
+  }
+}
+
+.lp-live-aside-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--live-teal-dim);
+  background: radial-gradient(circle at 35% 30%, rgba(20, 184, 166, 0.15), transparent 55%);
+}
+
+.lp-live-aside-glow {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  right: 40px;
+  bottom: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--live-teal-dim), transparent 70%);
+  filter: blur(12px);
+}
+
+/* Sağ form paneli */
+.lp-live-form-panel {
+  background: var(--live-form-surface);
+  color: var(--live-text);
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (min-width: 901px) {
+  .lp-live-form-panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+}
+
+.lp-live-form-notice {
+  margin: 0 0 6px;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--live-text-muted);
+}
+
+.lp-live-form-title {
+  font-family: var(--heading, inherit);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.lp-live-form-title-accent {
+  color: var(--live-teal);
+}
+
+/* Form — açık tema (global .lp-form koyu temayı ezer) */
+.lp-live-form-panel .lp-form.lp-live-account-form {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 2 sütun ızgara — kompakt alanlar */
+.lp-live-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .lp-live-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lp-live-form-panel .lp-live-form-grid > .lp-field {
+  margin-bottom: 0;
+}
+
+.lp-live-form-hint-row {
+  margin: 4px 0 8px;
+  padding: 0 2px;
+  font-size: 0.65rem;
+  line-height: 1.35;
+  color: var(--live-text-muted);
+}
+
+.lp-live-form-hint-visible {
+  display: block;
+}
+
+.lp-live-form-panel .lp-field {
+  margin-bottom: 10px;
+}
+
+.lp-live-form-panel .lp-field:not(.lp-field--checkbox) > label,
+.lp-live-form-panel .lp-field-legend {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--live-text-muted);
+  margin-bottom: 4px;
+}
+
+.lp-live-form-panel .lp-field input,
+.lp-live-form-panel .lp-field textarea {
+  border: 1px solid var(--live-border);
+  background: #f8fafc;
+  color: var(--live-text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+}
+
+.lp-live-form-panel .lp-field input:focus-visible,
+.lp-live-form-panel .lp-field textarea:focus-visible {
+  outline: 2px solid var(--live-teal-dim);
+  outline-offset: 2px;
+  border-color: var(--live-teal);
+  background: #fff;
+}
+
+.lp-live-form-panel .lp-field input::placeholder,
+.lp-live-form-panel .lp-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.lp-live-select-wrap {
+  position: relative;
+}
+
+.lp-live-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--live-text-muted);
+  pointer-events: none;
+}
+
+.lp-live-form-panel .lp-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 36px 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--live-border);
+  background: #f8fafc;
+  color: var(--live-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.lp-live-form-panel .lp-field select:focus-visible {
+  outline: 2px solid var(--live-teal-dim);
+  outline-offset: 2px;
+  border-color: var(--live-teal);
+  background: #fff;
+}
+
+.lp-live-input-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lp-live-input-icon input {
+  padding-right: 40px;
+}
+
+.lp-live-input-icon-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--live-text-muted);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.lp-live-input-icon-btn:hover:not(:disabled) {
+  color: var(--live-teal);
+  background: rgba(20, 184, 166, 0.08);
+}
+
+.lp-live-input-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lp-live-form-panel .lp-field-hint {
+  color: var(--live-text-muted);
+}
+
+.lp-live-form-panel .lp-field-hint--muted {
+  opacity: 0.85;
+}
+
+/* Segment (Bireysel / Kurumsal) */
+.lp-live-form-panel fieldset.lp-field--radios {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-live-form-panel fieldset.lp-field--radios.lp-field {
+  margin-bottom: 6px;
+  margin-top: 2px;
+}
+
+.lp-live-segment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lp-live-segment-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--live-border);
+  background: #f8fafc;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+  user-select: none;
+}
+
+.lp-live-segment-item:hover {
+  border-color: #94a3b8;
+}
+
+.lp-live-segment-item.is-selected {
+  border-color: var(--live-teal);
+  background: rgba(20, 184, 166, 0.08);
+}
+
+.lp-live-segment-item input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lp-live-segment-box {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  border: 2px solid #94a3b8;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.lp-live-segment-item.is-selected .lp-live-segment-box {
+  border-color: var(--live-teal);
+  background: var(--live-teal);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.lp-live-segment-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--live-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.lp-live-form-panel .lp-field--checkbox {
+  margin-bottom: 4px;
+}
+
+.lp-live-form-panel .lp-field--checkbox .lp-check-label {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--live-text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.lp-live-form-panel .lp-field--checkbox input {
+  width: auto;
+  margin-top: 0.2rem;
+  accent-color: var(--live-teal);
+}
+
+.lp-live-inline-link {
+  color: var(--live-teal);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.lp-live-inline-link:hover {
+  color: #0d9488;
+}
+
+.lp-live-form-error {
+  color: #b91c1c;
+  font-size: 0.75rem;
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+
+.lp-live-submit {
+  width: 100%;
+  margin-top: 6px;
+  padding-block: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  background: #0f172a;
+  color: #5eead4;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.lp-live-submit:hover:not(:disabled) {
+  background: #1e293b;
+  color: #99f6e4;
+}
+
+.lp-live-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.lp-live-submit--outline {
+  background: transparent;
+  color: var(--live-teal);
+  border: 2px solid var(--live-teal);
+}
+
+.lp-live-submit--outline:hover {
+  background: rgba(20, 184, 166, 0.1);
+  color: #0f766e;
+}
+
+.lp-live-form-success {
+  text-align: center;
+  padding: 28px 20px;
+  background: #f0fdfa;
+  border: 1px solid var(--live-teal-dim);
+  border-radius: 16px;
+  margin-top: 8px;
+}
+
+.lp-live-form-success .lp-form-success-title {
+  color: #0f766e;
+}
+
+.lp-live-account-success-body {
+  margin: 0.5rem 0 1.25rem;
+  font-size: 0.95rem;
+  color: var(--live-text-muted);
+  line-height: 1.5;
+}
+
+.lp-live-account-page .lp-nav a.is-active-route {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--live-teal);
+}
+
+.lp-live-account-back {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.lp-live-account-back a {
+  color: var(--live-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.lp-live-account-back a:hover {
+  color: var(--live-teal);
+}
