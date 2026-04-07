@@ -264,9 +264,9 @@ export const tr = {
     title: 'Müşteri Yorumları',
     intro: 'Danışmanlık sürecine katılan yatırımcılarımızın deneyimlerinden\nkısa kesitler.',
     q1: '“İki yıl içinde hedeflerime yaklaşmamda ciddi katkı sağladılar.\nŞeffaf iletişim ve düzenli portföy takibi benim için çok değerli.”',
-    name1: 'Ahmet Yılmaz',
+    name1: 'James Morrison',
     q2: '“Güvenli yatırım stratejileri ve risk odaklı yaklaşım sayesinde\nplanıma daha güvenle bağlı kaldım.”',
-    name2: 'Fatma Demir',
+    name2: 'Emma Richardson',
     trust:
       'Veltara Markets olarak veri güvenliğine ve düzenlemelere uygun\nsüreçlere önem veriyoruz; tüm görüşmeler gizlilik çerçevesindedir.',
   },
@@ -651,9 +651,9 @@ export const en = {
     title: 'Client testimonials',
     intro: 'Short excerpts from investors who joined our advisory process.',
     q1: '“They made a real difference in moving toward my goals over two years.\nTransparent communication and steady portfolio reviews mattered a lot.”',
-    name1: 'Ahmet Yilmaz',
+    name1: 'James Morrison',
     q2: '“Safer investment strategies and a risk-first mindset helped me\nstick to my plan with more confidence.”',
-    name2: 'Fatma Demir',
+    name2: 'Emma Richardson',
     trust:
       'At Veltara Markets we prioritise data security and compliant\nprocesses; all conversations are confidential.',
   },
