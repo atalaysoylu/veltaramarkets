@@ -1,12 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useI18n } from './i18n/I18nProvider'
-
-const FORM_RECIPIENT_EMAIL = 'boostetmarketing@proton.me'
-
-type FormSubmitJson = {
-  success?: string | boolean
-  message?: string
-}
+import { formCoFailureMessage } from './formCoFailureMessage'
+import { submitFormCo } from './submitFormCo'
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -45,51 +40,19 @@ export function ContactForm() {
     setStatus('loading')
 
     try {
-      const formPageUrl =
-        typeof globalThis.location !== 'undefined'
-          ? globalThis.location.href
-          : ''
-
-      const res = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(FORM_RECIPIENT_EMAIL)}`,
+      const result = await submitFormCo(
         {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            name: n,
-            email: em,
-            message: msg,
-            telefon: phone.trim() || '—',
-            mesaj: msg,
-            _subject: t('form.emailSubject'),
-            _replyto: em,
-            _url: formPageUrl,
-            _cc: em,
-            _template: 'table',
-            _captcha: 'false',
-          }),
+          name: n,
+          email: em,
+          message: msg,
+          telefon: phone.trim() || '—',
+          mesaj: msg,
         },
+        { subject: t('form.emailSubject'), replyTo: em, ccReplyTo: true },
       )
 
-      let data: FormSubmitJson
-      try {
-        data = (await res.json()) as FormSubmitJson
-      } catch {
-        setErrorMessage(t('form.errSubmit'))
-        setStatus('idle')
-        return
-      }
-
-      const failed =
-        !res.ok ||
-        data.success === false ||
-        data.success === 'false'
-
-      if (failed) {
-        setErrorMessage(t('form.errSubmit'))
+      if (!result.ok) {
+        setErrorMessage(formCoFailureMessage(result, t, 'form.errSubmit'))
         setStatus('idle')
         return
       }
