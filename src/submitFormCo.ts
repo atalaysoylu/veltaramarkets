@@ -1,4 +1,4 @@
-import { FORM_RECIPIENT_EMAIL } from './formConfig'
+import { FORM_RECIPIENT_EMAIL, FORM_SUBMIT_ACCESS_KEY } from './formConfig'
 
 type FormSubmitJson = {
   success?: string | boolean
@@ -20,6 +20,7 @@ export async function submitFormCo(
 
   const payload: Record<string, unknown> = {
     ...fields,
+    _access_key: FORM_SUBMIT_ACCESS_KEY,
     _subject: options.subject,
     _template: 'table',
     _captcha: 'false',
