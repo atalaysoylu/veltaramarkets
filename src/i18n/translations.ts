@@ -4,9 +4,10 @@ export type Locale = 'tr' | 'en'
 export const tr = {
   meta: {
     htmlLang: 'tr',
-    pageTitle: 'Veltara Markets — Akıllı Yatırım Danışmanlığı',
+    pageTitle:
+      'Veltara Markets | Ticaretten Daha Fazlası - Çevrimiçi Forex ve CFD Brokeri',
     pageDescription:
-      'Veltara Markets — Profesyonel Yatırım Danışmanlığı, Portföy Analizi ve Ücretsiz Yatırım Değerlendirmesi.',
+      'Güvenilir bir aracı kurumda ticaret yapın. Dakikalar içerisinde gerçek hesabınızı oluşturun.',
   },
   nav: {
     ariaMain: 'Ana Menü',
@@ -94,9 +95,11 @@ export const tr = {
   },
   hero: {
     ariaCarousel: 'Öne Çıkan Mesajlar',
-    headlineBefore: 'We Set ',
-    headlineBlue: 'The Standard.',
-    ctaJoin: "Veltara Markets'e Katılın",
+    headlineBefore: 'Veltara Markets | Ticaretten Daha Fazlası — ',
+    headlineBlue: 'Çevrimiçi Forex ve CFD Brokeri',
+    lead:
+      'Güvenilir bir aracı kurumda ticaret yapın. Dakikalar içerisinde gerçek hesabınızı oluşturun.',
+    ctaJoin: 'Gerçek Hesabınızı Oluşturun',
     ctaSecondary: 'Ücretsiz Analiz',
     prevSlide: 'Önceki Slayt',
     nextSlide: 'Sonraki Slayt',
@@ -110,20 +113,7 @@ export const tr = {
     feat3Lbl: 'Düzenleyici Lisans',
     feat4Num: '190+',
     feat4Lbl: 'Ülkeye Hizmet',
-    slides: [
-      {
-        lead:
-          'Küresel piyasalarda şeffaf danışmanlık ve portföy odaklı yaklaşım. Kurumsal kalitede netlik ve güven.',
-      },
-      {
-        lead:
-          'Risk profilinize uygun senaryolar ve anlaşılır raporlama ile yatırım kararlarınızı bir plan çerçevesinde alın.',
-      },
-      {
-        lead:
-          'Ücretsiz analiz formu ile hedeflerinizi paylaşın; kısa sürede size özel özet ve görüşme için dönüş yapalım.',
-      },
-    ],
+    slides: [{ lead: '' }, { lead: '' }, { lead: '' }],
   },
   stats: {
     aria: 'Öne Çıkan Rakamlar',
@@ -200,33 +190,6 @@ export const tr = {
       {
         title: 'Uyumluluk Odaklı Süreçler',
         body: 'Veltara Markets; veri güvenliği, şeffaflık ve düzenlemelere uygun süreçlere önem verir.',
-      },
-    ],
-  },
-  globalAwards: {
-    aria: 'Küresel ödüller ve tanınma',
-    headingCyan: 'Küresel Ödüllere',
-    headingNavy: 'Sahip Lider Broker',
-    items: [
-      {
-        lines: ['EN İYİ FOREX SPREADLERİ', 'MONEY EXPO MEXICO'],
-        year: '2023',
-      },
-      {
-        lines: ['YILIN EN İYİ', 'FOREX BROKERI'],
-        year: '2024',
-      },
-      {
-        lines: ['YILIN EN İYİ FOREX', 'LİKİDİTE SAĞLAYICISI'],
-        year: '2024',
-      },
-      {
-        lines: ['EN İYİ AFFİLİATE', 'FOREX BROKERI'],
-        year: '2024',
-      },
-      {
-        lines: ['YILIN EN GÜVENİLİR', 'BROKERI'],
-        year: '2024',
       },
     ],
   },
@@ -391,9 +354,9 @@ export type Messages = typeof tr
 export const en = {
   meta: {
     htmlLang: 'en',
-    pageTitle: 'Veltara Markets — Smart investment advisory',
+    pageTitle: 'Veltara Markets | More Than Trading - Online Forex & CFD Broker',
     pageDescription:
-      'Veltara Markets — Professional investment advisory, portfolio analysis, and free investment assessment.',
+      'Trade with a trusted broker. Create your real account in minutes.',
   },
   nav: {
     ariaMain: 'Main menu',
@@ -481,9 +444,11 @@ export const en = {
   },
   hero: {
     ariaCarousel: 'Featured messages',
-    headlineBefore: 'We Set ',
-    headlineBlue: 'The Standard.',
-    ctaJoin: 'Join Veltara Markets',
+    headlineBefore: 'Veltara Markets | More Than Trading — ',
+    headlineBlue: 'Online Forex & CFD Broker',
+    lead:
+      'Trade with a trusted broker. Create your real account in minutes.',
+    ctaJoin: 'Create Your Real Account',
     ctaSecondary: 'Free Analysis',
     prevSlide: 'Previous slide',
     nextSlide: 'Next slide',
@@ -497,20 +462,7 @@ export const en = {
     feat3Lbl: 'Regulatory Licenses',
     feat4Num: '190+',
     feat4Lbl: 'Countries Serviced',
-    slides: [
-      {
-        lead:
-          'Transparent advisory and a portfolio-first approach across global markets — clarity and confidence at institutional quality.',
-      },
-      {
-        lead:
-          'Scenarios aligned with your risk profile, regular reviews, and clear reporting. Invest within a plan, not in isolation.',
-      },
-      {
-        lead:
-          'Share your goals via our free analysis form; we will respond with a tailored summary and next steps.',
-      },
-    ],
+    slides: [{ lead: '' }, { lead: '' }, { lead: '' }],
   },
   stats: {
     aria: 'Key figures',
@@ -587,33 +539,6 @@ export const en = {
       {
         title: 'Compliance-Focused Operations',
         body: 'Veltara Markets prioritises data security, transparency, and regulatory alignment.',
-      },
-    ],
-  },
-  globalAwards: {
-    aria: 'Global awards and recognition',
-    headingCyan: 'Global Award-Winning',
-    headingNavy: 'Leading Broker',
-    items: [
-      {
-        lines: ['BEST FOREX SPREADS', 'MONEY EXPO MEXICO'],
-        year: '2023',
-      },
-      {
-        lines: ['BEST FOREX BROKER', 'OF THE YEAR'],
-        year: '2024',
-      },
-      {
-        lines: ['TOP FOREX LIQUIDITY', 'PROVIDER OF THE YEAR'],
-        year: '2024',
-      },
-      {
-        lines: ['BEST AFFILIATE', 'FOREX BROKER'],
-        year: '2024',
-      },
-      {
-        lines: ['THE MOST TRUSTED BROKER', 'OF THE YEAR'],
-        year: '2024',
       },
     ],
   },
