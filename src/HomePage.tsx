@@ -8,7 +8,6 @@ import { LogoMark } from './LogoMark'
 import { MostTradedSpreadBanner } from './MostTradedSpreadBanner'
 import { PaymentMethodsBanner } from './PaymentMethodsBanner'
 import { BrokerFeaturesSection } from './BrokerFeaturesSection'
-import { GlobalAwardsBanner } from './GlobalAwardsBanner'
 import { FooterLicenses } from './FooterLicenses'
 import { FooterRiskBlock } from './FooterRiskBlock'
 import { TickerBanner } from './TickerBanner'
@@ -214,8 +213,6 @@ export default function HomePage() {
         <TickerBanner />
 
         <BrokerFeaturesSection />
-
-        <GlobalAwardsBanner />
 
         <section id="hizmetler" className="lp-section">
           <div className="lp-container">

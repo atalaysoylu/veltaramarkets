@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { Link } from 'react-router-dom'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import './HeroBanner.css'
 
@@ -113,7 +114,6 @@ export function HeroBanner({ formSectionId }: HeroBannerProps) {
   }, [n])
 
   const href = `#${formSectionId}`
-  const slide = slides[active]
 
   const features = [
     { Icon: IconUsers, num: t('hero.feat1Num'), lbl: t('hero.feat1Lbl') },
@@ -153,11 +153,11 @@ export function HeroBanner({ formSectionId }: HeroBannerProps) {
                   </span>
                 </span>
               </h1>
-              <p className="lp-hero-banner__lead lp-preline">{slide.lead}</p>
+              <p className="lp-hero-banner__lead lp-preline">{t('hero.lead')}</p>
               <div className="lp-hero-banner__cta-row">
-                <a href={href} className="lp-hero-banner__btn-blue">
+                <Link to="/live-account" className="lp-hero-banner__btn-blue">
                   {t('hero.ctaJoin')}
-                </a>
+                </Link>
               </div>
               <a href={href} className="lp-hero-banner__text-link">
                 {t('hero.ctaSecondary')}
