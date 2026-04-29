@@ -109,27 +109,28 @@
   height: 32px;
   flex-shrink: 0;
   display: block;
-  filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.35));
+  object-fit: contain;
+  border-radius: 50%;
 }
 
 .lp-header-end {
   display: flex;
   align-items: center;
-  gap: clamp(16px, 2.2vw, 36px);
+  gap: clamp(12px, 1.6vw, 24px);
   flex-shrink: 0;
 }
 
 .lp-nav {
   display: flex;
   align-items: center;
-  gap: clamp(14px, 1.8vw, 26px);
+  gap: clamp(10px, 1.2vw, 18px);
   flex-wrap: nowrap;
 }
 
 .lp-nav a {
   color: var(--hero-text);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.82rem;
   font-weight: 500;
   transition: color 0.2s;
   white-space: nowrap;
@@ -137,6 +138,24 @@
 
 .lp-nav a:hover {
   color: var(--brand-link-on-dark);
+}
+
+.lp-whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #25d366 !important;
+  font-weight: 600;
+}
+
+.lp-wa-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.lp-whatsapp-link:hover {
+  color: #48e27e !important;
 }
 
 @media (max-width: 900px) {
@@ -191,14 +210,20 @@
 .lp-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
 .lp-btn-header {
-  padding: 8px 14px;
-  font-size: 0.8125rem;
+  padding: 8px 12px;
+  font-size: 0.78rem;
   border-radius: 8px;
+}
+
+@media (max-width: 1200px) {
+  .lp-header-actions .lp-btn-ghost {
+    display: none;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1066,6 +1091,53 @@
   font-size: 0.9rem;
   line-height: 1.5;
   max-width: 28ch;
+}
+
+.lp-footer-contact-card {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 10px;
+  background: rgba(10, 18, 30, 0.55);
+  max-width: 44ch;
+}
+
+.lp-footer-contact-title {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hero-heading);
+  font-weight: 700;
+}
+
+.lp-footer-contact-line {
+  margin: 0 0 6px;
+  font-size: 0.84rem;
+  color: rgba(226, 232, 240, 0.9);
+  line-height: 1.45;
+}
+
+.lp-footer-contact-line a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.lp-footer-contact-line a:hover {
+  color: #bfdbfe;
+}
+
+.lp-footer-contact-wa {
+  display: inline-flex;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #25d366;
+  text-decoration: none;
+}
+
+.lp-footer-contact-wa:hover {
+  color: #48e27e;
 }
 
 .lp-footer-links {

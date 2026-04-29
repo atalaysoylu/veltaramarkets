@@ -7,7 +7,6 @@ const LICENSE_ORDER = [
   'asic',
   'finma',
   'nasdaq',
-  'bist',
 ] as const
 
 /** `cysec` dosya adı bazı ağ filtrelerinde yanlışlıkla engellenebiliyor; ayrı asset kullan */

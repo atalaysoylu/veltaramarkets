@@ -7,7 +7,6 @@ export const TICKER_ENTRIES = [
   { id: 'mt4', label: 'MT4', showTextLabel: true },
   { id: 'nasdaq', label: 'NASDAQ', showTextLabel: false },
   { id: 'dax', label: 'DAX', showTextLabel: false },
-  { id: 'bist', label: 'BIST', showTextLabel: false },
   { id: 'nyse', label: 'NYSE', showTextLabel: false },
   { id: 'sp500', label: 'S&P 500', showTextLabel: false },
   { id: 'forex', label: 'FOREX', showTextLabel: true },
