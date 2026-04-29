@@ -61,10 +61,10 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
     const iban = isIbanInfo(all?.iban) ? all.iban : FALLBACK.iban
     const crypto = isCryptoArray(all?.crypto) ? all.crypto : FALLBACK.crypto
 
-    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300')
+    res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate')
     res.status(200).json({ iban, crypto } satisfies PaymentConfig)
   } catch {
-    res.setHeader('Cache-Control', 'no-store')
+    res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate')
     res.status(200).json(FALLBACK)
   }
 }
