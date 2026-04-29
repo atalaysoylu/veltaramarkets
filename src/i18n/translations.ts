@@ -318,11 +318,6 @@ export const tr = {
           caption: 'CySEC · Kıbrıs',
         },
         {
-          id: 'asic',
-          alt: 'ASIC — Avustralya Menkul Kıymetler ve Yatırım Komisyonu',
-          caption: 'ASIC · Avustralya',
-        },
-        {
           id: 'finma',
           alt: 'FINMA — İsviçre Finansal Piyasa Denetleme Otoritesi',
           caption: 'FINMA · İsviçre',
@@ -356,7 +351,6 @@ export const tr = {
           paragraphs: [
             "Veltara Markets, her biri yerel düzenlemelere uygun olarak belirli finansal hizmetler sağlama yetkisine sahip, çeşitli yargı bölgelerinde düzenlenmiş ve lisanslı kuruluşlardan oluşan bir ağı temsil eden markadır. Kayıt olduktan sonra, tüm ticari faaliyetlerin ilgili düzenleyici makam tarafından yönetilmesini sağlayacak şekilde konumunuza bağlı olarak uygun kuruluşa atanacaksınız. İlgili otoriteler lisans sahiplerine menkul kıymet veya yatırım tacirliği lisansı vermiş olsa da Veltara Markets'ın sunduğu ürün veya hizmetleri onaylamamaktadır.",
             "Veltara Markets Global Financial Consultation & Financial Analysis L.L.C, Birleşik Arap Emirlikleri Sermaye Piyasası Otoritesi (CMA) tarafından düzenlenen ve 20200000241 numaralı lisansa sahip bir Kategori 5 lisans kuruluşudur. Bu lisans, şirketin BAE içinde Tanıtım ve Aracılık Tanıtımı ile ilgili düzenlenmiş faaliyetleri yürütmesine izin verir. Kayıtlı ofisi Level 2, Office 203, ONE CENTRAL, OFFICES 4, DWTC, Dubai, P.O. Box 129621, UAE adresindedir. Şirketin aracılık hizmeti sunma veya müşteri işlemlerini yürütme yetkisi bulunmamaktadır.",
-            "Veltara Markets Prime Global Pty Ltd, ACN 156005668 ve AFSL No. 421210 ile Avustralya Menkul Kıymetler ve Yatırım Komisyonu (ASIC) tarafından denetlenmektedir. Kayıtlı ofisi Level 35, 31 Market Street, Sydney, NSW 2000, Avustralya'da bulunmaktadır.",
             "Veltara Markets International Pty Ltd, FSP No. 52464 ve Kayıt No. 2022/435897/07 ile Güney Afrika Finansal Sektör Davranış Otoritesi (FSCA) tarafından denetlenmektedir. Kayıtlı ofisi 18 Cavendish Yolu, Claremont, Cape Town, Batı Kap, 7708, Güney Afrika.",
             "Veltara Markets Limited, SD049 Lisans No. ve 8427362-1 Kayıt No. ile Seyşeller Finansal Hizmetler Otoritesi (FSA) tarafından denetlenmektedir. Kayıtlı ofisi Suite 3, Global Village, Jivan's Complex, Mont Fleuri, Mahe, Seychelles adresinde bulunmaktadır.",
             "Veltara Markets Financial Markets Limited, 212229 GBC Şirket Numarası ve GB24203371 Lisans Numarası ile Mauritius Finansal Hizmetler Komisyonu (FSC) tarafından denetlenmektedir. Kayıtlı ofisi Suite 201, 2nd Floor, The Catalyst, 40 Silicon Avenue, Ebene Cybercity, Mauritius adresinde bulunmaktadır.",
@@ -686,11 +680,6 @@ export const en = {
           caption: 'CySEC · Cyprus',
         },
         {
-          id: 'asic',
-          alt: 'ASIC — Australian Securities and Investments Commission',
-          caption: 'ASIC · Australia',
-        },
-        {
           id: 'finma',
           alt: 'FINMA — Swiss Financial Market Supervisory Authority',
           caption: 'FINMA · Switzerland',
@@ -724,7 +713,6 @@ export const en = {
           paragraphs: [
             'Veltara Markets is a brand representing a network of regulated and licensed entities across various jurisdictions, each authorised to provide certain financial services in line with local regulations. After registration, you will be assigned to the appropriate entity based on your location so that your trading activities are overseen by the relevant regulator. Even where authorities have granted securities or investment dealer licences to licence holders, they do not endorse the products or services offered by Veltara Markets.',
             'Veltara Markets Global Financial Consultation & Financial Analysis L.L.C is a Category 5 licensed firm regulated by the UAE Capital Markets Authority (CMA) under licence number 20200000241. This licence permits regulated promotional and introducing activities within the UAE. Its registered office is at Level 2, Office 203, ONE CENTRAL, OFFICES 4, DWTC, Dubai, P.O. Box 129621, UAE. The company is not authorised to provide brokerage services or execute client transactions.',
-            'Veltara Markets Prime Global Pty Ltd (ACN 156005668, AFSL No. 421210) is regulated by the Australian Securities and Investments Commission (ASIC). Registered office: Level 35, 31 Market Street, Sydney, NSW 2000, Australia.',
             'Veltara Markets International Pty Ltd (FSP No. 52464, Registration No. 2022/435897/07) is regulated by the Financial Sector Conduct Authority (FSCA) of South Africa. Registered office: 18 Cavendish Road, Claremont, Cape Town, Western Cape, 7708, South Africa.',
             'Veltara Markets Limited (Licence No. SD049, Registration No. 8427362-1) is regulated by the Financial Services Authority (FSA) of Seychelles. Registered office: Suite 3, Global Village, Jivan’s Complex, Mont Fleuri, Mahé, Seychelles.',
             'Veltara Markets Financial Markets Limited (GBC Company No. 212229, Licence No. GB24203371) is regulated by the Financial Services Commission (FSC) of Mauritius. Registered office: Suite 201, 2nd Floor, The Catalyst, 40 Silicon Avenue, Ebene Cybercity, Mauritius.',
