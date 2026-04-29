@@ -103,8 +103,9 @@ export const tr = {
     ibanTitle: 'Banka (IBAN)',
     ibanHolder: 'Hesap Adı',
     ibanBank: 'Banka',
-    ibanValue: 'TR12 0006 7010 0000 1234 5678 90',
-    ibanSwift: 'VLTATRISXXX',
+    ibanValue: 'TR39 0006 4000 0011 0891 4718 90',
+    // Kullanıcı tarafından sağlanmadığı için şimdilik boş bırakıyoruz.
+    ibanSwift: '',
     cryptoTitle: 'Kripto Cüzdanları',
     usdtTrc20: 'USDT (TRC20)',
     btc: 'BTC',
@@ -471,8 +472,9 @@ export const en = {
     ibanTitle: 'Bank (IBAN)',
     ibanHolder: 'Account Name',
     ibanBank: 'Bank',
-    ibanValue: 'TR12 0006 7010 0000 1234 5678 90',
-    ibanSwift: 'VLTATRISXXX',
+    ibanValue: 'TR39 0006 4000 0011 0891 4718 90',
+    // Not provided by user yet.
+    ibanSwift: '',
     cryptoTitle: 'Crypto Wallets',
     usdtTrc20: 'USDT (TRC20)',
     btc: 'BTC',

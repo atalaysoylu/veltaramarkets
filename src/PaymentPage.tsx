@@ -11,6 +11,57 @@ import './PaymentPage.css'
 const FORM_SECTION_ID = 'analiz'
 const WHATSAPP_SUPPORT_URL = 'https://wa.me/447938315394'
 
+type IbanInfo = {
+  holder: string
+  bank: string
+  iban: string
+  swift: string
+}
+
+type CryptoEntry = {
+  label: string
+  address: string
+}
+
+type PaymentConfig = {
+  iban: IbanInfo
+  crypto: CryptoEntry[]
+}
+
+const FALLBACK_CONFIG: PaymentConfig = {
+  iban: {
+    holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',
+    bank: 'TÜRKİYE İŞ BANKASI',
+    iban: 'TR39 0006 4000 0011 0891 4718 90',
+    swift: '',
+  },
+  crypto: [
+    { label: 'USDT (TRC20)', address: 'TMfzrSe1Ye8pnDMY9jTzAKrhBNk3G3rWRU' },
+  ],
+}
+
+function isPaymentConfig(value: unknown): value is PaymentConfig {
+  if (!value || typeof value !== 'object') return false
+  const v = value as Record<string, unknown>
+  const iban = v.iban as Record<string, unknown> | undefined
+  const ibanOk =
+    !!iban &&
+    typeof iban.holder === 'string' &&
+    typeof iban.bank === 'string' &&
+    typeof iban.iban === 'string' &&
+    typeof iban.swift === 'string'
+  const cryptoOk =
+    Array.isArray(v.crypto) &&
+    v.crypto.every(
+      (e) =>
+        e &&
+        typeof e === 'object' &&
+        typeof (e as Record<string, unknown>).label === 'string' &&
+        typeof (e as Record<string, unknown>).address === 'string',
+    )
+  return ibanOk && cryptoOk
+}
+
 function MenuIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden className="lp-menu-svg">
@@ -38,11 +89,25 @@ function WhatsAppIcon() {
 export default function PaymentPage() {
   const { t } = useI18n()
   const [navOpen, setNavOpen] = useState(false)
+  const [config, setConfig] = useState<PaymentConfig>(FALLBACK_CONFIG)
   const year = new Date().getFullYear()
 
   useEffect(() => {
     document.title = t('paymentPage.metaTitle')
   }, [t])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('/api/payment-config', { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('bad_status'))))
+      .then((data: unknown) => {
+        if (isPaymentConfig(data)) setConfig(data)
+      })
+      .catch(() => {
+        /* fallback statede kalır */
+      })
+    return () => controller.abort()
+  }, [])
 
   return (
     <div className="landing lp-payment-page">
@@ -144,29 +209,31 @@ export default function PaymentPage() {
             <article className="lp-payment-card">
               <h2>{t('paymentPage.ibanTitle')}</h2>
               <p>
-                <strong>{t('paymentPage.ibanHolder')}:</strong> Veltara Markets LTD
+                <strong>{t('paymentPage.ibanHolder')}:</strong> {config.iban.holder}
               </p>
               <p>
-                <strong>{t('paymentPage.ibanBank')}:</strong> Demo Bank PLC
+                <strong>{t('paymentPage.ibanBank')}:</strong> {config.iban.bank}
               </p>
-              <p className="lp-payment-mono">{t('paymentPage.ibanValue')}</p>
-              <p className="lp-payment-mono">{t('paymentPage.ibanSwift')}</p>
+              <p className="lp-payment-mono">{config.iban.iban}</p>
+              {config.iban.swift ? (
+                <p className="lp-payment-mono">{config.iban.swift}</p>
+              ) : null}
             </article>
 
             <article className="lp-payment-card">
               <h2>{t('paymentPage.cryptoTitle')}</h2>
-              <p>
-                <strong>{t('paymentPage.usdtTrc20')}:</strong>
-              </p>
-              <p className="lp-payment-mono">TX6a8gF7Jg4YwDkQ9Lh6pM2vNz1rA3bC5D</p>
-              <p>
-                <strong>{t('paymentPage.btc')}:</strong>
-              </p>
-              <p className="lp-payment-mono">bc1q0r9k8w2e3m6n4x5y7z9p1q3t5u7v9w2e4r6t8y</p>
-              <p>
-                <strong>{t('paymentPage.eth')}:</strong>
-              </p>
-              <p className="lp-payment-mono">0x8f2A6B4d1C7e9F5a3D2b6E8c1A4f9D7b5E3c1A6F</p>
+              {config.crypto.length === 0 ? (
+                <p className="lp-payment-mono">—</p>
+              ) : (
+                config.crypto.map((entry) => (
+                  <div key={`${entry.label}-${entry.address}`}>
+                    <p>
+                      <strong>{entry.label}:</strong>
+                    </p>
+                    <p className="lp-payment-mono">{entry.address}</p>
+                  </div>
+                ))
+              )}
             </article>
           </div>
 
