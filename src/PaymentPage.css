@@ -1,0 +1,77 @@
+.lp-payment-main {
+  min-height: 52vh;
+  background: radial-gradient(1200px 420px at 50% -120px, rgba(56, 189, 248, 0.1), transparent),
+    var(--hero-bg);
+  color: var(--hero-text);
+}
+
+.lp-payment-shell {
+  padding: 64px 0 56px;
+}
+
+.lp-payment-title {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  color: var(--hero-heading);
+}
+
+.lp-payment-intro {
+  margin: 10px 0 28px;
+  color: rgba(226, 232, 240, 0.85);
+  font-size: 0.95rem;
+}
+
+.lp-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.lp-payment-card {
+  border: 1px solid var(--hero-border);
+  border-radius: 14px;
+  background: rgba(10, 18, 30, 0.7);
+  padding: 18px;
+}
+
+.lp-payment-card h2 {
+  margin: 0 0 12px;
+  color: var(--hero-heading);
+  font-size: 1rem;
+}
+
+.lp-payment-card p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.lp-payment-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  word-break: break-all;
+  color: #dbeafe;
+}
+
+.lp-payment-back {
+  margin-top: 18px;
+}
+
+.lp-payment-back a {
+  color: var(--brand-link-on-dark);
+  text-decoration: none;
+}
+
+.lp-payment-back a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .lp-payment-shell {
+    padding-top: 44px;
+  }
+
+  .lp-payment-grid {
+    grid-template-columns: 1fr;
+  }
+}

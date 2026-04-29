@@ -68,22 +68,6 @@ export function TickerLogo({ id }: { id: string }) {
           DAX
         </text>,
       )
-    case 'bist':
-      return pill(
-        54,
-        <text
-          x="27"
-          y="21"
-          textAnchor="middle"
-          fontSize="13"
-          fontWeight="800"
-          fill="currentColor"
-          fontFamily="system-ui,sans-serif"
-          letterSpacing="0.14em"
-        >
-          BIST
-        </text>,
-      )
     case 'nyse':
       return pill(
         56,

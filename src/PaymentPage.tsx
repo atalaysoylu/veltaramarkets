@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { LanguageSwitch } from './LanguageSwitch'
-import { LiveAccountForm } from './LiveAccountForm'
 import { LogoMark } from './LogoMark'
 import { FooterLicenses } from './FooterLicenses'
 import { FooterRiskBlock } from './FooterRiskBlock'
 import './App.css'
-import './LiveAccountPage.css'
+import './PaymentPage.css'
 
 const FORM_SECTION_ID = 'analiz'
 const WHATSAPP_SUPPORT_URL = 'https://wa.me/447938315394'
@@ -15,12 +14,7 @@ const WHATSAPP_SUPPORT_URL = 'https://wa.me/447938315394'
 function MenuIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden className="lp-menu-svg">
-      <path
-        d="M4 7h16M4 12h16M4 17h16"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-      />
+      <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.75" />
     </svg>
   )
 }
@@ -28,12 +22,7 @@ function MenuIcon() {
 function CloseIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden className="lp-menu-svg">
-      <path
-        d="M6 6l12 12M18 6 6 18"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-      />
+      <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.75" />
     </svg>
   )
 }
@@ -46,78 +35,17 @@ function WhatsAppIcon() {
   )
 }
 
-function IconProducts() {
-  return (
-    <svg className="lp-live-aside-icon" viewBox="0 0 48 48" fill="none" aria-hidden>
-      <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.9" />
-      <circle cx="24" cy="10" r="2.5" fill="currentColor" opacity="0.5" />
-      <circle cx="38" cy="24" r="2.5" fill="currentColor" opacity="0.5" />
-      <circle cx="24" cy="38" r="2.5" fill="currentColor" opacity="0.5" />
-      <circle cx="10" cy="24" r="2.5" fill="currentColor" opacity="0.5" />
-      <path
-        d="M24 13v8M31 24h-8M24 31v-8M17 24h8"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        opacity="0.35"
-      />
-    </svg>
-  )
-}
-
-function IconClock() {
-  return (
-    <svg className="lp-live-aside-icon" viewBox="0 0 48 48" fill="none" aria-hidden>
-      <circle cx="24" cy="24" r="14" stroke="currentColor" strokeWidth="1.75" />
-      <path
-        d="M24 16v10l6 4"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M24 24c-6 0-10-2-12-5"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        opacity="0.4"
-      />
-    </svg>
-  )
-}
-
-function IconSpread() {
-  return (
-    <svg className="lp-live-aside-icon" viewBox="0 0 48 48" fill="none" aria-hidden>
-      <path
-        d="M8 36V20l8-6 8 10 8-14 8 6v20"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8 28h32"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeDasharray="3 4"
-        opacity="0.45"
-      />
-    </svg>
-  )
-}
-
-export default function LiveAccountPage() {
+export default function PaymentPage() {
   const { t } = useI18n()
   const [navOpen, setNavOpen] = useState(false)
   const year = new Date().getFullYear()
 
   useEffect(() => {
-    document.title = t('liveAccount.metaTitle')
+    document.title = t('paymentPage.metaTitle')
   }, [t])
 
   return (
-    <div className="landing lp-live-account-page">
+    <div className="landing lp-payment-page">
       <header className="lp-header">
         <div className="lp-header-inner">
           <Link to="/" className="lp-logo">
@@ -129,10 +57,10 @@ export default function LiveAccountPage() {
               <Link to={`/#${FORM_SECTION_ID}`}>{t('nav.services')}</Link>
               <Link to={`/#${FORM_SECTION_ID}`}>{t('nav.process')}</Link>
               <Link to={`/#${FORM_SECTION_ID}`}>{t('nav.reviews')}</Link>
-              <Link to="/live-account" className="is-active-route" aria-current="page">
-                {t('nav.liveAccount')}
+              <Link to="/live-account">{t('nav.liveAccount')}</Link>
+              <Link to="/payment" className="is-active-route" aria-current="page">
+                {t('nav.payment')}
               </Link>
-              <Link to="/payment">{t('nav.payment')}</Link>
               <a
                 href={WHATSAPP_SUPPORT_URL}
                 target="_blank"
@@ -148,17 +76,14 @@ export default function LiveAccountPage() {
               <Link to="/" className="lp-btn lp-btn-ghost lp-btn-header">
                 {t('header.home')}
               </Link>
-              <Link
-                to={`/#${FORM_SECTION_ID}`}
-                className="lp-btn lp-btn-primary lp-btn-header"
-              >
+              <Link to={`/#${FORM_SECTION_ID}`} className="lp-btn lp-btn-primary lp-btn-header">
                 {t('nav.freeAnalysis')}
               </Link>
               <button
                 type="button"
                 className="lp-nav-toggle"
                 aria-expanded={navOpen}
-                aria-controls="lp-mobile-nav-live"
+                aria-controls="lp-mobile-nav-payment"
                 onClick={() => setNavOpen((o) => !o)}
               >
                 {navOpen ? (
@@ -175,7 +100,7 @@ export default function LiveAccountPage() {
           </div>
         </div>
         <div
-          id="lp-mobile-nav-live"
+          id="lp-mobile-nav-payment"
           className={`lp-mobile-nav ${navOpen ? 'is-open' : ''}`}
           hidden={!navOpen}
         >
@@ -191,6 +116,12 @@ export default function LiveAccountPage() {
           <Link to={`/#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
             {t('nav.reviews')}
           </Link>
+          <Link to="/live-account" onClick={() => setNavOpen(false)}>
+            {t('nav.liveAccount')}
+          </Link>
+          <Link to="/payment" onClick={() => setNavOpen(false)}>
+            {t('nav.payment')}
+          </Link>
           <a
             href={WHATSAPP_SUPPORT_URL}
             onClick={() => setNavOpen(false)}
@@ -201,73 +132,48 @@ export default function LiveAccountPage() {
             <WhatsAppIcon />
             <span>{t('nav.whatsapp')}</span>
           </a>
-          <Link to="/live-account" onClick={() => setNavOpen(false)}>
-            {t('nav.liveAccount')}
-          </Link>
-          <Link to="/payment" onClick={() => setNavOpen(false)}>
-            {t('nav.payment')}
-          </Link>
-          <Link to={`/#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
-            {t('nav.freeAnalysis')}
-          </Link>
         </div>
       </header>
 
-      <main className="lp-live-account-main" id="top">
-        <div className="lp-live-account-bg" aria-hidden />
-        <div className="lp-container lp-live-account-outer">
-          <div className="lp-live-split-card">
-            <aside className="lp-live-aside" aria-label={t('liveAccount.title')}>
-              <h2 className="lp-live-aside-title">
-                {t('liveAccount.asideHeadingBefore')}
-                <span className="lp-live-aside-title-accent">
-                  {t('liveAccount.asideHeadingAccent')}
-                </span>
-                {t('liveAccount.asideHeadingAfter')}
-              </h2>
-              <p className="lp-live-aside-lead lp-preline">{t('liveAccount.asideLead')}</p>
-              <ul className="lp-live-aside-list">
-                <li>
-                  <IconProducts />
-                  <div>
-                    <strong>{t('liveAccount.asideF1Title')}</strong>
-                    <p className="lp-preline">{t('liveAccount.asideF1Body')}</p>
-                  </div>
-                </li>
-                <li>
-                  <IconClock />
-                  <div>
-                    <strong>{t('liveAccount.asideF2Title')}</strong>
-                    <p className="lp-preline">{t('liveAccount.asideF2Body')}</p>
-                  </div>
-                </li>
-                <li>
-                  <IconSpread />
-                  <div>
-                    <strong>{t('liveAccount.asideF3Title')}</strong>
-                    <p className="lp-preline">{t('liveAccount.asideF3Body')}</p>
-                  </div>
-                </li>
-              </ul>
-              <div className="lp-live-aside-deco" aria-hidden>
-                <div className="lp-live-aside-orbit" />
-                <div className="lp-live-aside-glow" />
-              </div>
-            </aside>
+      <main className="lp-payment-main">
+        <section className="lp-payment-shell lp-container">
+          <h1 className="lp-payment-title">{t('paymentPage.title')}</h1>
+          <p className="lp-payment-intro">{t('paymentPage.intro')}</p>
 
-            <div className="lp-live-form-panel">
-              <p className="lp-live-form-notice lp-preline">{t('liveAccount.notice')}</p>
-              <h1 className="lp-live-form-title">
-                {t('liveAccount.formTitleBefore')}
-                <span className="lp-live-form-title-accent">{t('liveAccount.formTitleAccent')}</span>
-              </h1>
-              <LiveAccountForm />
-              <p className="lp-live-account-back">
-                <Link to="/">{t('liveAccount.backHome')}</Link>
+          <div className="lp-payment-grid">
+            <article className="lp-payment-card">
+              <h2>{t('paymentPage.ibanTitle')}</h2>
+              <p>
+                <strong>{t('paymentPage.ibanHolder')}:</strong> Veltara Markets LTD
               </p>
-            </div>
+              <p>
+                <strong>{t('paymentPage.ibanBank')}:</strong> Demo Bank PLC
+              </p>
+              <p className="lp-payment-mono">{t('paymentPage.ibanValue')}</p>
+              <p className="lp-payment-mono">{t('paymentPage.ibanSwift')}</p>
+            </article>
+
+            <article className="lp-payment-card">
+              <h2>{t('paymentPage.cryptoTitle')}</h2>
+              <p>
+                <strong>{t('paymentPage.usdtTrc20')}:</strong>
+              </p>
+              <p className="lp-payment-mono">TX6a8gF7Jg4YwDkQ9Lh6pM2vNz1rA3bC5D</p>
+              <p>
+                <strong>{t('paymentPage.btc')}:</strong>
+              </p>
+              <p className="lp-payment-mono">bc1q0r9k8w2e3m6n4x5y7z9p1q3t5u7v9w2e4r6t8y</p>
+              <p>
+                <strong>{t('paymentPage.eth')}:</strong>
+              </p>
+              <p className="lp-payment-mono">0x8f2A6B4d1C7e9F5a3D2b6E8c1A4f9D7b5E3c1A6F</p>
+            </article>
           </div>
-        </div>
+
+          <p className="lp-payment-back">
+            <Link to="/">{t('paymentPage.backHome')}</Link>
+          </p>
+        </section>
       </main>
 
       <footer className="lp-footer" id="gizlilik">
@@ -297,7 +203,6 @@ export default function LiveAccountPage() {
             <Link to={`/#${FORM_SECTION_ID}`}>{t('footer.about')}</Link>
             <Link to="/live-account">{t('nav.liveAccount')}</Link>
             <Link to="/payment">{t('nav.payment')}</Link>
-            <Link to={`/#${FORM_SECTION_ID}`}>{t('nav.freeAnalysis')}</Link>
           </div>
           <div className="lp-footer-links">
             <span className="lp-footer-col-title">{t('footer.colLegal')}</span>
@@ -312,9 +217,7 @@ export default function LiveAccountPage() {
           <FooterRiskBlock />
         </div>
         <div className="lp-container lp-footer-copy-wrap">
-          <p className="lp-footer-copy">
-            {formatTemplate(t('footer.copy'), { year })}
-          </p>
+          <p className="lp-footer-copy">{formatTemplate(t('footer.copy'), { year })}</p>
         </div>
       </footer>
     </div>
