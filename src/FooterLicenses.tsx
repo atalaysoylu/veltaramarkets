@@ -4,7 +4,6 @@ import { useI18n } from './i18n/I18nProvider'
 const LICENSE_ORDER = [
   'fca',
   'cysec',
-  'asic',
   'finma',
   'nasdaq',
 ] as const
