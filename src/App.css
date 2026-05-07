@@ -1079,22 +1079,8 @@
   }
 }
 
-.lp-footer-brand {
-  display: block;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--hero-heading);
-  margin-bottom: 10px;
-}
-
-.lp-footer-tag {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  max-width: 28ch;
-}
-
 .lp-footer-contact-card {
-  margin-top: 14px;
+  margin-top: 0;
   padding: 12px;
   border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: 10px;

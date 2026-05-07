@@ -375,8 +375,6 @@ export default function HomePage() {
       <footer className="lp-footer" id="gizlilik">
         <div className="lp-container lp-footer-grid">
           <div>
-            <span className="lp-footer-brand">Veltara Markets</span>
-            <p className="lp-footer-tag">{t('footer.tagline')}</p>
             <div className="lp-footer-contact-card">
               <p className="lp-footer-contact-title">{t('footer.ukOfficeLabel')}</p>
               <p className="lp-footer-contact-line">{t('footer.ukOfficeAddress')}</p>
