@@ -362,7 +362,6 @@ export const tr = {
     emailSubject: 'Veltara Markets — İletişim Formu',
   },
   footer: {
-    tagline: 'Profesyonel Yatırım Danışmanlığı ve Portföy Analizi.',
     ukOfficeLabel: 'UK Finans Merkezi',
     ukOfficeAddress:
       'Canary Wharf Financial District, 40 Bank Street, London E14 5NR, United Kingdom',
@@ -797,7 +796,6 @@ export const en = {
     emailSubject: 'Veltara Markets — Contact form',
   },
   footer: {
-    tagline: 'Professional investment advisory and portfolio analysis.',
     ukOfficeLabel: 'UK Financial Centre',
     ukOfficeAddress: 'Canary Wharf Financial District, 40 Bank Street, London E14 5NR, UK',
     supportPhoneLabel: 'Support Line',
