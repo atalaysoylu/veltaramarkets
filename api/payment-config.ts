@@ -1,3 +1,4 @@
+/** Edge Config yapısı: `iban`, `crypto`. Varsayılanlar `src/paymentConfig.ts` ile aynı kalmalı. */
 import { getAll } from '@vercel/edge-config'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 

@@ -5,62 +5,12 @@ import { LanguageSwitch } from './LanguageSwitch'
 import { LogoMark } from './LogoMark'
 import { FooterLicenses } from './FooterLicenses'
 import { FooterRiskBlock } from './FooterRiskBlock'
+import { usePaymentConfig } from './usePaymentConfig'
 import './App.css'
 import './PaymentPage.css'
 
 const FORM_SECTION_ID = 'analiz'
 const WHATSAPP_SUPPORT_URL = 'https://wa.me/447938315394'
-
-type IbanInfo = {
-  holder: string
-  bank: string
-  iban: string
-  swift: string
-}
-
-type CryptoEntry = {
-  label: string
-  address: string
-}
-
-type PaymentConfig = {
-  iban: IbanInfo
-  crypto: CryptoEntry[]
-}
-
-const FALLBACK_CONFIG: PaymentConfig = {
-  iban: {
-    holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',
-    bank: 'TÜRKİYE İŞ BANKASI',
-    iban: 'TR39 0006 4000 0011 0891 4718 90',
-    swift: '',
-  },
-  crypto: [
-    { label: 'USDT (TRC20)', address: 'TMfzrSe1Ye8pnDMY9jTzAKrhBNk3G3rWRU' },
-  ],
-}
-
-function isPaymentConfig(value: unknown): value is PaymentConfig {
-  if (!value || typeof value !== 'object') return false
-  const v = value as Record<string, unknown>
-  const iban = v.iban as Record<string, unknown> | undefined
-  const ibanOk =
-    !!iban &&
-    typeof iban.holder === 'string' &&
-    typeof iban.bank === 'string' &&
-    typeof iban.iban === 'string' &&
-    typeof iban.swift === 'string'
-  const cryptoOk =
-    Array.isArray(v.crypto) &&
-    v.crypto.every(
-      (e) =>
-        e &&
-        typeof e === 'object' &&
-        typeof (e as Record<string, unknown>).label === 'string' &&
-        typeof (e as Record<string, unknown>).address === 'string',
-    )
-  return ibanOk && cryptoOk
-}
 
 function MenuIcon() {
   return (
@@ -89,28 +39,12 @@ function WhatsAppIcon() {
 export default function PaymentPage() {
   const { t } = useI18n()
   const [navOpen, setNavOpen] = useState(false)
-  const [config, setConfig] = useState<PaymentConfig>(FALLBACK_CONFIG)
+  const config = usePaymentConfig()
   const year = new Date().getFullYear()
 
   useEffect(() => {
     document.title = t('paymentPage.metaTitle')
   }, [t])
-
-  useEffect(() => {
-    const controller = new AbortController()
-    fetch('/api/payment-config', {
-      signal: controller.signal,
-      cache: 'no-store',
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('bad_status'))))
-      .then((data: unknown) => {
-        if (isPaymentConfig(data)) setConfig(data)
-      })
-      .catch(() => {
-        /* fallback statede kalır */
-      })
-    return () => controller.abort()
-  }, [])
 
   return (
     <div className="landing lp-payment-page">

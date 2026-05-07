@@ -1,0 +1,681 @@
+/* Panel, para çek, para yatır — açık arka plan, kart düzeni */
+
+.lp-live-account-main:has(.lp-portal-outer) {
+  align-items: flex-start !important;
+  overflow-y: auto;
+  padding: 20px 0 28px !important;
+}
+
+.lp-portal-outer {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  margin: 0 auto;
+  padding: 0 4px;
+}
+
+/* Koyu sayfa zemini üzerinde okunur metin + kart içinde koyu metin */
+.lp-live-account-page .lp-live-account-main .lp-portal-outer {
+  color: #cbd5e1;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-portal-card {
+  color: #0f172a;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-portal-card .lp-withdraw-done-title,
+.lp-live-account-page .lp-live-account-main .lp-portal-card .lp-withdraw-done-body {
+  color: #0f172a;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-portal-card .lp-withdraw-done-body {
+  color: #475569;
+}
+
+.lp-deposit-flow {
+  width: min(640px, 100%);
+}
+
+.lp-portal-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+.lp-portal-panel {
+  text-align: center;
+}
+
+.lp-portal-welcome {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.lp-portal-lead {
+  margin: 0 0 24px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.lp-portal-actions-grid {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.lp-portal-action {
+  display: block;
+  text-align: left;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #fff 40%);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.lp-portal-action:hover {
+  border-color: #003366;
+  box-shadow: 0 8px 20px rgba(0, 51, 102, 0.12);
+}
+
+.lp-portal-action-title {
+  display: block;
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: #003366;
+}
+
+.lp-portal-action-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.88rem;
+  color: #64748b;
+}
+
+.lp-portal-logout {
+  width: auto;
+  margin: 0 auto;
+}
+
+.lp-portal-back,
+.lp-portal-back-btn {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #5eead4;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-portal-back,
+.lp-live-account-page .lp-live-account-main .lp-portal-back-btn {
+  color: #5eead4;
+}
+
+.lp-portal-back-btn:hover,
+.lp-portal-back:hover {
+  text-decoration: underline;
+  color: #99f6e4;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-portal-back:hover,
+.lp-live-account-page .lp-live-account-main .lp-portal-back-btn:hover {
+  color: #ccfbf1;
+}
+
+.lp-portal-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 14px 20px !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: 12px !important;
+  border: none !important;
+  background: #003366 !important;
+  color: #fff !important;
+  margin-top: 8px;
+}
+
+/* Çekim */
+.lp-withdraw-header {
+  margin-bottom: 16px;
+}
+
+.lp-withdraw-title {
+  margin: 6px 0 4px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-withdraw-sub {
+  color: #94a3b8;
+}
+
+.lp-withdraw-sub {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.lp-withdraw-card {
+  padding: 22px !important;
+}
+
+.lp-withdraw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lp-withdraw-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.lp-withdraw-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.lp-withdraw-input:focus-visible {
+  outline: 2px solid rgba(0, 51, 102, 0.35);
+  border-color: #003366;
+}
+
+.lp-withdraw-hint {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.lp-withdraw-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 12px;
+  background: #e8f4fc;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.lp-portal-shield-svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.lp-withdraw-note p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.lp-withdraw-error {
+  margin: -4px 0 !important;
+}
+
+.lp-withdraw-done-title {
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.lp-withdraw-done-body {
+  margin: 0 0 20px;
+  color: #64748b;
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.lp-portal-done-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Yatırım — banka */
+.lp-deposit-bank-head {
+  margin-bottom: 16px;
+}
+
+.lp-deposit-bank-title {
+  margin: 0 0 6px;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #003366;
+}
+
+.lp-deposit-bank-sub {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #64748b;
+}
+
+.lp-deposit-search-wrap {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.lp-deposit-search-wrap .lp-deposit-search-svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.lp-deposit-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px 12px 44px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+}
+
+.lp-deposit-search:focus-visible {
+  outline: 2px solid rgba(0, 51, 102, 0.22);
+}
+
+.lp-deposit-bank-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 520px) {
+  .lp-deposit-bank-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lp-deposit-bank-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.lp-deposit-bank-card:hover {
+  border-color: #94a3b8;
+}
+
+.lp-deposit-bank-card.is-selected {
+  border-color: transparent;
+  box-shadow:
+    inset 4px 0 0 #003366,
+    0 0 0 1px rgba(0, 51, 102, 0.15);
+  background: #eef6ff;
+}
+
+.lp-deposit-bank-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.lp-deposit-bank-avatar--sm {
+  width: 28px;
+  height: 28px;
+  font-size: 0.75rem;
+}
+
+.lp-deposit-bank-name {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.lp-deposit-sticky-actions {
+  margin-top: 8px;
+}
+
+.lp-deposit-panel-link {
+  text-align: center;
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+}
+
+.lp-deposit-panel-link a {
+  color: #64748b;
+}
+
+.lp-deposit-flow-error {
+  margin: -4px 0 8px !important;
+}
+
+/* Koyu arka üzerinde başlıklar ve dış bağlantılar (canlı hesap sayfası) */
+.lp-live-account-page .lp-live-account-main .lp-deposit-bank-title,
+.lp-live-account-page .lp-live-account-main .lp-deposit-amount-title,
+.lp-live-account-page .lp-live-account-main .lp-deposit-complete-title {
+  color: #f8fafc;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-bank-sub,
+.lp-live-account-page .lp-live-account-main .lp-deposit-amount-sub {
+  color: #94a3b8;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-complete-sub-row,
+.lp-live-account-page .lp-live-account-main .lp-deposit-complete-sub-row p {
+  color: #94a3b8;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-mini-bank {
+  color: #e2e8f0;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-mini-bank .lp-deposit-bank-avatar ~ span {
+  color: #f1f5f9;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-panel-link a {
+  color: #5eead4;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-panel-link a:hover {
+  color: #99f6e4;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-trust {
+  color: #94a3b8;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-sms-note {
+  color: #94a3b8;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-quick-label {
+  color: #7dd3fc;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-flow-error.lp-form-error,
+.lp-live-account-page .lp-live-account-main .lp-deposit-mail-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(127, 29, 29, 0.45);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  color: #fecaca;
+}
+
+.lp-deposit-copied-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.lp-deposit-mail-error {
+  margin-top: 4px !important;
+}
+
+/* Tutar */
+.lp-deposit-amount-head {
+  margin-bottom: 20px;
+}
+
+.lp-deposit-amount-title {
+  margin: 0 0 6px;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #003366;
+}
+
+.lp-deposit-amount-sub {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #64748b;
+}
+
+.lp-deposit-amount-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid #93c5fd;
+  background: #fff;
+  margin-bottom: 22px;
+}
+
+.lp-deposit-amount-currency {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #003366;
+}
+
+.lp-deposit-amount-input {
+  flex: 1;
+  border: none;
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #003366;
+  min-width: 0;
+  background: transparent;
+}
+
+.lp-deposit-amount-input:focus {
+  outline: none;
+}
+
+.lp-deposit-quick-label {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.lp-deposit-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.lp-deposit-chip {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.lp-deposit-chip.is-selected {
+  border-color: #003366;
+  background: #eef6ff;
+  color: #003366;
+}
+
+/* Complete */
+.lp-deposit-complete-head {
+  margin-bottom: 16px;
+}
+
+.lp-deposit-complete-title {
+  margin: 0 0 8px;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #003366;
+}
+
+.lp-deposit-complete-sub-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.lp-deposit-mini-bank {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.lp-deposit-complete-card {
+  margin-bottom: 12px;
+}
+
+.lp-deposit-complete-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.lp-deposit-complete-row:last-of-type {
+  border-bottom: none;
+}
+
+.lp-deposit-complete-k {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lp-deposit-complete-v {
+  font-size: 0.95rem;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.lp-deposit-copy-block {
+  margin-bottom: 14px;
+}
+
+.lp-deposit-copy-label {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+.lp-deposit-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.lp-deposit-iban,
+.lp-deposit-desc {
+  flex: 1;
+  font-size: 0.84rem;
+  word-break: break-all;
+  color: #0f172a;
+}
+
+.lp-deposit-copy-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  color: #475569;
+  display: grid;
+  place-items: center;
+}
+
+.lp-deposit-copy-btn:focus-visible {
+  outline: 2px solid #003366;
+  outline-offset: 2px;
+}
+
+.lp-deposit-alert {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+
+.lp-deposit-alert--warn {
+  background: rgba(255, 237, 213, 0.9);
+  border: 1px solid rgba(251, 146, 60, 0.5);
+  color: #9a3412;
+}
+
+.lp-deposit-alert--ok {
+  background: rgba(220, 252, 231, 0.9);
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  color: #166534;
+}
+
+.lp-deposit-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0 10px;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.lp-deposit-trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lp-deposit-sms-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0 0 10px;
+}

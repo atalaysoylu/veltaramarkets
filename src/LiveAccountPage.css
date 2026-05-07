@@ -82,7 +82,6 @@
   gap: 0;
   align-items: stretch;
   width: 100%;
-  max-height: min(680px, calc(100svh - 120px));
   border-radius: 20px;
   overflow: hidden;
   box-shadow:
@@ -94,7 +93,6 @@
 @media (max-width: 900px) {
   .lp-live-split-card {
     grid-template-columns: 1fr;
-    max-height: none;
     border-radius: 18px;
   }
 
