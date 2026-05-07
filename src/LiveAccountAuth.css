@@ -1,0 +1,209 @@
+/**
+ * Login / Register — sade, tek sütun form, nötr palet
+ */
+
+.lp-live-form-panel.lp-auth-panel {
+  padding: clamp(22px, 4vw, 34px) clamp(20px, 3vw, 36px);
+  justify-content: flex-start;
+}
+
+/* Sekmeler — gömülü segment */
+.lp-auth-tabs {
+  display: flex;
+  padding: 4px;
+  margin: 0 0 22px;
+  gap: 4px;
+  background: #f1f5f9;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.lp-auth-tab {
+  flex: 1;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition:
+    background 0.18s,
+    color 0.18s,
+    box-shadow 0.18s;
+}
+
+.lp-auth-tab:hover {
+  color: #334155;
+}
+
+.lp-auth-tab.is-active {
+  background: #fff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Başlık */
+.lp-live-form-panel.lp-auth-panel .lp-live-form-title {
+  font-size: clamp(1.25rem, 2.8vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 22px;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.lp-live-form-panel.lp-auth-panel .lp-live-form-title-accent {
+  color: #0d9488;
+}
+
+/* Form gövdesi — tek kolon */
+.lp-live-form-panel .lp-auth-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field {
+  margin-bottom: 0;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field > label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #0f172a;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field input::placeholder {
+  color: #94a3b8;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field input:hover {
+  border-color: #cbd5e1;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-fields .lp-field input:focus-visible {
+  outline: none;
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+  background: #fff;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-live-input-icon input {
+  padding-right: 48px;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-live-input-icon-btn {
+  right: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  color: #64748b;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-live-input-icon-btn:hover:not(:disabled) {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+/* Şifre ipucu — yeterli boşluk ve okunabilir kontrast */
+.lp-live-form-panel .lp-auth-form .lp-auth-hint {
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+/* Hata */
+.lp-live-form-panel .lp-auth-form .lp-auth-error {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 0.8125rem;
+}
+
+/* Gönder */
+.lp-live-form-panel .lp-auth-form .lp-live-submit.lp-auth-submit {
+  margin-top: 22px;
+  min-height: 48px;
+  padding-block: 12px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  background: #0f172a;
+  color: #fff;
+  transition: background 0.18s;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-live-submit.lp-auth-submit:hover:not(:disabled) {
+  background: #1e293b;
+  color: #fff;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-live-submit.lp-auth-submit:active:not(:disabled) {
+  background: #020617;
+}
+
+/* Ana sayfa linki */
+.lp-auth-back {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.8125rem;
+}
+
+.lp-auth-back a {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.lp-auth-back a:hover {
+  color: #0f172a;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* Sol panel — biraz daha sakin */
+.lp-live-split-card .lp-live-aside {
+  background: linear-gradient(165deg, #eceff4 0%, #e8ecf1 48%, #e2e7ef 100%);
+}
+
+.lp-live-split-card .lp-live-aside-lead {
+  color: #64748b;
+}
+
+.lp-live-split-card .lp-live-aside-title {
+  color: #0f172a;
+}

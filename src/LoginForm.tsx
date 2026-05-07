@@ -7,15 +7,6 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
-function meetsPasswordPolicy(p: string) {
-  if (p.length < 8 || p.length > 16) return false
-  if (!/[A-Z]/.test(p)) return false
-  if (!/[a-z]/.test(p)) return false
-  if (!/[0-9]/.test(p)) return false
-  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(p)) return false
-  return true
-}
-
 function EyeIcon({ hidden }: { hidden?: boolean }) {
   if (hidden) {
     return (
@@ -43,11 +34,10 @@ function EyeIcon({ hidden }: { hidden?: boolean }) {
   )
 }
 
-export function LiveAccountForm() {
+export function LoginForm() {
   const { t } = useI18n()
-  const { register } = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
-  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
@@ -56,28 +46,19 @@ export function LiveAccountForm() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setErrorMessage('')
-    const n = fullName.trim()
     const em = email.trim()
-
-    if (!n || !em || !password) {
-      setErrorMessage(t('liveAccount.errRequired'))
+    if (!em || !password) {
+      setErrorMessage(t('auth.errRequired'))
       return
     }
     if (!isValidEmail(em)) {
-      setErrorMessage(t('liveAccount.errEmail'))
+      setErrorMessage(t('auth.errEmail'))
       return
     }
-    if (!meetsPasswordPolicy(password)) {
-      setErrorMessage(t('liveAccount.errPassword'))
+    if (!login(em, password)) {
+      setErrorMessage(t('auth.errLogin'))
       return
     }
-
-    const result = register({ email: em, fullName: n, password })
-    if (result === 'exists') {
-      setErrorMessage(t('auth.errRegisterExists'))
-      return
-    }
-
     navigate('/live-account/panel', { replace: true })
   }
 
@@ -85,43 +66,26 @@ export function LiveAccountForm() {
     <form className="lp-form lp-live-account-form lp-auth-form" onSubmit={handleSubmit} noValidate>
       <div className="lp-auth-fields">
         <div className="lp-field">
-          <label htmlFor="live-fullname">{t('liveAccount.fullName')}</label>
+          <label htmlFor="login-email">{t('liveAccount.email')}</label>
           <input
-            id="live-fullname"
-            type="text"
-            name="ad_soyad"
-            autoComplete="name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="lp-field">
-          <label htmlFor="live-email">{t('liveAccount.email')}</label>
-          <input
-            id="live-email"
+            id="login-email"
             type="email"
-            name="email"
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
-
         <div className="lp-field">
-          <label htmlFor="live-password">{t('liveAccount.password')}</label>
+          <label htmlFor="login-password">{t('liveAccount.password')}</label>
           <div className="lp-live-input-icon">
             <input
-              id="live-password"
+              id="login-password"
               type={showPwd ? 'text' : 'password'}
-              name="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              aria-describedby="live-pwd-rules"
             />
             <button
               type="button"
@@ -140,10 +104,6 @@ export function LiveAccountForm() {
         </div>
       </div>
 
-      <p id="live-pwd-rules" className="lp-auth-hint">
-        {t('liveAccount.passwordHintShort')}
-      </p>
-
       {errorMessage ? (
         <p className="lp-form-error lp-auth-error" role="alert">
           {errorMessage}
@@ -154,7 +114,7 @@ export function LiveAccountForm() {
         type="submit"
         className="lp-btn lp-btn-lg lp-form-submit lp-live-submit lp-auth-submit"
       >
-        {t('liveAccount.submit')}
+        {t('auth.loginSubmit')}
       </button>
     </form>
   )
