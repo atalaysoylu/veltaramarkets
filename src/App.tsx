@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './HomePage'
 import LiveAccountLayout from './LiveAccountLayout'
 import LiveAccountAuthScreen from './LiveAccountAuthScreen'
@@ -6,7 +6,6 @@ import LiveAccountPanelScreen from './LiveAccountPanelScreen'
 import WithdrawRequestScreen from './WithdrawRequestScreen'
 import DepositFlowScreen from './DepositFlowScreen'
 import { ProtectedLiveRoute } from './ProtectedLiveRoute'
-import PaymentPage from './PaymentPage'
 import './App.css'
 
 export default function App() {
@@ -40,7 +39,7 @@ export default function App() {
           }
         />
       </Route>
-      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/payment" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

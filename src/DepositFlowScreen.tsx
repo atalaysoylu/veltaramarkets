@@ -6,7 +6,7 @@ import {
   getDepositDraft,
   setDepositDraft,
 } from './authStorage'
-import { DEPOSIT_BANKS, type DepositBank } from './depositBanks'
+import { DEPOSIT_BANKS, depositBankLogoSrc, type DepositBank } from './depositBanks'
 import { copyTextToClipboard } from './copyToClipboard'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { compactIban } from './paymentConfig'
@@ -69,6 +69,38 @@ function SearchIcon() {
       <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.75" />
       <path d="m20 20-4-4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
     </svg>
+  )
+}
+
+function DepositBankLogoMark({ bank, small }: { bank: DepositBank; small?: boolean }) {
+  const [imgFailed, setImgFailed] = useState(false)
+
+  const baseCls = ['lp-deposit-bank-avatar', small ? 'lp-deposit-bank-avatar--sm' : '']
+    .filter(Boolean)
+    .join(' ')
+
+  if (imgFailed) {
+    return (
+      <span
+        className={baseCls}
+        style={{ backgroundColor: bank.color }}
+        aria-hidden
+      >
+        {bank.initial}
+      </span>
+    )
+  }
+
+  return (
+    <span className={`${baseCls} lp-deposit-bank-avatar--logo`} aria-hidden>
+      <img
+        src={depositBankLogoSrc(bank)}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        onError={() => setImgFailed(true)}
+      />
+    </span>
   )
 }
 
@@ -284,9 +316,7 @@ export default function DepositFlowScreen() {
                 setErrorMessage('')
               }}
             >
-              <span className="lp-deposit-bank-avatar" style={{ backgroundColor: b.color }}>
-                {b.initial}
-              </span>
+              <DepositBankLogoMark bank={b} />
               <span className="lp-deposit-bank-name">{b.name}</span>
             </button>
           ))}
@@ -368,12 +398,7 @@ export default function DepositFlowScreen() {
           <p>{t('deposit.completeSub')}</p>
           {bankForComplete ? (
             <span className="lp-deposit-mini-bank">
-              <span
-                className="lp-deposit-bank-avatar lp-deposit-bank-avatar--sm"
-                style={{ backgroundColor: bankForComplete.color }}
-              >
-                {bankForComplete.initial}
-              </span>
+              <DepositBankLogoMark bank={bankForComplete} small />
               <span>{bankForComplete.name}</span>
             </span>
           ) : null}

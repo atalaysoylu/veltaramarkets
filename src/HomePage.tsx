@@ -136,7 +136,6 @@ export default function HomePage() {
               <a href={`#${FORM_SECTION_ID}`}>{t('nav.process')}</a>
               <a href={`#${FORM_SECTION_ID}`}>{t('nav.reviews')}</a>
               <Link to="/live-account">{t('nav.liveAccount')}</Link>
-              <Link to="/payment">{t('nav.payment')}</Link>
               <a
                 href={WHATSAPP_SUPPORT_URL}
                 target="_blank"
@@ -204,9 +203,6 @@ export default function HomePage() {
           </a>
           <Link to="/live-account" onClick={() => setNavOpen(false)}>
             {t('nav.liveAccount')}
-          </Link>
-          <Link to="/payment" onClick={() => setNavOpen(false)}>
-            {t('nav.payment')}
           </Link>
           <a href={`#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
             {t('nav.freeAnalysis')}
@@ -396,7 +392,6 @@ export default function HomePage() {
             <span className="lp-footer-col-title">{t('footer.colCompany')}</span>
             <a href={`#${FORM_SECTION_ID}`}>{t('footer.about')}</a>
             <Link to="/live-account">{t('nav.liveAccount')}</Link>
-            <Link to="/payment">{t('nav.payment')}</Link>
             <a href={`#${FORM_SECTION_ID}`}>{t('nav.freeAnalysis')}</a>
             <a href={`#${FORM_SECTION_ID}`}>{t('footer.references')}</a>
           </div>
