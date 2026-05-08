@@ -374,6 +374,22 @@
   padding: 3px;
 }
 
+.lp-deposit-wallet {
+  word-break: break-word;
+}
+
+.lp-deposit-method-line {
+  display: block;
+}
+
+.lp-deposit-method-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
 .lp-deposit-bank-name {
   font-weight: 600;
   font-size: 0.82rem;
@@ -422,6 +438,10 @@
 
 .lp-live-account-page .lp-live-account-main .lp-deposit-mini-bank .lp-deposit-bank-avatar ~ span {
   color: #f1f5f9;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-mini-bank .lp-deposit-method-sub {
+  color: #94a3b8;
 }
 
 .lp-live-account-page .lp-live-account-main .lp-deposit-bank-avatar--logo {

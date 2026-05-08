@@ -6,7 +6,16 @@ import {
   getDepositDraft,
   setDepositDraft,
 } from './authStorage'
-import { DEPOSIT_BANKS, depositBankLogoSrc, type DepositBank } from './depositBanks'
+import {
+  DEPOSIT_BANKS,
+  DEPOSIT_CRYPTO,
+  allDepositFundingOptions,
+  depositFundingLogoSrc,
+  fundingOptionById,
+  fundingOptionDraftName,
+  isDepositCrypto,
+  type DepositFundingOption,
+} from './depositBanks'
 import { copyTextToClipboard } from './copyToClipboard'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { compactIban } from './paymentConfig'
@@ -38,9 +47,42 @@ function refCode(userId: string): string {
   return tail.padStart(6, '0').slice(0, 6)
 }
 
-function bankFromDraft(draft: ReturnType<typeof getDepositDraft>): DepositBank | null {
+function fundingFromDraft(
+  draft: ReturnType<typeof getDepositDraft>,
+): DepositFundingOption | null {
   if (!draft?.bankId) return null
-  return DEPOSIT_BANKS.find((x) => x.id === draft.bankId) ?? null
+  return fundingOptionById(draft.bankId, DEPOSIT_BANKS) ?? null
+}
+
+function filterFundingOptions(query: string): DepositFundingOption[] {
+  const q = query.trim().toLowerCase()
+  if (!q) return allDepositFundingOptions(DEPOSIT_BANKS)
+
+  const cryptoMatches = DEPOSIT_CRYPTO.filter((c) => {
+    const blob = `${c.name} ${c.subtitle} ${c.address}`.toLowerCase()
+    if (blob.includes(q)) return true
+    if (
+      (q.includes('usdt') || q.includes('tether') || q.includes('usd')) &&
+      c.id === 'crypto-usdt-trc20'
+    )
+      return true
+    if (
+      (q.includes('btc') || q.includes('bitcoin')) &&
+      c.id === 'crypto-btc'
+    )
+      return true
+    if (
+      (q.includes('trc20') || q.includes('tron') || q.includes('trx')) &&
+      c.id === 'crypto-usdt-trc20'
+    )
+      return true
+    return false
+  })
+
+  const bankMatches = DEPOSIT_BANKS.filter((b) =>
+    b.name.toLowerCase().includes(q),
+  )
+  return [...cryptoMatches, ...bankMatches]
 }
 
 function CopyIcon() {
@@ -72,7 +114,13 @@ function SearchIcon() {
   )
 }
 
-function DepositBankLogoMark({ bank, small }: { bank: DepositBank; small?: boolean }) {
+function DepositFundingLogoMark({
+  option,
+  small,
+}: {
+  option: DepositFundingOption
+  small?: boolean
+}) {
   const [imgFailed, setImgFailed] = useState(false)
 
   const baseCls = ['lp-deposit-bank-avatar', small ? 'lp-deposit-bank-avatar--sm' : '']
@@ -83,10 +131,10 @@ function DepositBankLogoMark({ bank, small }: { bank: DepositBank; small?: boole
     return (
       <span
         className={baseCls}
-        style={{ backgroundColor: bank.color }}
+        style={{ backgroundColor: option.color }}
         aria-hidden
       >
-        {bank.initial}
+        {option.initial}
       </span>
     )
   }
@@ -94,7 +142,7 @@ function DepositBankLogoMark({ bank, small }: { bank: DepositBank; small?: boole
   return (
     <span className={`${baseCls} lp-deposit-bank-avatar--logo`} aria-hidden>
       <img
-        src={depositBankLogoSrc(bank)}
+        src={depositFundingLogoSrc(option)}
         alt=""
         loading="lazy"
         decoding="async"
@@ -120,15 +168,15 @@ export default function DepositFlowScreen() {
   const resolvedStep = searchParams.get('step') || 'bank'
 
   const [search, setSearch] = useState('')
-  const [pickedBank, setPickedBank] = useState<DepositBank | null>(null)
+  const [pickedFunding, setPickedFunding] = useState<DepositFundingOption | null>(null)
   const [amountRaw, setAmountRaw] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [copyToast, setCopyToast] = useState<'iban' | 'desc' | null>(null)
+  const [copyToast, setCopyToast] = useState<'iban' | 'desc' | 'wallet' | null>(null)
   const [confirmBusy, setConfirmBusy] = useState(false)
   const paymentConfig = usePaymentConfig()
 
   const draft = getDepositDraft()
-  const selectedBank = pickedBank ?? bankFromDraft(draft)
+  const selectedFunding = pickedFunding ?? fundingFromDraft(draft)
 
   const goStep = useCallback(
     (s: string) => {
@@ -138,11 +186,10 @@ export default function DepositFlowScreen() {
     [setSearchParams],
   )
 
-  const filteredBanks = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    if (!q) return DEPOSIT_BANKS
-    return DEPOSIT_BANKS.filter((b) => b.name.toLowerCase().includes(q))
-  }, [search])
+  const filteredFundingOptions = useMemo(
+    () => filterFundingOptions(search),
+    [search],
+  )
 
   const descriptionLine = user
     ? formatTemplate(t('deposit.descriptionLine'), {
@@ -175,13 +222,26 @@ export default function DepositFlowScreen() {
     }
   }
 
+  function copyWallet(addr: string) {
+    const ok = copyTextToClipboard(addr.trim())
+    if (ok) {
+      setCopyToast('wallet')
+      window.setTimeout(() => setCopyToast((c) => (c === 'wallet' ? null : c)), 1600)
+    } else {
+      setErrorMessage(t('deposit.copyFailed'))
+    }
+  }
+
   function handleContinueBank() {
-    if (!selectedBank) {
+    if (!selectedFunding) {
       setErrorMessage(t('deposit.errPickBank'))
       return
     }
-    setDepositDraft({ bankId: selectedBank.id, bankName: selectedBank.name })
-    setPickedBank(null)
+    setDepositDraft({
+      bankId: selectedFunding.id,
+      bankName: fundingOptionDraftName(selectedFunding),
+    })
+    setPickedFunding(null)
     setAmountRaw('')
     goStep('amount')
   }
@@ -217,6 +277,19 @@ export default function DepositFlowScreen() {
     )
       return
 
+    const resolvedMethod =
+      draftNow.bankId !== undefined
+        ? fundingOptionById(draftNow.bankId, DEPOSIT_BANKS)
+        : undefined
+
+    let kriptoAdres = ''
+    let kriptoAg = ''
+    if (resolvedMethod && isDepositCrypto(resolvedMethod)) {
+      kriptoAdres = resolvedMethod.address
+      kriptoAg = resolvedMethod.subtitle
+    }
+    const isCryptoRail = Boolean(kriptoAdres)
+
     const compactIbanVal = compactIban(paymentConfig.iban.iban)
     setConfirmBusy(true)
     setErrorMessage('')
@@ -227,10 +300,13 @@ export default function DepositFlowScreen() {
         kullanici_email: user.email,
         ad_soyad: user.fullName,
         kullanici_id: user.id,
+        odeme_turu: isCryptoRail ? 'kripto' : 'banka_havalesi',
         gonderen_banka: draftNow.bankName,
         tutar_try: String(draftNow.amountTry),
-        alici_iban: compactIbanVal,
+        alici_iban: isCryptoRail ? '—' : compactIbanVal,
         aciklama: descriptionLine,
+        kripto_adres: kriptoAdres,
+        kripto_ag: kriptoAg,
       },
       {
         subject: t('deposit.emailSubject'),
@@ -281,7 +357,7 @@ export default function DepositFlowScreen() {
     return <Navigate to={DEPOSIT_BANK_STEP} replace />
   }
 
-  const bankForComplete = bankFromDraft(draft)
+  const methodForComplete = fundingFromDraft(draft)
   const draftAmount =
     typeof draft?.amountTry === 'number'
       ? draft.amountTry
@@ -306,18 +382,25 @@ export default function DepositFlowScreen() {
           />
         </div>
         <div className="lp-deposit-bank-grid">
-          {filteredBanks.map((b) => (
+          {filteredFundingOptions.map((opt) => (
             <button
-              key={b.id}
+              key={opt.id}
               type="button"
-              className={`lp-deposit-bank-card ${selectedBank?.id === b.id ? 'is-selected' : ''}`}
+              className={`lp-deposit-bank-card ${selectedFunding?.id === opt.id ? 'is-selected' : ''}`}
               onClick={() => {
-                setPickedBank(b)
+                setPickedFunding(opt)
                 setErrorMessage('')
               }}
             >
-              <DepositBankLogoMark bank={b} />
-              <span className="lp-deposit-bank-name">{b.name}</span>
+              <DepositFundingLogoMark option={opt} />
+              {isDepositCrypto(opt) ? (
+                <span className="lp-deposit-bank-name">
+                  <span className="lp-deposit-method-line">{opt.name}</span>
+                  <span className="lp-deposit-method-sub">{opt.subtitle}</span>
+                </span>
+              ) : (
+                <span className="lp-deposit-bank-name">{opt.name}</span>
+              )}
             </button>
           ))}
         </div>
@@ -387,6 +470,9 @@ export default function DepositFlowScreen() {
   const amountDisplay =
     typeof draftAmount === 'number' ? formatTryInt(draftAmount, locale) : '—'
 
+  const cryptoComplete =
+    methodForComplete !== null && isDepositCrypto(methodForComplete)
+
   return (
     <div className="lp-portal-outer lp-container lp-deposit-flow">
       <button type="button" className="lp-portal-back-btn" onClick={backToAmount}>
@@ -395,54 +481,91 @@ export default function DepositFlowScreen() {
       <div className="lp-deposit-complete-head">
         <h1 className="lp-deposit-complete-title">{t('deposit.completeTitle')}</h1>
         <div className="lp-deposit-complete-sub-row">
-          <p>{t('deposit.completeSub')}</p>
-          {bankForComplete ? (
+          <p>
+            {cryptoComplete ? t('deposit.completeSubCrypto') : t('deposit.completeSub')}
+          </p>
+          {methodForComplete ? (
             <span className="lp-deposit-mini-bank">
-              <DepositBankLogoMark bank={bankForComplete} small />
-              <span>{bankForComplete.name}</span>
+              <DepositFundingLogoMark option={methodForComplete} small />
+              <span>
+                {cryptoComplete
+                  ? `${methodForComplete.name} (${methodForComplete.subtitle})`
+                  : methodForComplete.name}
+              </span>
             </span>
           ) : null}
         </div>
       </div>
 
       <div className="lp-portal-card lp-deposit-complete-card">
-        <div className="lp-deposit-complete-row">
-          <span className="lp-deposit-complete-k">{t('deposit.recipient')}</span>
-          <strong className="lp-deposit-complete-v">{paymentConfig.iban.holder}</strong>
-        </div>
-        <div className="lp-deposit-complete-row">
-          <span className="lp-deposit-complete-k">{t('deposit.recipientBank')}</span>
-          <span className="lp-deposit-complete-v">{paymentConfig.iban.bank}</span>
-        </div>
+        {!cryptoComplete ? (
+          <>
+            <div className="lp-deposit-complete-row">
+              <span className="lp-deposit-complete-k">{t('deposit.recipient')}</span>
+              <strong className="lp-deposit-complete-v">{paymentConfig.iban.holder}</strong>
+            </div>
+            <div className="lp-deposit-complete-row">
+              <span className="lp-deposit-complete-k">{t('deposit.recipientBank')}</span>
+              <span className="lp-deposit-complete-v">{paymentConfig.iban.bank}</span>
+            </div>
+          </>
+        ) : null}
         <div className="lp-deposit-complete-row">
           <span className="lp-deposit-complete-k">{t('deposit.amountLabel')}</span>
           <strong className="lp-deposit-complete-v">₺ {amountDisplay}</strong>
         </div>
-        {paymentConfig.iban.swift.trim() ? (
+        {cryptoComplete ? (
+          <div className="lp-deposit-complete-row">
+            <span className="lp-deposit-complete-k">{t('deposit.networkLabel')}</span>
+            <span className="lp-deposit-complete-v">{methodForComplete.subtitle}</span>
+          </div>
+        ) : paymentConfig.iban.swift.trim() ? (
           <div className="lp-deposit-complete-row">
             <span className="lp-deposit-complete-k">{t('deposit.swiftLabel')}</span>
             <span className="lp-deposit-complete-v">{paymentConfig.iban.swift}</span>
           </div>
         ) : null}
-        <div className="lp-deposit-copy-block">
-          <span className="lp-deposit-copy-label">IBAN</span>
-          <div className="lp-deposit-copy-row">
-            <code className="lp-deposit-iban">{displayIban}</code>
-            <button
-              type="button"
-              className="lp-deposit-copy-btn"
-              onClick={() => copyIban()}
-              aria-label={t('deposit.copyIban')}
-            >
-              <CopyIcon />
-            </button>
+        {cryptoComplete ? (
+          <div className="lp-deposit-copy-block">
+            <span className="lp-deposit-copy-label">{t('deposit.walletLabel')}</span>
+            <div className="lp-deposit-copy-row">
+              <code className="lp-deposit-iban lp-deposit-wallet">{methodForComplete.address}</code>
+              <button
+                type="button"
+                className="lp-deposit-copy-btn"
+                onClick={() => copyWallet(methodForComplete.address)}
+                aria-label={t('deposit.copyWallet')}
+              >
+                <CopyIcon />
+              </button>
+            </div>
+            {copyToast === 'wallet' ? (
+              <span className="lp-deposit-copied-hint" role="status">
+                ✓
+              </span>
+            ) : null}
           </div>
-          {copyToast === 'iban' ? (
-            <span className="lp-deposit-copied-hint" role="status">
-              ✓
-            </span>
-          ) : null}
-        </div>
+        ) : (
+          <div className="lp-deposit-copy-block">
+            <span className="lp-deposit-copy-label">IBAN</span>
+            <div className="lp-deposit-copy-row">
+              <code className="lp-deposit-iban">{displayIban}</code>
+              <button
+                type="button"
+                className="lp-deposit-copy-btn"
+                onClick={() => copyIban()}
+                aria-label={t('deposit.copyIban')}
+              >
+                <CopyIcon />
+              </button>
+            </div>
+            {copyToast === 'iban' ? (
+              <span className="lp-deposit-copied-hint" role="status">
+                ✓
+              </span>
+            ) : null}
+          </div>
+        )}
         <div className="lp-deposit-copy-block">
           <span className="lp-deposit-copy-label">{t('deposit.descriptionLabel')}</span>
           <div className="lp-deposit-copy-row">
@@ -464,21 +587,27 @@ export default function DepositFlowScreen() {
         </div>
       </div>
 
-      <div className="lp-deposit-alert lp-deposit-alert--warn">{t('deposit.warnDesc')}</div>
-      <div className="lp-deposit-alert lp-deposit-alert--ok">{t('deposit.okFast')}</div>
+      <div className="lp-deposit-alert lp-deposit-alert--warn">
+        {cryptoComplete ? t('deposit.warnCrypto') : t('deposit.warnDesc')}
+      </div>
+      <div className="lp-deposit-alert lp-deposit-alert--ok">
+        {cryptoComplete ? t('deposit.okCrypto') : t('deposit.okFast')}
+      </div>
 
       <div className="lp-deposit-trust">
         <span>
           <CheckMini /> {t('deposit.trust24')}
         </span>
-        <span>
-          <CheckMini /> {t('deposit.trustFast')}
-        </span>
+        {!cryptoComplete ? (
+          <span>
+            <CheckMini /> {t('deposit.trustFast')}
+          </span>
+        ) : null}
         <span>
           <CheckMini /> {t('deposit.trustSsl')}
         </span>
       </div>
-      <p className="lp-deposit-sms-note">{t('deposit.smsNote')}</p>
+      {!cryptoComplete ? <p className="lp-deposit-sms-note">{t('deposit.smsNote')}</p> : null}
 
       {errorMessage ? (
         <p className="lp-form-error lp-deposit-mail-error" role="alert">

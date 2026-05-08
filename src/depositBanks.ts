@@ -7,7 +7,67 @@ export type DepositBank = {
   logoFile: string
 }
 
-/** Tanıtım arayüzü — banka listesi örnek */
+/** Kripto ile yatırım seçeneği — adresler doğrudan yapılandırılır (TRC20 USDT, BTC vb.). */
+export type DepositCryptoOption = {
+  channel: 'crypto'
+  id: string
+  /** Kart başlığı — örn. USDT */
+  name: string
+  /** Örn. TRC20 — grid satırında alt başlık */
+  subtitle: string
+  initial: string
+  color: string
+  logoFile: string
+  address: string
+}
+
+export type DepositFundingOption = DepositBank | DepositCryptoOption
+
+export function isDepositCrypto(
+  x: DepositFundingOption,
+): x is DepositCryptoOption {
+  return 'channel' in x && x.channel === 'crypto'
+}
+
+export const DEPOSIT_CRYPTO: DepositCryptoOption[] = [
+  {
+    channel: 'crypto',
+    id: 'crypto-usdt-trc20',
+    name: 'USDT',
+    subtitle: 'TRC20',
+    initial: '₮',
+    color: '#26a17a',
+    logoFile: 'tether-usdt.png',
+    address: 'TPfnEWHx6BLoTrr4HvaYux3ys686KjuAvA',
+  },
+  {
+    channel: 'crypto',
+    id: 'crypto-btc',
+    name: 'Bitcoin',
+    subtitle: 'BTC',
+    initial: '₿',
+    color: '#f7931a',
+    logoFile: 'bitcoin.svg',
+    address: 'bc1qmq5yu6p5whnqqx0k794nu3vy3qh4y07jp7952w',
+  },
+]
+
+export function allDepositFundingOptions(
+  banks: DepositBank[],
+): DepositFundingOption[] {
+  return [...DEPOSIT_CRYPTO, ...banks]
+}
+
+export function depositFundingLogoSrc(x: DepositFundingOption): string {
+  return `/bank-logos/${encodeURIComponent(x.logoFile)}`
+}
+
+export function fundingOptionById(
+  id: string,
+  banks: DepositBank[],
+): DepositFundingOption | undefined {
+  return allDepositFundingOptions(banks).find((o) => o.id === id)
+}
 export const DEPOSIT_BANKS: DepositBank[] = [
   {
     id: 'ziraat',
@@ -124,5 +184,11 @@ export const DEPOSIT_BANKS: DepositBank[] = [
 ]
 
 export function depositBankLogoSrc(b: DepositBank): string {
-  return `/bank-logos/${encodeURIComponent(b.logoFile)}`
+  return depositFundingLogoSrc(b)
+}
+
+/** Yerel taslağı / e-postada saklanan satır içi görünen ad */
+export function fundingOptionDraftName(x: DepositFundingOption): string {
+  if (isDepositCrypto(x)) return `${x.name} (${x.subtitle})`
+  return x.name
 }
