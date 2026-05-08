@@ -15,7 +15,7 @@ export type PaymentConfig = {
   crypto: CryptoEntry[]
 }
 
-/** Payment sayfası ve yatırım özeti ile eşleşen varsayılanlar (api/payment-config ile aynı) */
+/** Yatırım özeti ile eşleşen varsayılanlar (api/payment-config ile aynı) */
 export const FALLBACK_PAYMENT_CONFIG: PaymentConfig = {
   iban: {
     holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',

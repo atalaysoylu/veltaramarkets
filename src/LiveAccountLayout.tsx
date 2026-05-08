@@ -74,7 +74,6 @@ export default function LiveAccountLayout() {
               >
                 {t('nav.liveAccount')}
               </NavLink>
-              <Link to="/payment">{t('nav.payment')}</Link>
               <a
                 href={WHATSAPP_SUPPORT_URL}
                 target="_blank"
@@ -146,9 +145,6 @@ export default function LiveAccountLayout() {
           <Link to="/live-account" onClick={() => setNavOpen(false)}>
             {t('nav.liveAccount')}
           </Link>
-          <Link to="/payment" onClick={() => setNavOpen(false)}>
-            {t('nav.payment')}
-          </Link>
           <Link to={`/#${FORM_SECTION_ID}`} onClick={() => setNavOpen(false)}>
             {t('nav.freeAnalysis')}
           </Link>
@@ -184,7 +180,6 @@ export default function LiveAccountLayout() {
             <span className="lp-footer-col-title">{t('footer.colCompany')}</span>
             <Link to={`/#${FORM_SECTION_ID}`}>{t('footer.about')}</Link>
             <Link to="/live-account">{t('nav.liveAccount')}</Link>
-            <Link to="/payment">{t('nav.payment')}</Link>
             <Link to={`/#${FORM_SECTION_ID}`}>{t('nav.freeAnalysis')}</Link>
           </div>
           <div className="lp-footer-links">

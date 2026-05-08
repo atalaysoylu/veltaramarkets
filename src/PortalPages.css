@@ -356,6 +356,24 @@
   font-size: 0.75rem;
 }
 
+.lp-deposit-bank-avatar--logo {
+  background: #f8fafc;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.09);
+  overflow: hidden;
+  padding: 5px;
+}
+
+.lp-deposit-bank-avatar--logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lp-deposit-bank-avatar--sm.lp-deposit-bank-avatar--logo {
+  padding: 3px;
+}
+
 .lp-deposit-bank-name {
   font-weight: 600;
   font-size: 0.82rem;
@@ -404,6 +422,13 @@
 
 .lp-live-account-page .lp-live-account-main .lp-deposit-mini-bank .lp-deposit-bank-avatar ~ span {
   color: #f1f5f9;
+}
+
+.lp-live-account-page .lp-live-account-main .lp-deposit-bank-avatar--logo {
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px rgba(226, 232, 240, 0.45),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
 }
 
 .lp-live-account-page .lp-live-account-main .lp-deposit-panel-link a {
