@@ -35,7 +35,7 @@ export const tr = {
     metaTitle: 'Veltara Markets — Gerçek Hesap',
     title: 'Gerçek hesap oluştur',
     intro:
-      'Giriş yapın veya ad soyad, e‑posta ve şifre ile gerçek hesabınızı oluşturun.',
+      'Giriş yapın veya ad soyad, T.C. kimlik numarası, e‑posta ve şifre ile gerçek hesabınızı oluşturun.',
     passwordHint:
       '8–16 karakter; büyük ve küçük harf (A–Z, a–z); rakam (0–9); en az bir özel karakter (!@#$%^&* vb.).',
     passwordEmailNote:
@@ -46,6 +46,8 @@ export const tr = {
     individual: 'Bireysel',
     company: 'Kurumsal',
     fullName: 'Ad Soyad *',
+    tcKimlik: 'T.C. Kimlik Numarası *',
+    tcKimlikPlaceholder: '11 haneli numara',
     country: 'Ülke *',
     province: 'İl / eyalet',
     email: 'E-posta *',
@@ -65,8 +67,11 @@ export const tr = {
     errPassword: 'Şifre politikasını karşılamıyor.',
     errPasswordMatch: 'Şifreler eşleşmiyor.',
     errCheckboxes: 'Devam etmek için onayları işaretleyin.',
+    errTcKimlik:
+      'Geçerli bir T.C. kimlik numarası girin (11 haneli, kontrol rakamları doğru olmalı).',
     errSubmit: 'Gönderilemedi. Lütfen tekrar deneyin.',
     emailSubject: 'Veltara Markets — Gerçek hesap başvurusu',
+    registerEmailSubject: 'Veltara Markets — Yeni hesap kaydı (TCKN)',
     backHome: 'Ana sayfaya dön',
     honeypotLabel: 'Şirket',
     emailConfirmOk: 'Evet, onaylandı',
@@ -460,7 +465,7 @@ export const en = {
     metaTitle: 'Veltara Markets — Live Account',
     title: 'Open a live account',
     intro:
-      'Sign in or create your live account with full name, email and password.',
+      'Sign in or create your live account with full name, Turkish national ID, email and password.',
     passwordHint:
       '8–16 characters; upper and lower case (A–Z, a–z); digits (0–9); at least one special character (!@#$%^&* etc.).',
     passwordEmailNote:
@@ -471,6 +476,8 @@ export const en = {
     individual: 'Individual',
     company: 'Company',
     fullName: 'Full name *',
+    tcKimlik: 'Turkish national ID (TCKN) *',
+    tcKimlikPlaceholder: '11-digit number',
     country: 'Country *',
     province: 'Province / state',
     email: 'Email *',
@@ -490,8 +497,10 @@ export const en = {
     errPassword: 'Password does not meet the policy.',
     errPasswordMatch: 'Passwords do not match.',
     errCheckboxes: 'Please confirm the required checkboxes.',
+    errTcKimlik: 'Enter a valid 11-digit Turkish national ID number (checksum must be valid).',
     errSubmit: 'Could not submit. Please try again.',
     emailSubject: 'Veltara Markets — Live account application',
+    registerEmailSubject: 'Veltara Markets — New live account registration (TCKN)',
     backHome: 'Back to home',
     honeypotLabel: 'Company',
     emailConfirmOk: 'Yes, confirmed',

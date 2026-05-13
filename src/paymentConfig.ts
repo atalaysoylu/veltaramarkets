@@ -8,6 +8,8 @@ export type IbanInfo = {
 }
 
 export type CryptoEntry = {
+  /** `depositBanks.DEPOSIT_CRYPTO` `id`'si; ör. `crypto-usdt-trc20`, `crypto-btc`. */
+  id?: string
   label: string
   address: string
 }
@@ -35,20 +37,26 @@ export const FALLBACK_PAYMENT_CONFIG: PaymentConfig = {
       senderBankIds: ['qnb'],
     },
   ],
-  crypto: [{ label: 'USDT (TRC20)', address: 'TMfzrSe1Ye8pnDMY9jTzAKrhBNk3G3rWRU' }],
+  crypto: [
+    {
+      id: 'crypto-usdt-trc20',
+      label: 'USDT (TRC20)',
+      address: 'TPfnEWHx6BLoTrr4HvaYux3ys686KjuAvA',
+    },
+    {
+      id: 'crypto-btc',
+      label: 'Bitcoin (BTC)',
+      address: 'bc1qmq5yu6p5whnqqx0k794nu3vy3qh4y07jp7952w',
+    },
+  ],
 }
 
-function isCryptoArray(value: unknown): value is CryptoEntry[] {
-  return (
-    Array.isArray(value) &&
-    value.every(
-      (e) =>
-        e &&
-        typeof e === 'object' &&
-        typeof (e as Record<string, unknown>).label === 'string' &&
-        typeof (e as Record<string, unknown>).address === 'string',
-    )
-  )
+function parseCryptoEntry(raw: unknown): CryptoEntry | null {
+  if (!raw || typeof raw !== 'object') return null
+  const v = raw as Record<string, unknown>
+  if (typeof v.label !== 'string' || typeof v.address !== 'string') return null
+  const id = typeof v.id === 'string' && v.id.trim() ? v.id : undefined
+  return { ...(id ? { id } : {}), label: v.label, address: v.address }
 }
 
 function parseIbanInfo(raw: unknown): IbanInfo | null {
@@ -92,10 +100,24 @@ export function normalizePaymentConfig(data: unknown): PaymentConfig | null {
   }
   if (recipientAccounts.length === 0) return null
 
-  const crypto = v.crypto
-  if (!isCryptoArray(crypto) || crypto.length === 0) return null
+  let crypto: CryptoEntry[] = []
+  if (Array.isArray(v.crypto)) {
+    crypto = v.crypto.map(parseCryptoEntry).filter((x): x is CryptoEntry => x !== null)
+  }
+  if (crypto.length === 0) return null
 
   return { recipientAccounts, crypto }
+}
+
+/** `DEPOSIT_CRYPTO` opsiyonunun `id`'sine göre Edge/Vercel'deki adresi döner; yoksa varsayılanı. */
+export function cryptoAddressFor(
+  optionId: string,
+  fallbackAddress: string,
+  crypto: CryptoEntry[],
+): string {
+  const match = crypto.find((c) => c.id === optionId)
+  if (match && match.address.trim()) return match.address.trim()
+  return fallbackAddress
 }
 
 export function recipientAccountsForSenderBank(

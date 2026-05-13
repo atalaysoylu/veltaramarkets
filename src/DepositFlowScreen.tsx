@@ -21,6 +21,7 @@ import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import {
   compactIban,
   compactIbansJoined,
+  cryptoAddressFor,
   recipientAccountsForSenderBank,
   type IbanInfo,
 } from './paymentConfig'
@@ -214,6 +215,11 @@ export default function DepositFlowScreen() {
     depositRecipientRows.length > 1 &&
     depositRecipientRows.every((r) => r.holder === depositRecipientRows[0]?.holder)
 
+  const displayCryptoAddress =
+    methodForComplete && isDepositCrypto(methodForComplete)
+      ? cryptoAddressFor(methodForComplete.id, methodForComplete.address, paymentConfig.crypto)
+      : ''
+
   const amountDisplay =
     typeof draftAmount === 'number' ? formatTryInt(draftAmount, locale) : '—'
 
@@ -319,7 +325,11 @@ export default function DepositFlowScreen() {
     let kriptoAdres = ''
     let kriptoAg = ''
     if (resolvedMethod && isDepositCrypto(resolvedMethod)) {
-      kriptoAdres = resolvedMethod.address
+      kriptoAdres = cryptoAddressFor(
+        resolvedMethod.id,
+        resolvedMethod.address,
+        paymentConfig.crypto,
+      )
       kriptoAg = resolvedMethod.subtitle
     }
     const isCryptoRail = Boolean(kriptoAdres)
@@ -340,6 +350,7 @@ export default function DepositFlowScreen() {
         kullanici_email: user.email,
         ad_soyad: user.fullName,
         kullanici_id: user.id,
+        tc_kimlik_no: user.tckn.trim() ? user.tckn : '—',
         odeme_turu: isCryptoRail ? 'kripto' : 'banka_havalesi',
         gonderen_banka: draftNow.bankName,
         tutar_try: String(draftNow.amountTry),
@@ -595,11 +606,11 @@ export default function DepositFlowScreen() {
           <div className="lp-deposit-copy-block">
             <span className="lp-deposit-copy-label">{t('deposit.walletLabel')}</span>
             <div className="lp-deposit-copy-row">
-              <code className="lp-deposit-iban lp-deposit-wallet">{methodForComplete.address}</code>
+              <code className="lp-deposit-iban lp-deposit-wallet">{displayCryptoAddress}</code>
               <button
                 type="button"
                 className="lp-deposit-copy-btn"
-                onClick={() => copyWallet(methodForComplete.address)}
+                onClick={() => copyWallet(displayCryptoAddress)}
                 aria-label={t('deposit.copyWallet')}
               >
                 <CopyIcon />

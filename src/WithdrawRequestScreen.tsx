@@ -71,6 +71,7 @@ export default function WithdrawRequestScreen() {
         kullanici_email: sessionUser.email,
         ad_soyad: sessionUser.fullName,
         kullanici_id: sessionUser.id,
+        tc_kimlik_no: sessionUser.tckn.trim() ? sessionUser.tckn : '—',
         hedef_iban: normalized,
         tutar_try: String(amount),
       },
