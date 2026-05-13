@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   FALLBACK_PAYMENT_CONFIG,
-  isPaymentConfig,
+  normalizePaymentConfig,
   type PaymentConfig,
 } from './paymentConfig'
 
@@ -16,7 +16,8 @@ export function usePaymentConfig(): PaymentConfig {
     })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('bad_status'))))
       .then((data: unknown) => {
-        if (isPaymentConfig(data)) setConfig(data)
+        const normalized = normalizePaymentConfig(data)
+        if (normalized) setConfig(normalized)
       })
       .catch(() => {
         /* fallback */

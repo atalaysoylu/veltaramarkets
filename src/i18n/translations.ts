@@ -156,13 +156,13 @@ export const tr = {
     networkLabel: 'Ağ',
     walletLabel: 'Alıcı cüzdan adresi',
     descriptionLabel: 'AÇIKLAMA',
-    descriptionLine: '{name} OY-{code}',
+    descriptionLine: '{name}, Hizmet Bedeli',
     copyIban: 'IBAN kopyala',
     copyDesc: 'Açıklamayı kopyala',
     copyWallet: 'Adresi kopyala',
     copyFailed: 'Kopyalanamadı. Metni seçip manuel kopyalayın.',
     warnDesc:
-      'Açıklama önemli: İşleminizin hızlı geçmesi için açıklama kısmına size verdiğimiz metni AYNEN yazın.',
+      'Açıklama önemli: Bankada açıklama alanına “Ad Soyad, Hizmet Bedeli” formatında yazmalısınız (adınızı ve virgülden sonra Hizmet Bedeli ifadesini aynen kullanın).',
     warnCrypto:
       'Kriptoda ağ kritik öneme sahiptir: Yanlış ağa (ör. ERC20 yerine TRC20) yapılan gönderilerde varlıklar kaybolabilir. Göndermeden adresi iki kez kontrol edin.',
     okFast: 'Gönderdiğiniz tutar 1-2 dakika içerisinde hesabınıza yansıyacaktır.',
@@ -580,13 +580,13 @@ export const en = {
     networkLabel: 'Network',
     walletLabel: 'Recipient wallet address',
     descriptionLabel: 'DESCRIPTION',
-    descriptionLine: '{name} OY-{code}',
+    descriptionLine: '{name}, Service fee',
     copyIban: 'Copy IBAN',
     copyDesc: 'Copy reference text',
     copyWallet: 'Copy address',
     copyFailed: 'Could not copy. Select the text and copy manually.',
     warnDesc:
-      'Reference matters: paste the reference text exactly in the payment description field for faster settlement.',
+      'Use the DESCRIPTION field exactly in the form “Full name, Service fee”: your name, a comma, then the words Service fee — as shown below.',
     warnCrypto:
       'Crypto networks differ: sending on the wrong network (e.g. not TRC20 for this USDT) can result in irreversible loss. Verify the address before sending.',
     okFast: 'Your funds typically appear within 1–2 minutes.',

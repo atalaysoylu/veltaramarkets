@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import {
@@ -18,7 +18,12 @@ import {
 } from './depositBanks'
 import { copyTextToClipboard } from './copyToClipboard'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
-import { compactIban } from './paymentConfig'
+import {
+  compactIban,
+  compactIbansJoined,
+  recipientAccountsForSenderBank,
+  type IbanInfo,
+} from './paymentConfig'
 import { formCoFailureMessage } from './formCoFailureMessage'
 import { submitFormCo } from './submitFormCo'
 import { usePaymentConfig } from './usePaymentConfig'
@@ -39,12 +44,6 @@ function formatTryInt(n: number, locale: string) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(n)
-}
-
-function refCode(userId: string): string {
-  const alnum = userId.replace(/[^a-zA-Z0-9]/g, '')
-  const tail = alnum.slice(-6).toUpperCase()
-  return tail.padStart(6, '0').slice(0, 6)
 }
 
 function fundingFromDraft(
@@ -171,7 +170,9 @@ export default function DepositFlowScreen() {
   const [pickedFunding, setPickedFunding] = useState<DepositFundingOption | null>(null)
   const [amountRaw, setAmountRaw] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [copyToast, setCopyToast] = useState<'iban' | 'desc' | 'wallet' | null>(null)
+  const [clipboardHint, setClipboardHint] = useState<
+    { kind: 'iban'; index: number } | { kind: 'desc' } | { kind: 'wallet' } | null
+  >(null)
   const [confirmBusy, setConfirmBusy] = useState(false)
   const paymentConfig = usePaymentConfig()
 
@@ -191,21 +192,56 @@ export default function DepositFlowScreen() {
     [search],
   )
 
+  const methodForComplete = fundingFromDraft(draft)
+  const draftAmount =
+    typeof draft?.amountTry === 'number'
+      ? draft.amountTry
+      : parseTryAmount(amountRaw)
+
+  const cryptoComplete =
+    methodForComplete !== null && isDepositCrypto(methodForComplete)
+
+  const senderBankIdForIban =
+    methodForComplete && !isDepositCrypto(methodForComplete) ? methodForComplete.id : undefined
+
+  const depositRecipientRows = useMemo(
+    () =>
+      recipientAccountsForSenderBank(senderBankIdForIban, paymentConfig.recipientAccounts),
+    [senderBankIdForIban, paymentConfig.recipientAccounts],
+  )
+
+  const sameHolderAcross =
+    depositRecipientRows.length > 1 &&
+    depositRecipientRows.every((r) => r.holder === depositRecipientRows[0]?.holder)
+
+  const amountDisplay =
+    typeof draftAmount === 'number' ? formatTryInt(draftAmount, locale) : '—'
+
   const descriptionLine = user
     ? formatTemplate(t('deposit.descriptionLine'), {
         name: user.fullName.toUpperCase(),
-        code: refCode(user.id),
       })
     : ''
 
-  const displayIban = paymentConfig.iban.iban
+  function flashClipboardHint(
+    next: { kind: 'iban'; index: number } | { kind: 'desc' } | { kind: 'wallet' },
+  ) {
+    setClipboardHint(next)
+    window.setTimeout(() => {
+      setClipboardHint((current) => {
+        if (!current || current.kind !== next.kind) return current
+        if (next.kind === 'iban' && current.kind === 'iban' && current.index !== next.index) {
+          return current
+        }
+        return null
+      })
+    }, 1600)
+  }
 
-  function copyIban() {
-    const compact = compactIban(displayIban)
-    const ok = copyTextToClipboard(compact)
+  function copyIbanAccount(acct: IbanInfo, toastIndex: number) {
+    const ok = copyTextToClipboard(compactIban(acct.iban))
     if (ok) {
-      setCopyToast('iban')
-      window.setTimeout(() => setCopyToast((c) => (c === 'iban' ? null : c)), 1600)
+      flashClipboardHint({ kind: 'iban', index: toastIndex })
     } else {
       setErrorMessage(t('deposit.copyFailed'))
     }
@@ -215,8 +251,7 @@ export default function DepositFlowScreen() {
     if (!descriptionLine) return
     const ok = copyTextToClipboard(descriptionLine)
     if (ok) {
-      setCopyToast('desc')
-      window.setTimeout(() => setCopyToast((c) => (c === 'desc' ? null : c)), 1600)
+      flashClipboardHint({ kind: 'desc' })
     } else {
       setErrorMessage(t('deposit.copyFailed'))
     }
@@ -225,8 +260,7 @@ export default function DepositFlowScreen() {
   function copyWallet(addr: string) {
     const ok = copyTextToClipboard(addr.trim())
     if (ok) {
-      setCopyToast('wallet')
-      window.setTimeout(() => setCopyToast((c) => (c === 'wallet' ? null : c)), 1600)
+      flashClipboardHint({ kind: 'wallet' })
     } else {
       setErrorMessage(t('deposit.copyFailed'))
     }
@@ -290,7 +324,13 @@ export default function DepositFlowScreen() {
     }
     const isCryptoRail = Boolean(kriptoAdres)
 
-    const compactIbanVal = compactIban(paymentConfig.iban.iban)
+    const senderBankId =
+      resolvedMethod && !isDepositCrypto(resolvedMethod) ? resolvedMethod.id : undefined
+    const depositAccounts = recipientAccountsForSenderBank(
+      senderBankId,
+      paymentConfig.recipientAccounts,
+    )
+    const compactIbanVal = isCryptoRail ? '—' : compactIbansJoined(depositAccounts)
     setConfirmBusy(true)
     setErrorMessage('')
 
@@ -356,12 +396,6 @@ export default function DepositFlowScreen() {
   ) {
     return <Navigate to={DEPOSIT_BANK_STEP} replace />
   }
-
-  const methodForComplete = fundingFromDraft(draft)
-  const draftAmount =
-    typeof draft?.amountTry === 'number'
-      ? draft.amountTry
-      : parseTryAmount(amountRaw)
 
   if (resolvedStep === 'bank') {
     return (
@@ -467,12 +501,6 @@ export default function DepositFlowScreen() {
     )
   }
 
-  const amountDisplay =
-    typeof draftAmount === 'number' ? formatTryInt(draftAmount, locale) : '—'
-
-  const cryptoComplete =
-    methodForComplete !== null && isDepositCrypto(methodForComplete)
-
   return (
     <div className="lp-portal-outer lp-container lp-deposit-flow">
       <button type="button" className="lp-portal-back-btn" onClick={backToAmount}>
@@ -500,14 +528,57 @@ export default function DepositFlowScreen() {
       <div className="lp-portal-card lp-deposit-complete-card">
         {!cryptoComplete ? (
           <>
-            <div className="lp-deposit-complete-row">
-              <span className="lp-deposit-complete-k">{t('deposit.recipient')}</span>
-              <strong className="lp-deposit-complete-v">{paymentConfig.iban.holder}</strong>
-            </div>
-            <div className="lp-deposit-complete-row">
-              <span className="lp-deposit-complete-k">{t('deposit.recipientBank')}</span>
-              <span className="lp-deposit-complete-v">{paymentConfig.iban.bank}</span>
-            </div>
+            {sameHolderAcross ? (
+              <div className="lp-deposit-complete-row">
+                <span className="lp-deposit-complete-k">{t('deposit.recipient')}</span>
+                <strong className="lp-deposit-complete-v">{depositRecipientRows[0].holder}</strong>
+              </div>
+            ) : null}
+            {depositRecipientRows.map((acct, idx) => (
+              <Fragment key={`${acct.bank}-${acct.iban}-${idx}`}>
+                <div
+                  className={
+                    idx > 0 && sameHolderAcross ? 'lp-deposit-recipient-block-continued' : undefined
+                  }
+                >
+                  {!sameHolderAcross ? (
+                    <div className="lp-deposit-complete-row">
+                      <span className="lp-deposit-complete-k">{t('deposit.recipient')}</span>
+                      <strong className="lp-deposit-complete-v">{acct.holder}</strong>
+                    </div>
+                  ) : null}
+                  <div className="lp-deposit-complete-row">
+                    <span className="lp-deposit-complete-k">{t('deposit.recipientBank')}</span>
+                    <span className="lp-deposit-complete-v">{acct.bank}</span>
+                  </div>
+                  {acct.swift.trim() ? (
+                    <div className="lp-deposit-complete-row">
+                      <span className="lp-deposit-complete-k">{t('deposit.swiftLabel')}</span>
+                      <span className="lp-deposit-complete-v">{acct.swift}</span>
+                    </div>
+                  ) : null}
+                  <div className="lp-deposit-copy-block">
+                    <span className="lp-deposit-copy-label">IBAN</span>
+                    <div className="lp-deposit-copy-row">
+                      <code className="lp-deposit-iban">{acct.iban}</code>
+                      <button
+                        type="button"
+                        className="lp-deposit-copy-btn"
+                        onClick={() => copyIbanAccount(acct, idx)}
+                        aria-label={t('deposit.copyIban')}
+                      >
+                        <CopyIcon />
+                      </button>
+                    </div>
+                    {clipboardHint?.kind === 'iban' && clipboardHint.index === idx ? (
+                      <span className="lp-deposit-copied-hint" role="status">
+                        ✓
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              </Fragment>
+            ))}
           </>
         ) : null}
         <div className="lp-deposit-complete-row">
@@ -518,11 +589,6 @@ export default function DepositFlowScreen() {
           <div className="lp-deposit-complete-row">
             <span className="lp-deposit-complete-k">{t('deposit.networkLabel')}</span>
             <span className="lp-deposit-complete-v">{methodForComplete.subtitle}</span>
-          </div>
-        ) : paymentConfig.iban.swift.trim() ? (
-          <div className="lp-deposit-complete-row">
-            <span className="lp-deposit-complete-k">{t('deposit.swiftLabel')}</span>
-            <span className="lp-deposit-complete-v">{paymentConfig.iban.swift}</span>
           </div>
         ) : null}
         {cryptoComplete ? (
@@ -539,33 +605,13 @@ export default function DepositFlowScreen() {
                 <CopyIcon />
               </button>
             </div>
-            {copyToast === 'wallet' ? (
+            {clipboardHint?.kind === 'wallet' ? (
               <span className="lp-deposit-copied-hint" role="status">
                 ✓
               </span>
             ) : null}
           </div>
-        ) : (
-          <div className="lp-deposit-copy-block">
-            <span className="lp-deposit-copy-label">IBAN</span>
-            <div className="lp-deposit-copy-row">
-              <code className="lp-deposit-iban">{displayIban}</code>
-              <button
-                type="button"
-                className="lp-deposit-copy-btn"
-                onClick={() => copyIban()}
-                aria-label={t('deposit.copyIban')}
-              >
-                <CopyIcon />
-              </button>
-            </div>
-            {copyToast === 'iban' ? (
-              <span className="lp-deposit-copied-hint" role="status">
-                ✓
-              </span>
-            ) : null}
-          </div>
-        )}
+        ) : null}
         <div className="lp-deposit-copy-block">
           <span className="lp-deposit-copy-label">{t('deposit.descriptionLabel')}</span>
           <div className="lp-deposit-copy-row">
@@ -579,7 +625,7 @@ export default function DepositFlowScreen() {
               <CopyIcon />
             </button>
           </div>
-          {copyToast === 'desc' ? (
+          {clipboardHint?.kind === 'desc' ? (
             <span className="lp-deposit-copied-hint" role="status">
               ✓
             </span>
