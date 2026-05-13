@@ -637,6 +637,12 @@
   margin-bottom: 14px;
 }
 
+.lp-deposit-recipient-block-continued {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f5f9;
+}
+
 .lp-deposit-copy-label {
   display: block;
   font-size: 0.76rem;

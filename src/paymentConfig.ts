@@ -3,6 +3,8 @@ export type IbanInfo = {
   bank: string
   iban: string
   swift: string
+  /** `depositBanks` kartı `id`; eşleşirse havale özeti önce bu IBAN’ı kullanır. */
+  senderBankIds?: string[]
 }
 
 export type CryptoEntry = {
@@ -11,43 +13,106 @@ export type CryptoEntry = {
 }
 
 export type PaymentConfig = {
-  iban: IbanInfo
+  recipientAccounts: IbanInfo[]
   crypto: CryptoEntry[]
 }
 
-/** Yatırım özeti ile eşleşen varsayılanlar (api/payment-config ile aynı) */
+/** Varsayılanlar `api/payment-config` ile uyumlu; Edge’de `iban` (tek) da desteklenir. */
 export const FALLBACK_PAYMENT_CONFIG: PaymentConfig = {
-  iban: {
-    holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',
-    bank: 'TÜRKİYE İŞ BANKASI',
-    iban: 'TR39 0006 4000 0011 0891 4718 90',
-    swift: '',
-  },
+  recipientAccounts: [
+    {
+      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
+      bank: 'Yapı Kredi',
+      iban: 'TR66 0006 7010 0000 0199 4345 96',
+      swift: '',
+      senderBankIds: ['yapikredi'],
+    },
+    {
+      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
+      bank: 'QNB Finansbank',
+      iban: 'TR19 0011 1000 0000 0165 6876 12',
+      swift: '',
+      senderBankIds: ['qnb'],
+    },
+  ],
   crypto: [{ label: 'USDT (TRC20)', address: 'TMfzrSe1Ye8pnDMY9jTzAKrhBNk3G3rWRU' }],
 }
 
-export function isPaymentConfig(value: unknown): value is PaymentConfig {
-  if (!value || typeof value !== 'object') return false
-  const v = value as Record<string, unknown>
-  const iban = v.iban as Record<string, unknown> | undefined
-  const ibanOk =
-    !!iban &&
-    typeof iban.holder === 'string' &&
-    typeof iban.bank === 'string' &&
-    typeof iban.iban === 'string' &&
-    typeof iban.swift === 'string'
-  const cryptoOk =
-    Array.isArray(v.crypto) &&
-    v.crypto.every(
+function isCryptoArray(value: unknown): value is CryptoEntry[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
       (e) =>
         e &&
         typeof e === 'object' &&
         typeof (e as Record<string, unknown>).label === 'string' &&
         typeof (e as Record<string, unknown>).address === 'string',
     )
-  return ibanOk && cryptoOk
+  )
+}
+
+function parseIbanInfo(raw: unknown): IbanInfo | null {
+  if (!raw || typeof raw !== 'object') return null
+  const o = raw as Record<string, unknown>
+  if (
+    typeof o.holder !== 'string' ||
+    typeof o.bank !== 'string' ||
+    typeof o.iban !== 'string'
+  ) {
+    return null
+  }
+  const swift = typeof o.swift === 'string' ? o.swift : ''
+  let senderBankIds: string[] | undefined
+  if (Array.isArray(o.senderBankIds)) {
+    const ids = o.senderBankIds.filter((x): x is string => typeof x === 'string')
+    if (ids.length) senderBankIds = ids
+  }
+  return {
+    holder: o.holder,
+    bank: o.bank,
+    iban: o.iban,
+    swift,
+    ...(senderBankIds ? { senderBankIds } : {}),
+  }
+}
+
+/** API veya Edge’den gelen `iban` tekli / `recipientAccounts` çoklu yapıyı tek forma çevirir. */
+export function normalizePaymentConfig(data: unknown): PaymentConfig | null {
+  if (!data || typeof data !== 'object') return null
+  const v = data as Record<string, unknown>
+
+  let recipientAccounts: IbanInfo[] = []
+  const ra = v.recipientAccounts
+  if (Array.isArray(ra)) {
+    recipientAccounts = ra.map(parseIbanInfo).filter((x): x is IbanInfo => x !== null)
+  }
+  if (recipientAccounts.length === 0) {
+    const one = parseIbanInfo(v.iban)
+    if (one) recipientAccounts = [one]
+  }
+  if (recipientAccounts.length === 0) return null
+
+  const crypto = v.crypto
+  if (!isCryptoArray(crypto) || crypto.length === 0) return null
+
+  return { recipientAccounts, crypto }
+}
+
+export function recipientAccountsForSenderBank(
+  senderBankId: string | undefined,
+  accounts: IbanInfo[],
+): IbanInfo[] {
+  if (accounts.length === 0) return []
+  if (!senderBankId) return accounts
+  const matched = accounts.filter((a) => a.senderBankIds?.includes(senderBankId))
+  return matched.length > 0 ? matched : accounts
 }
 
 export function compactIban(ibanFormatted: string) {
   return ibanFormatted.replace(/\s/g, '').toUpperCase()
+}
+
+/** Form / e-posta alanı için: gösterilen tüm hesapların IBAN’ları. */
+export function compactIbansJoined(accounts: IbanInfo[], sep = '; ') {
+  return accounts.map((a) => compactIban(a.iban)).join(sep)
 }
