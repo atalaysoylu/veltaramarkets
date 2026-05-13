@@ -19,12 +19,14 @@ export type AuthUser = {
   id: string
   email: string
   fullName: string
+  /** 11 haneli TCKN; eski hesaplarda boş olabilir */
+  tckn: string
   withdrawLockUntil: number
 }
 
 function toPublic(u: StoredUser): AuthUser {
-  const { id, email, fullName, withdrawLockUntil } = u
-  return { id, email, fullName, withdrawLockUntil }
+  const { id, email, fullName, tckn, withdrawLockUntil } = u
+  return { id, email, fullName, tckn, withdrawLockUntil }
 }
 
 function resolveUser(): AuthUser | null {
@@ -41,6 +43,7 @@ type AuthContextValue = {
   register: (input: {
     email: string
     fullName: string
+    tckn: string
     password: string
   }) => 'ok' | 'exists'
   refreshUser: () => void
@@ -70,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const register = useCallback(
-    (input: { email: string; fullName: string; password: string }) => {
+    (input: { email: string; fullName: string; tckn: string; password: string }) => {
       const result = registerUser(input)
       if (!result.ok) return 'exists'
       setUser(toPublic(result.user))

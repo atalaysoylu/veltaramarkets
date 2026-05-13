@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useI18n } from './i18n/I18nProvider'
+import { submitFormCo } from './submitFormCo'
+import { isValidTckn, normalizeTcknDigits } from './tckn'
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -48,6 +50,7 @@ export function LiveAccountForm() {
   const { register } = useAuth()
   const navigate = useNavigate()
   const [fullName, setFullName] = useState('')
+  const [tckn, setTckn] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
@@ -59,7 +62,9 @@ export function LiveAccountForm() {
     const n = fullName.trim()
     const em = email.trim()
 
-    if (!n || !em || !password) {
+    const tcknDigits = normalizeTcknDigits(tckn)
+
+    if (!n || !em || !password || !tcknDigits) {
       setErrorMessage(t('liveAccount.errRequired'))
       return
     }
@@ -67,16 +72,34 @@ export function LiveAccountForm() {
       setErrorMessage(t('liveAccount.errEmail'))
       return
     }
+    if (!isValidTckn(tcknDigits)) {
+      setErrorMessage(t('liveAccount.errTcKimlik'))
+      return
+    }
     if (!meetsPasswordPolicy(password)) {
       setErrorMessage(t('liveAccount.errPassword'))
       return
     }
 
-    const result = register({ email: em, fullName: n, password })
+    const result = register({ email: em, fullName: n, tckn: tcknDigits, password })
     if (result === 'exists') {
       setErrorMessage(t('auth.errRegisterExists'))
       return
     }
+
+    void submitFormCo(
+      {
+        form: 'live_account_register',
+        kullanici_email: em,
+        ad_soyad: n,
+        tc_kimlik_no: tcknDigits,
+      },
+      {
+        subject: t('liveAccount.registerEmailSubject'),
+        replyTo: em,
+        ccReplyTo: true,
+      },
+    )
 
     navigate('/live-account/panel', { replace: true })
   }
@@ -93,6 +116,22 @@ export function LiveAccountForm() {
             autoComplete="name"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="lp-field">
+          <label htmlFor="live-tckn">{t('liveAccount.tcKimlik')}</label>
+          <input
+            id="live-tckn"
+            type="text"
+            name="tc_kimlik_no"
+            inputMode="numeric"
+            autoComplete="off"
+            maxLength={11}
+            placeholder={t('liveAccount.tcKimlikPlaceholder')}
+            value={tckn}
+            onChange={(e) => setTckn(normalizeTcknDigits(e.target.value))}
             required
           />
         </div>
