@@ -175,6 +175,85 @@
   background: #020617;
 }
 
+/* Doğrulama adımı — başlık ve alt metin */
+.lp-live-form-panel .lp-auth-form .lp-auth-verify-head {
+  margin: 4px 0 18px;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-verify-title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-verify-sub {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #475569;
+  word-break: break-word;
+}
+
+/* Doğrulama kodu inputu */
+.lp-live-form-panel .lp-auth-form input[name='verification_code'] {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.36em;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* "Tekrar gönder / Geri dön" satırı */
+.lp-live-form-panel .lp-auth-form .lp-auth-verify-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-secondary-btn {
+  appearance: none;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-secondary-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-secondary-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: #475569;
+}
+
+.lp-live-form-panel .lp-auth-form .lp-auth-secondary-btn--ghost:hover:not(:disabled) {
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+/* Submit disabled görünümü */
+.lp-live-form-panel .lp-auth-form .lp-live-submit.lp-auth-submit:disabled {
+  background: #475569;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
 /* Ana sayfa linki */
 .lp-auth-back {
   margin-top: 20px;
