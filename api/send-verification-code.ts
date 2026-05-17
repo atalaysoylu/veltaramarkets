@@ -1,12 +1,154 @@
 import crypto from 'node:crypto'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { hashCode, signPayload, type CodePayload } from './_lib/verifyToken'
-import { sendVerificationEmail } from './_lib/sendVerificationEmail'
+
+/* ─────────────────────────── sabitler ─────────────────────────── */
+
+const RESEND_API_KEY = 're_euzzGwQe_JDZ4v5RF77nimrrHJykxTsjy'
+const RESEND_FROM_EMAIL = 'Veltara Markets <no-reply@veltaramarkets.com>'
+const AUTH_VERIFY_SECRET = 'HQn2mCT7wdm1uqttorRaEzw7F2GO9wfSPV8R41c4mvxmzroCYWPWuD76iouomQYL'
 
 const CODE_TTL_MS = 10 * 60 * 1000
 
+/* ─────────────────────────── token yardımcıları ─────────────────────────── */
+
+type CodePayload = {
+  email: string
+  codeHash: string
+  exp: number
+}
+
+function b64urlEncode(buf: Buffer): string {
+  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+function hmac(input: string): string {
+  return b64urlEncode(crypto.createHmac('sha256', AUTH_VERIFY_SECRET).update(input).digest())
+}
+
+function hashCode(code: string, email: string): string {
+  return hmac(`code:${email.toLowerCase()}:${code}`)
+}
+
+function signPayload(payload: CodePayload): string {
+  const data = b64urlEncode(Buffer.from(JSON.stringify(payload), 'utf8'))
+  const sig = hmac(data)
+  return `${data}.${sig}`
+}
+
+/* ─────────────────────────── e-posta gönderimi (Resend) ─────────────────────────── */
+
+function buildText(code: string): string {
+  return [
+    'Veltara Markets — Doğrulama Kodu',
+    '',
+    `Kayıt işlemini tamamlamak için doğrulama kodunuz: ${code}`,
+    '',
+    'Bu kodu 10 dakika içinde girmeniz gerekir.',
+    'Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz.',
+    '',
+    '— Veltara Markets',
+  ].join('\n')
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function buildHtml(code: string): string {
+  return `<!doctype html>
+<html lang="tr">
+  <body style="margin:0;padding:0;background:#f4f6fb;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6fb;padding:32px 12px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;border:1px solid #e2e8f0;overflow:hidden">
+            <tr>
+              <td style="padding:24px 28px;background:#003366;color:#ffffff;font-size:18px;font-weight:700;letter-spacing:0.02em">
+                Veltara Markets
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px">
+                <h1 style="margin:0 0 8px;font-size:20px;color:#0f172a">E-postanızı doğrulayın</h1>
+                <p style="margin:0 0 20px;color:#334155;font-size:14px;line-height:1.6">
+                  Veltara Markets hesap kaydınızı tamamlamak için aşağıdaki <strong>6 haneli kodu</strong>
+                  açık olan kayıt ekranına girin. Kod <strong>10 dakika</strong> içinde geçerlidir.
+                </p>
+                <div style="margin:18px 0;padding:18px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;text-align:center">
+                  <div style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:30px;letter-spacing:8px;color:#003366;font-weight:700">
+                    ${escapeHtml(code)}
+                  </div>
+                </div>
+                <p style="margin:18px 0 0;color:#475569;font-size:13px;line-height:1.55">
+                  Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz; hesabınız oluşturulmaz.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;line-height:1.55">
+                Otomatik bir mesaj. Yanıtlamayın.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`
+}
+
+type SendResult = { ok: boolean; status?: number; error?: string }
+
+async function sendVerificationEmail(to: string, code: string): Promise<SendResult> {
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: RESEND_FROM_EMAIL,
+        to: [to],
+        subject: 'Veltara Markets — Doğrulama Kodunuz',
+        html: buildHtml(code),
+        text: buildText(code),
+      }),
+    })
+
+    if (!res.ok) {
+      let errText = ''
+      try {
+        errText = await res.text()
+      } catch {
+        /* ignore */
+      }
+      return { ok: false, status: res.status, error: errText || `HTTP ${res.status}` }
+    }
+    return { ok: true }
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'network_error' }
+  }
+}
+
+/* ─────────────────────────── HTTP handler ─────────────────────────── */
+
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function safeJsonParse(s: string): Record<string, unknown> | null {
+  try {
+    const v = JSON.parse(s) as unknown
+    return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null
+  } catch {
+    return null
+  }
 }
 
 function readEmail(req: VercelRequest): string | null {
@@ -18,15 +160,6 @@ function readEmail(req: VercelRequest): string | null {
   if (typeof raw !== 'string') return null
   const email = raw.trim().toLowerCase()
   return isValidEmail(email) ? email : null
-}
-
-function safeJsonParse(s: string): Record<string, unknown> | null {
-  try {
-    const v = JSON.parse(s) as unknown
-    return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null
-  } catch {
-    return null
-  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -51,9 +184,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const sent = await sendVerificationEmail(email, code)
   if (!sent.ok) {
-    res
-      .status(502)
-      .json({ ok: false, reason: 'email_failed', detail: sent.error })
+    res.status(502).json({ ok: false, reason: 'email_failed', detail: sent.error })
     return
   }
 
