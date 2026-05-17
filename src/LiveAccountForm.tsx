@@ -1,9 +1,16 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
-import { useI18n } from './i18n/I18nProvider'
+import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { submitFormCo } from './submitFormCo'
-import { isValidTckn, normalizeTcknDigits } from './tckn'
+import { normalizeTcknDigits } from './tckn'
+import {
+  sendVerificationCode,
+  verifyCode,
+  type SendCodeReason,
+  type VerifyCodeReason,
+} from './emailVerify'
+import { findUserByEmail } from './authStorage'
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -45,23 +52,79 @@ function EyeIcon({ hidden }: { hidden?: boolean }) {
   )
 }
 
+const RESEND_COOLDOWN_SEC = 30
+
 export function LiveAccountForm() {
   const { t } = useI18n()
   const { register } = useAuth()
   const navigate = useNavigate()
+
+  const [step, setStep] = useState<'form' | 'verify'>('form')
+
   const [fullName, setFullName] = useState('')
   const [tckn, setTckn] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
+
+  const [code, setCode] = useState('')
+  const [token, setToken] = useState('')
+  const [resendCooldown, setResendCooldown] = useState(0)
+
   const [errorMessage, setErrorMessage] = useState('')
+  const [busy, setBusy] = useState(false)
 
-  function handleSubmit(e: FormEvent) {
+  const codeInputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    if (step === 'verify') {
+      codeInputRef.current?.focus()
+    }
+  }, [step])
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return
+    const id = window.setTimeout(() => setResendCooldown((s) => Math.max(0, s - 1)), 1000)
+    return () => window.clearTimeout(id)
+  }, [resendCooldown])
+
+  function mapSendError(reason: SendCodeReason): string {
+    switch (reason) {
+      case 'invalid_email':
+        return t('liveAccount.errEmail')
+      case 'email_failed':
+        return t('liveAccount.errEmailFailed')
+      case 'network_error':
+        return t('liveAccount.errNetwork')
+      default:
+        return t('liveAccount.errSendCode')
+    }
+  }
+
+  function mapVerifyError(reason: VerifyCodeReason): string {
+    switch (reason) {
+      case 'invalid_code':
+        return t('liveAccount.errCodeInvalid')
+      case 'expired':
+        return t('liveAccount.errCodeExpired')
+      case 'email_mismatch':
+        return t('liveAccount.errCodeEmailMismatch')
+      case 'network_error':
+        return t('liveAccount.errNetwork')
+      case 'invalid_token':
+      case 'missing_fields':
+      default:
+        return t('liveAccount.errVerify')
+    }
+  }
+
+  async function handleSubmitForm(e: FormEvent) {
     e.preventDefault()
+    if (busy) return
     setErrorMessage('')
-    const n = fullName.trim()
-    const em = email.trim()
 
+    const n = fullName.trim()
+    const em = email.trim().toLowerCase()
     const tcknDigits = normalizeTcknDigits(tckn)
 
     if (!n || !em || !password || !tcknDigits) {
@@ -72,17 +135,70 @@ export function LiveAccountForm() {
       setErrorMessage(t('liveAccount.errEmail'))
       return
     }
-    if (!isValidTckn(tcknDigits)) {
-      setErrorMessage(t('liveAccount.errTcKimlik'))
-      return
-    }
     if (!meetsPasswordPolicy(password)) {
       setErrorMessage(t('liveAccount.errPassword'))
       return
     }
+    if (findUserByEmail(em)) {
+      setErrorMessage(t('auth.errRegisterExists'))
+      return
+    }
 
-    const result = register({ email: em, fullName: n, tckn: tcknDigits, password })
-    if (result === 'exists') {
+    setBusy(true)
+    const sent = await sendVerificationCode(em)
+    setBusy(false)
+
+    if (!sent.ok) {
+      setErrorMessage(mapSendError(sent.reason))
+      return
+    }
+    setToken(sent.token)
+    setCode('')
+    setResendCooldown(RESEND_COOLDOWN_SEC)
+    setStep('verify')
+  }
+
+  async function handleResend() {
+    if (busy || resendCooldown > 0) return
+    setErrorMessage('')
+    setBusy(true)
+    const sent = await sendVerificationCode(email.trim().toLowerCase())
+    setBusy(false)
+    if (!sent.ok) {
+      setErrorMessage(mapSendError(sent.reason))
+      return
+    }
+    setToken(sent.token)
+    setCode('')
+    setResendCooldown(RESEND_COOLDOWN_SEC)
+  }
+
+  async function handleSubmitVerify(e: FormEvent) {
+    e.preventDefault()
+    if (busy) return
+    setErrorMessage('')
+
+    const codeDigits = code.replace(/\D/g, '')
+    if (codeDigits.length !== 6) {
+      setErrorMessage(t('liveAccount.errCodeFormat'))
+      return
+    }
+
+    const em = email.trim().toLowerCase()
+
+    setBusy(true)
+    const result = await verifyCode(em, codeDigits, token)
+    if (!result.ok) {
+      setBusy(false)
+      setErrorMessage(mapVerifyError(result.reason))
+      return
+    }
+
+    const n = fullName.trim()
+    const tcknDigits = normalizeTcknDigits(tckn)
+    const registered = register({ email: em, fullName: n, tckn: tcknDigits, password })
+    if (registered === 'exists') {
+      setBusy(false)
       setErrorMessage(t('auth.errRegisterExists'))
       return
     }
@@ -101,11 +217,92 @@ export function LiveAccountForm() {
       },
     )
 
+    setBusy(false)
     navigate('/live-account/panel', { replace: true })
   }
 
+  function handleBackToForm() {
+    if (busy) return
+    setErrorMessage('')
+    setStep('form')
+    setCode('')
+  }
+
+  if (step === 'verify') {
+    return (
+      <form
+        className="lp-form lp-live-account-form lp-auth-form"
+        onSubmit={handleSubmitVerify}
+        noValidate
+      >
+        <div className="lp-auth-verify-head">
+          <h3 className="lp-auth-verify-title">{t('liveAccount.verifyTitle')}</h3>
+          <p className="lp-auth-verify-sub">
+            {formatTemplate(t('liveAccount.verifySub'), { email: email.trim().toLowerCase() })}
+          </p>
+        </div>
+
+        <div className="lp-auth-fields">
+          <div className="lp-field">
+            <label htmlFor="live-code">{t('liveAccount.verifyCodeLabel')}</label>
+            <input
+              ref={codeInputRef}
+              id="live-code"
+              type="text"
+              name="verification_code"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              placeholder={t('liveAccount.verifyCodePlaceholder')}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              required
+            />
+          </div>
+        </div>
+
+        <p className="lp-auth-hint">{t('liveAccount.verifyHint')}</p>
+
+        {errorMessage ? (
+          <p className="lp-form-error lp-auth-error" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          className="lp-btn lp-btn-lg lp-form-submit lp-live-submit lp-auth-submit"
+          disabled={busy}
+        >
+          {busy ? t('liveAccount.verifySubmitting') : t('liveAccount.verifySubmit')}
+        </button>
+
+        <div className="lp-auth-verify-actions">
+          <button
+            type="button"
+            className="lp-auth-secondary-btn"
+            onClick={handleResend}
+            disabled={busy || resendCooldown > 0}
+          >
+            {resendCooldown > 0
+              ? formatTemplate(t('liveAccount.verifyResendIn'), { sec: resendCooldown })
+              : t('liveAccount.verifyResend')}
+          </button>
+          <button
+            type="button"
+            className="lp-auth-secondary-btn lp-auth-secondary-btn--ghost"
+            onClick={handleBackToForm}
+            disabled={busy}
+          >
+            {t('liveAccount.verifyBack')}
+          </button>
+        </div>
+      </form>
+    )
+  }
+
   return (
-    <form className="lp-form lp-live-account-form lp-auth-form" onSubmit={handleSubmit} noValidate>
+    <form className="lp-form lp-live-account-form lp-auth-form" onSubmit={handleSubmitForm} noValidate>
       <div className="lp-auth-fields">
         <div className="lp-field">
           <label htmlFor="live-fullname">{t('liveAccount.fullName')}</label>
@@ -192,8 +389,9 @@ export function LiveAccountForm() {
       <button
         type="submit"
         className="lp-btn lp-btn-lg lp-form-submit lp-live-submit lp-auth-submit"
+        disabled={busy}
       >
-        {t('liveAccount.submit')}
+        {busy ? t('liveAccount.sendingCode') : t('liveAccount.sendCode')}
       </button>
     </form>
   )
