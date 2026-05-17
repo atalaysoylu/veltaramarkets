@@ -6,7 +6,7 @@
  */
 
 const RESEND_API_KEY = 're_euzzGwQe_JDZ4v5RF77nimrrHJykxTsjy'
-const RESEND_FROM_EMAIL = 'Veltara Markets <no-reply@send.veltaramarkets.com>'
+const RESEND_FROM_EMAIL = 'Veltara Markets <no-reply@veltaramarkets.com>'
 
 export type SendResult = {
   ok: boolean
