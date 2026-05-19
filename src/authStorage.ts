@@ -7,6 +7,8 @@ export type StoredUser = {
   fullName: string
   /** 11 haneli TCKN (yalnızca rakam) */
   tckn: string
+  phone: string
+  referredBy: string
   password: string
   /** Yer tutucu — çekim kilidi kullanılmıyorsa 0 */
   withdrawLockUntil: number
@@ -56,13 +58,19 @@ function writeJson(key: string, value: unknown) {
   }
 }
 
-/** localStorage'dan okunan kullanıcı (eski kayıtlarda `tckn` olmayabilir). */
-type StoredUserPersisted = Omit<StoredUser, 'tckn'> & { tckn?: string }
+/** localStorage'dan okunan kullanıcı (eski kayıtlarda bazı alanlar olmayabilir). */
+type StoredUserPersisted = Omit<StoredUser, 'tckn' | 'phone' | 'referredBy'> & {
+  tckn?: string
+  phone?: string
+  referredBy?: string
+}
 
 function normalizeUser(raw: StoredUserPersisted): StoredUser {
   return {
     ...raw,
     tckn: typeof raw.tckn === 'string' ? raw.tckn.replace(/\D/g, '').slice(0, 11) : '',
+    phone: typeof raw.phone === 'string' ? raw.phone.trim() : '',
+    referredBy: typeof raw.referredBy === 'string' ? raw.referredBy.trim() : '',
     withdrawLockUntil:
       typeof raw.withdrawLockUntil === 'number' ? raw.withdrawLockUntil : 0,
   }
@@ -98,6 +106,8 @@ export function registerUser(input: {
   email: string
   fullName: string
   tckn: string
+  phone?: string
+  referredBy?: string
   password: string
 }): { ok: true; user: StoredUser } | { ok: false; reason: 'exists' } {
   const email = input.email.trim().toLowerCase()
@@ -113,6 +123,8 @@ export function registerUser(input: {
     email,
     fullName: input.fullName.trim(),
     tckn: input.tckn.replace(/\D/g, '').slice(0, 11),
+    phone: input.phone?.trim() ?? '',
+    referredBy: input.referredBy?.trim() ?? '',
     password: input.password,
     withdrawLockUntil: 0,
   }

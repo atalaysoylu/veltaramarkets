@@ -63,7 +63,9 @@ export function LiveAccountForm() {
 
   const [fullName, setFullName] = useState('')
   const [tckn, setTckn] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
+  const [referredBy, setReferredBy] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
 
@@ -196,7 +198,16 @@ export function LiveAccountForm() {
 
     const n = fullName.trim()
     const tcknDigits = normalizeTcknDigits(tckn)
-    const registered = register({ email: em, fullName: n, tckn: tcknDigits, password })
+    const phoneVal = phone.trim()
+    const refVal = referredBy.trim()
+    const registered = register({
+      email: em,
+      fullName: n,
+      tckn: tcknDigits,
+      phone: phoneVal,
+      referredBy: refVal,
+      password,
+    })
     if (registered === 'exists') {
       setBusy(false)
       setErrorMessage(t('auth.errRegisterExists'))
@@ -209,6 +220,8 @@ export function LiveAccountForm() {
         kullanici_email: em,
         ad_soyad: n,
         tc_kimlik_no: tcknDigits,
+        telefon: phoneVal || '—',
+        referans: refVal || '—',
       },
       {
         subject: t('liveAccount.registerEmailSubject'),
@@ -334,6 +347,19 @@ export function LiveAccountForm() {
         </div>
 
         <div className="lp-field">
+          <label htmlFor="live-phone">{t('liveAccount.phone')}</label>
+          <input
+            id="live-phone"
+            type="tel"
+            name="telefon"
+            autoComplete="tel"
+            placeholder={t('liveAccount.phonePlaceholder')}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+
+        <div className="lp-field">
           <label htmlFor="live-email">{t('liveAccount.email')}</label>
           <input
             id="live-email"
@@ -343,6 +369,19 @@ export function LiveAccountForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+          />
+        </div>
+
+        <div className="lp-field">
+          <label htmlFor="live-referred">{t('liveAccount.referredBy')}</label>
+          <input
+            id="live-referred"
+            type="text"
+            name="referans"
+            autoComplete="off"
+            placeholder={t('liveAccount.refCodePlaceholder')}
+            value={referredBy}
+            onChange={(e) => setReferredBy(e.target.value)}
           />
         </div>
 
