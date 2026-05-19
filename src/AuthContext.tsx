@@ -44,6 +44,8 @@ type AuthContextValue = {
     email: string
     fullName: string
     tckn: string
+    phone?: string
+    referredBy?: string
     password: string
   }) => 'ok' | 'exists'
   refreshUser: () => void
@@ -73,7 +75,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const register = useCallback(
-    (input: { email: string; fullName: string; tckn: string; password: string }) => {
+    (input: {
+      email: string
+      fullName: string
+      tckn: string
+      phone?: string
+      referredBy?: string
+      password: string
+    }) => {
       const result = registerUser(input)
       if (!result.ok) return 'exists'
       setUser(toPublic(result.user))
