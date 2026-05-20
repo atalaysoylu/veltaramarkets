@@ -17,5 +17,6 @@ export function formCoFailureMessage(
   if (raw.includes('web server') || raw.includes('html files')) {
     return t('form.errSubmitNeedServer')
   }
+  if (result.message?.trim()) return result.message.trim()
   return t(genericKey)
 }
