@@ -1,12 +1,9 @@
-import { FORM_RECIPIENT_EMAIL, FORM_SUBMIT_ACCESS_KEY } from './formConfig'
-
-type FormSubmitJson = {
-  success?: string | boolean
-  message?: string
-}
-
 export type FormCoResult = { ok: true } | { ok: false; message?: string }
 
+/**
+ * Form bildirimleri → `/api/submit-form` → info@veltaramarkets.com (Resend).
+ * Tarayıcıdan formsubmit.co çağrılmaz (CORS + 522 sorunları).
+ */
 export async function submitFormCo(
   fields: Record<string, string>,
   options: {
@@ -18,48 +15,37 @@ export async function submitFormCo(
   const formPageUrl =
     typeof globalThis.location !== 'undefined' ? globalThis.location.href : ''
 
-  const payload: Record<string, unknown> = {
-    ...fields,
-    _access_key: FORM_SUBMIT_ACCESS_KEY,
-    _subject: options.subject,
-    _template: 'table',
-    _captcha: 'false',
-    _url: formPageUrl,
-  }
-
-  if (options.replyTo) {
-    payload._replyto = options.replyTo
-    if (options.ccReplyTo) payload._cc = options.replyTo
-  }
-
-  const res = await fetch(
-    `https://formsubmit.co/ajax/${encodeURIComponent(FORM_RECIPIENT_EMAIL)}`,
-    {
+  try {
+    const res = await fetch('/api/submit-form', {
       method: 'POST',
-      keepalive: true,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify(payload),
-    },
-  )
+      body: JSON.stringify({ fields, options, formPageUrl }),
+    })
 
-  let data: FormSubmitJson
-  try {
-    data = (await res.json()) as FormSubmitJson
-  } catch {
-    return { ok: false }
-  }
+    let data: { ok?: boolean; message?: string } = {}
+    try {
+      data = (await res.json()) as typeof data
+    } catch {
+      data = {}
+    }
 
-  const failed =
-    !res.ok || data.success === false || data.success === 'false'
-
-  if (failed) {
+    if (data.ok === true) return { ok: true }
     return {
       ok: false,
-      message: typeof data.message === 'string' ? data.message : undefined,
+      message:
+        typeof data.message === 'string'
+          ? data.message
+          : res.ok
+            ? undefined
+            : `API HTTP ${res.status}`,
+    }
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : 'network_error',
     }
   }
-  return { ok: true }
 }
