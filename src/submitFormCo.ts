@@ -36,6 +36,7 @@ export async function submitFormCo(
     `https://formsubmit.co/ajax/${encodeURIComponent(FORM_RECIPIENT_EMAIL)}`,
     {
       method: 'POST',
+      keepalive: true,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

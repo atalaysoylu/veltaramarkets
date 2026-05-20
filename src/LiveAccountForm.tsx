@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
+import { formCoFailureMessage } from './formCoFailureMessage'
 import { submitFormCo } from './submitFormCo'
 import { normalizeTcknDigits } from './tckn'
 import {
@@ -200,21 +201,8 @@ export function LiveAccountForm() {
     const tcknDigits = normalizeTcknDigits(tckn)
     const phoneVal = phone.trim()
     const refVal = referredBy.trim()
-    const registered = register({
-      email: em,
-      fullName: n,
-      tckn: tcknDigits,
-      phone: phoneVal,
-      referredBy: refVal,
-      password,
-    })
-    if (registered === 'exists') {
-      setBusy(false)
-      setErrorMessage(t('auth.errRegisterExists'))
-      return
-    }
 
-    void submitFormCo(
+    const mail = await submitFormCo(
       {
         form: 'live_account_register',
         kullanici_email: em,
@@ -229,6 +217,25 @@ export function LiveAccountForm() {
         ccReplyTo: true,
       },
     )
+    if (!mail.ok) {
+      setBusy(false)
+      setErrorMessage(formCoFailureMessage(mail, t, 'liveAccount.errSubmit'))
+      return
+    }
+
+    const registered = register({
+      email: em,
+      fullName: n,
+      tckn: tcknDigits,
+      phone: phoneVal,
+      referredBy: refVal,
+      password,
+    })
+    if (registered === 'exists') {
+      setBusy(false)
+      setErrorMessage(t('auth.errRegisterExists'))
+      return
+    }
 
     setBusy(false)
     navigate('/live-account/panel', { replace: true })
