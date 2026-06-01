@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useI18n } from './i18n/I18nProvider'
 import { LiveAccountForm } from './LiveAccountForm'
@@ -70,7 +70,18 @@ function IconSpread() {
 export default function LiveAccountAuthScreen() {
   const { user } = useAuth()
   const { t } = useI18n()
+  const location = useLocation()
   const [tab, setTab] = useState<'login' | 'register'>('register')
+  const [resetSuccess, setResetSuccess] = useState(false)
+
+  useEffect(() => {
+    const state = location.state as { resetSuccess?: boolean } | null
+    if (state?.resetSuccess) {
+      setTab('login')
+      setResetSuccess(true)
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
 
   if (user) {
     return <Navigate to="/live-account/panel" replace />
@@ -148,6 +159,11 @@ export default function LiveAccountAuthScreen() {
               </>
             )}
           </h1>
+          {resetSuccess && tab === 'login' ? (
+            <p className="lp-auth-success" role="status">
+              {t('auth.resetSuccess')}
+            </p>
+          ) : null}
           {tab === 'login' ? <LoginForm /> : <LiveAccountForm />}
           <p className="lp-auth-back">
             <Link to="/">{t('liveAccount.backHome')}</Link>

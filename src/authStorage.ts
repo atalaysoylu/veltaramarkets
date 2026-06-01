@@ -145,6 +145,19 @@ export function logoutSession() {
   setSession(null)
 }
 
+export function updateUserPassword(
+  email: string,
+  newPassword: string,
+): 'ok' | 'not_found' {
+  const e = email.trim().toLowerCase()
+  const users = getStoredUsers()
+  const idx = users.findIndex((u) => u.email === e)
+  if (idx < 0) return 'not_found'
+  users[idx] = { ...users[idx], password: newPassword }
+  saveStoredUsers(users)
+  return 'ok'
+}
+
 export function getWithdrawalRequests(): WithdrawalRequest[] {
   return readJson<WithdrawalRequest[]>(KEY_WITHDRAWALS, [])
 }

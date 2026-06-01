@@ -274,6 +274,36 @@
   text-underline-offset: 0.18em;
 }
 
+.lp-auth-forgot-wrap {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.lp-auth-forgot-link {
+  font-size: 0.8125rem;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.lp-auth-forgot-link:hover {
+  color: #0f172a;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.lp-auth-success {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 /* Sol panel — biraz daha sakin */
 .lp-live-split-card .lp-live-aside {
   background: linear-gradient(165deg, #eceff4 0%, #e8ecf1 48%, #e2e7ef 100%);

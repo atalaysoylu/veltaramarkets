@@ -43,14 +43,19 @@ async function postJson<T>(url: string, body: unknown): Promise<T | { __networkE
   }
 }
 
-export async function sendVerificationCode(email: string): Promise<SendCodeResult> {
+export type VerificationPurpose = 'register' | 'reset'
+
+export async function sendVerificationCode(
+  email: string,
+  purpose: VerificationPurpose = 'register',
+): Promise<SendCodeResult> {
   const data = await postJson<{
     ok: boolean
     token?: string
     expiresInSec?: number
     reason?: string
     detail?: string
-  }>('/api/send-verification-code', { email })
+  }>('/api/send-verification-code', { email, purpose })
 
   if ('__networkError' in data) return { ok: false, reason: 'network_error' }
 

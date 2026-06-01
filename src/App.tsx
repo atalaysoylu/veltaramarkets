@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './HomePage'
 import LiveAccountLayout from './LiveAccountLayout'
 import LiveAccountAuthScreen from './LiveAccountAuthScreen'
+import ForgotPasswordScreen from './ForgotPasswordScreen'
 import LiveAccountPanelScreen from './LiveAccountPanelScreen'
 import WithdrawRequestScreen from './WithdrawRequestScreen'
 import DepositFlowScreen from './DepositFlowScreen'
@@ -14,6 +15,7 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/live-account" element={<LiveAccountLayout />}>
         <Route index element={<LiveAccountAuthScreen />} />
+        <Route path="forgot-password" element={<ForgotPasswordScreen />} />
         <Route
           path="panel"
           element={

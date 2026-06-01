@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useI18n } from './i18n/I18nProvider'
 
@@ -101,6 +101,11 @@ export function LoginForm() {
               <EyeIcon hidden={showPwd} />
             </button>
           </div>
+          <p className="lp-auth-forgot-wrap">
+            <Link to="/live-account/forgot-password" className="lp-auth-forgot-link">
+              {t('auth.forgotPassword')}
+            </Link>
+          </p>
         </div>
       </div>
 

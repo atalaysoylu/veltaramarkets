@@ -35,9 +35,23 @@ function signPayload(payload: CodePayload): string {
   return `${data}.${sig}`
 }
 
+type VerifyPurpose = 'register' | 'reset'
+
 /* ─────────────────────────── e-posta gönderimi (Resend) ─────────────────────────── */
 
-function buildText(code: string): string {
+function buildText(code: string, purpose: VerifyPurpose): string {
+  if (purpose === 'reset') {
+    return [
+      'Veltara Markets — Şifre Sıfırlama',
+      '',
+      `Şifrenizi sıfırlamak için doğrulama kodunuz: ${code}`,
+      '',
+      'Bu kodu 10 dakika içinde girmeniz gerekir.',
+      'Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz; şifreniz değişmez.',
+      '',
+      '— Veltara Markets',
+    ].join('\n')
+  }
   return [
     'Veltara Markets — Doğrulama Kodu',
     '',
@@ -59,7 +73,15 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-function buildHtml(code: string): string {
+function buildHtml(code: string, purpose: VerifyPurpose): string {
+  const isReset = purpose === 'reset'
+  const heading = isReset ? 'Şifrenizi sıfırlayın' : 'E-postanızı doğrulayın'
+  const bodyCopy = isReset
+    ? 'Şifrenizi sıfırlamak için aşağıdaki <strong>6 haneli kodu</strong> açık olan şifre sıfırlama ekranına girin. Kod <strong>10 dakika</strong> içinde geçerlidir.'
+    : 'Veltara Markets hesap kaydınızı tamamlamak için aşağıdaki <strong>6 haneli kodu</strong> açık olan kayıt ekranına girin. Kod <strong>10 dakika</strong> içinde geçerlidir.'
+  const footerCopy = isReset
+    ? 'Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz; şifreniz değişmez.'
+    : 'Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz; hesabınız oluşturulmaz.'
   return `<!doctype html>
 <html lang="tr">
   <body style="margin:0;padding:0;background:#f4f6fb;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a">
@@ -74,10 +96,9 @@ function buildHtml(code: string): string {
             </tr>
             <tr>
               <td style="padding:28px">
-                <h1 style="margin:0 0 8px;font-size:20px;color:#0f172a">E-postanızı doğrulayın</h1>
+                <h1 style="margin:0 0 8px;font-size:20px;color:#0f172a">${heading}</h1>
                 <p style="margin:0 0 20px;color:#334155;font-size:14px;line-height:1.6">
-                  Veltara Markets hesap kaydınızı tamamlamak için aşağıdaki <strong>6 haneli kodu</strong>
-                  açık olan kayıt ekranına girin. Kod <strong>10 dakika</strong> içinde geçerlidir.
+                  ${bodyCopy}
                 </p>
                 <div style="margin:18px 0;padding:18px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;text-align:center">
                   <div style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:30px;letter-spacing:8px;color:#003366;font-weight:700">
@@ -85,7 +106,7 @@ function buildHtml(code: string): string {
                   </div>
                 </div>
                 <p style="margin:18px 0 0;color:#475569;font-size:13px;line-height:1.55">
-                  Bu işlemi siz başlatmadıysanız bu e-postayı yok sayabilirsiniz; hesabınız oluşturulmaz.
+                  ${footerCopy}
                 </p>
               </td>
             </tr>
@@ -104,7 +125,15 @@ function buildHtml(code: string): string {
 
 type SendResult = { ok: boolean; status?: number; error?: string }
 
-async function sendVerificationEmail(to: string, code: string): Promise<SendResult> {
+async function sendVerificationEmail(
+  to: string,
+  code: string,
+  purpose: VerifyPurpose,
+): Promise<SendResult> {
+  const subject =
+    purpose === 'reset'
+      ? 'Veltara Markets — Şifre Sıfırlama Kodunuz'
+      : 'Veltara Markets — Doğrulama Kodunuz'
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -115,9 +144,9 @@ async function sendVerificationEmail(to: string, code: string): Promise<SendResu
       body: JSON.stringify({
         from: RESEND_FROM_EMAIL,
         to: [to],
-        subject: 'Veltara Markets — Doğrulama Kodunuz',
-        html: buildHtml(code),
-        text: buildText(code),
+        subject,
+        html: buildHtml(code, purpose),
+        text: buildText(code, purpose),
       }),
     })
 
@@ -151,15 +180,26 @@ function safeJsonParse(s: string): Record<string, unknown> | null {
   }
 }
 
+function readBody(req: VercelRequest): Record<string, unknown> | null {
+  if (typeof req.body === 'string') return safeJsonParse(req.body)
+  if (req.body && typeof req.body === 'object' && !Array.isArray(req.body)) {
+    return req.body as Record<string, unknown>
+  }
+  return null
+}
+
 function readEmail(req: VercelRequest): string | null {
-  const body =
-    typeof req.body === 'string'
-      ? safeJsonParse(req.body)
-      : (req.body as Record<string, unknown> | undefined)
-  const raw = body && typeof body === 'object' ? (body as Record<string, unknown>).email : undefined
+  const body = readBody(req)
+  const raw = body?.email
   if (typeof raw !== 'string') return null
   const email = raw.trim().toLowerCase()
   return isValidEmail(email) ? email : null
+}
+
+function readPurpose(req: VercelRequest): VerifyPurpose {
+  const body = readBody(req)
+  const raw = body?.purpose
+  return raw === 'reset' ? 'reset' : 'register'
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -173,6 +213,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.status(400).json({ ok: false, reason: 'invalid_email' })
     return
   }
+  const purpose = readPurpose(req)
 
   const code = String(crypto.randomInt(0, 1_000_000)).padStart(6, '0')
   const payload: CodePayload = {
@@ -182,7 +223,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   const token = signPayload(payload)
 
-  const sent = await sendVerificationEmail(email, code)
+  const sent = await sendVerificationEmail(email, code, purpose)
   if (!sent.ok) {
     res.status(502).json({ ok: false, reason: 'email_failed', detail: sent.error })
     return
