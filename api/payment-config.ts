@@ -40,18 +40,11 @@ type PaymentConfig = {
 const FALLBACK: PaymentConfig = {
   recipientAccounts: [
     {
-      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
-      bank: 'Yapı Kredi',
-      iban: 'TR66 0006 7010 0000 0199 4345 96',
+      holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',
+      bank: 'Ziraat katılım',
+      iban: 'TR71 0020 9000 0248 9202 0000 01',
       swift: '',
-      senderBankIds: ['yapikredi'],
-    },
-    {
-      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
-      bank: 'QNB Finansbank',
-      iban: 'TR19 0011 1000 0000 0165 6876 12',
-      swift: '',
-      senderBankIds: ['qnb'],
+      senderBankIds: ['ziraatkatilim'],
     },
   ],
   crypto: [

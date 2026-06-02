@@ -23,18 +23,11 @@ export type PaymentConfig = {
 export const FALLBACK_PAYMENT_CONFIG: PaymentConfig = {
   recipientAccounts: [
     {
-      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
-      bank: 'Yapı Kredi',
-      iban: 'TR66 0006 7010 0000 0199 4345 96',
+      holder: 'PİRAMİT BASILI YAYIM HİZMETLERİ PAZARLAMA LİMİTED ŞİRKETİ',
+      bank: 'Ziraat katılım',
+      iban: 'TR71 0020 9000 0248 9202 0000 01',
       swift: '',
-      senderBankIds: ['yapikredi'],
-    },
-    {
-      holder: 'EUROLİNE GLOBAL OFSET BASIM YAYIM TİCARET LİMİTED ŞİRKETİ',
-      bank: 'QNB Finansbank',
-      iban: 'TR19 0011 1000 0000 0165 6876 12',
-      swift: '',
-      senderBankIds: ['qnb'],
+      senderBankIds: ['ziraatkatilim'],
     },
   ],
   crypto: [
@@ -126,8 +119,15 @@ export function recipientAccountsForSenderBank(
 ): IbanInfo[] {
   if (accounts.length === 0) return []
   if (!senderBankId) return accounts
-  const matched = accounts.filter((a) => a.senderBankIds?.includes(senderBankId))
+  const senderNorm = normalizeBankId(senderBankId)
+  const matched = accounts.filter((a) =>
+    a.senderBankIds?.some((id) => normalizeBankId(id) === senderNorm),
+  )
   return matched.length > 0 ? matched : accounts
+}
+
+export function normalizeBankId(value: string) {
+  return value.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
 }
 
 export function compactIban(ibanFormatted: string) {

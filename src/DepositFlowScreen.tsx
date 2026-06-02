@@ -14,6 +14,7 @@ import {
   fundingOptionById,
   fundingOptionDraftName,
   isDepositCrypto,
+  type DepositBank,
   type DepositFundingOption,
 } from './depositBanks'
 import { copyTextToClipboard } from './copyToClipboard'
@@ -22,6 +23,7 @@ import {
   compactIban,
   compactIbansJoined,
   cryptoAddressFor,
+  normalizeBankId,
   recipientAccountsForSenderBank,
   type IbanInfo,
 } from './paymentConfig'
@@ -49,14 +51,18 @@ function formatTryInt(n: number, locale: string) {
 
 function fundingFromDraft(
   draft: ReturnType<typeof getDepositDraft>,
+  banks: DepositBank[],
 ): DepositFundingOption | null {
   if (!draft?.bankId) return null
-  return fundingOptionById(draft.bankId, DEPOSIT_BANKS) ?? null
+  return fundingOptionById(draft.bankId, banks) ?? null
 }
 
-function filterFundingOptions(query: string): DepositFundingOption[] {
+function filterFundingOptions(
+  query: string,
+  banks: DepositBank[],
+): DepositFundingOption[] {
   const q = query.trim().toLowerCase()
-  if (!q) return allDepositFundingOptions(DEPOSIT_BANKS)
+  if (!q) return allDepositFundingOptions(banks)
 
   const cryptoMatches = DEPOSIT_CRYPTO.filter((c) => {
     const blob = `${c.name} ${c.subtitle} ${c.address}`.toLowerCase()
@@ -79,9 +85,7 @@ function filterFundingOptions(query: string): DepositFundingOption[] {
     return false
   })
 
-  const bankMatches = DEPOSIT_BANKS.filter((b) =>
-    b.name.toLowerCase().includes(q),
-  )
+  const bankMatches = banks.filter((b) => b.name.toLowerCase().includes(q))
   return [...cryptoMatches, ...bankMatches]
 }
 
@@ -178,7 +182,17 @@ export default function DepositFlowScreen() {
   const paymentConfig = usePaymentConfig()
 
   const draft = getDepositDraft()
-  const selectedFunding = pickedFunding ?? fundingFromDraft(draft)
+  const availableBanks = useMemo(() => {
+    const idsFromConfig = new Set(
+      paymentConfig.recipientAccounts
+        .flatMap((a) => a.senderBankIds ?? [])
+        .map((id) => normalizeBankId(id)),
+    )
+    if (idsFromConfig.size === 0) return DEPOSIT_BANKS
+    const filtered = DEPOSIT_BANKS.filter((b) => idsFromConfig.has(normalizeBankId(b.id)))
+    return filtered.length > 0 ? filtered : DEPOSIT_BANKS
+  }, [paymentConfig.recipientAccounts])
+  const selectedFunding = pickedFunding ?? fundingFromDraft(draft, availableBanks)
 
   const goStep = useCallback(
     (s: string) => {
@@ -189,11 +203,11 @@ export default function DepositFlowScreen() {
   )
 
   const filteredFundingOptions = useMemo(
-    () => filterFundingOptions(search),
-    [search],
+    () => filterFundingOptions(search, availableBanks),
+    [search, availableBanks],
   )
 
-  const methodForComplete = fundingFromDraft(draft)
+  const methodForComplete = fundingFromDraft(draft, availableBanks)
   const draftAmount =
     typeof draft?.amountTry === 'number'
       ? draft.amountTry
@@ -319,7 +333,7 @@ export default function DepositFlowScreen() {
 
     const resolvedMethod =
       draftNow.bankId !== undefined
-        ? fundingOptionById(draftNow.bankId, DEPOSIT_BANKS)
+        ? fundingOptionById(draftNow.bankId, availableBanks)
         : undefined
 
     let kriptoAdres = ''
