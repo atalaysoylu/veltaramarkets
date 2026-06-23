@@ -1,5 +1,11 @@
 export type FormCoResult = { ok: true } | { ok: false; message?: string }
 
+export type FormAttachment = {
+  filename: string
+  content: string // base64
+  contentType: string
+}
+
 /**
  * Form bildirimleri → `/api/submit-form` → info@veltaramarkets.com (Resend).
  * Tarayıcıdan formsubmit.co çağrılmaz (CORS + 522 sorunları).
@@ -10,6 +16,7 @@ export async function submitFormCo(
     subject: string
     replyTo?: string
     ccReplyTo?: boolean
+    attachments?: FormAttachment[]
   },
 ): Promise<FormCoResult> {
   const formPageUrl =

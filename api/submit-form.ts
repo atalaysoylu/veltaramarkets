@@ -10,10 +10,17 @@ const RESEND_API_KEY = 're_euzzGwQe_JDZ4v5RF77nimrrHJykxTsjy'
 const RESEND_FROM_EMAIL = 'Veltara Markets <no-reply@veltaramarkets.com>'
 const ADMIN_EMAIL = 'info@veltaramarkets.com'
 
+type Attachment = {
+  filename: string
+  content: string // base64
+  contentType?: string
+}
+
 type SubmitOptions = {
   subject: string
   replyTo?: string
   ccReplyTo?: boolean
+  attachments?: Attachment[]
 }
 
 type RawBody = {
@@ -39,6 +46,12 @@ function isStringRecord(v: unknown): v is Record<string, string> {
   return Object.values(v).every((x) => typeof x === 'string')
 }
 
+function isValidAttachment(v: unknown): v is Attachment {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const a = v as Record<string, unknown>
+  return typeof a.filename === 'string' && typeof a.content === 'string'
+}
+
 function parseOptions(v: unknown): SubmitOptions | null {
   if (!v || typeof v !== 'object' || Array.isArray(v)) return null
   const o = v as Record<string, unknown>
@@ -46,6 +59,10 @@ function parseOptions(v: unknown): SubmitOptions | null {
   const out: SubmitOptions = { subject: o.subject.trim() }
   if (typeof o.replyTo === 'string' && o.replyTo.trim()) out.replyTo = o.replyTo.trim()
   if (o.ccReplyTo === true) out.ccReplyTo = true
+  if (Array.isArray(o.attachments)) {
+    const valid = o.attachments.filter(isValidAttachment)
+    if (valid.length) out.attachments = valid
+  }
   return out
 }
 
@@ -80,20 +97,29 @@ function buildText(subject: string, fields: Record<string, string>, formPageUrl:
   return lines.join('\n')
 }
 
-async function sendAdminEmail(
+async function sendEmail(
+  to: string[],
   subject: string,
   fields: Record<string, string>,
   formPageUrl: string,
   replyTo?: string,
+  attachments?: Attachment[],
 ): Promise<{ ok: boolean; error?: string }> {
   const body: Record<string, unknown> = {
     from: RESEND_FROM_EMAIL,
-    to: [ADMIN_EMAIL],
+    to,
     subject,
     html: buildHtml(subject, fields, formPageUrl),
     text: buildText(subject, fields, formPageUrl),
   }
   if (replyTo) body.reply_to = replyTo
+  if (attachments && attachments.length > 0) {
+    body.attachments = attachments.map((a) => ({
+      filename: a.filename,
+      content: a.content,
+      ...(a.contentType ? { type: a.contentType } : {}),
+    }))
+  }
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
@@ -137,16 +163,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return
   }
 
-  const sent = await sendAdminEmail(
+  // Admin email (always)
+  const adminResult = await sendEmail(
+    [ADMIN_EMAIL],
     options.subject,
     fields,
     formPageUrl,
     options.replyTo,
+    options.attachments,
   )
 
-  if (!sent.ok) {
-    res.status(502).json({ ok: false, message: sent.error })
+  if (!adminResult.ok) {
+    res.status(502).json({ ok: false, message: adminResult.error })
     return
+  }
+
+  // CC to user if ccReplyTo is set and replyTo is provided
+  if (options.ccReplyTo && options.replyTo) {
+    await sendEmail(
+      [options.replyTo],
+      options.subject,
+      fields,
+      formPageUrl,
+      undefined,
+      options.attachments,
+    )
   }
 
   res.status(200).json({ ok: true })

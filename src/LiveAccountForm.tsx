@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { formatTemplate, useI18n } from './i18n/I18nProvider'
 import { formCoFailureMessage } from './formCoFailureMessage'
-import { submitFormCo } from './submitFormCo'
+import { submitFormCo, type FormAttachment } from './submitFormCo'
 import { normalizeTcknDigits } from './tckn'
 import {
   sendVerificationCode,
@@ -53,6 +53,22 @@ function EyeIcon({ hidden }: { hidden?: boolean }) {
   )
 }
 
+const ALLOWED_KYC_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp']
+const MAX_KYC_BYTES = 10 * 1024 * 1024 // 10 MB
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      // strip "data:...;base64," prefix
+      resolve(result.split(',')[1] ?? '')
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file)
+  })
+}
+
 const RESEND_COOLDOWN_SEC = 30
 
 export function LiveAccountForm() {
@@ -69,6 +85,9 @@ export function LiveAccountForm() {
   const [referredBy, setReferredBy] = useState('')
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
+
+  const [kycResidence, setKycResidence] = useState<File | null>(null)
+  const [kycId, setKycId] = useState<File | null>(null)
 
   const [code, setCode] = useState('')
   const [token, setToken] = useState('')
@@ -142,6 +161,20 @@ export function LiveAccountForm() {
       setErrorMessage(t('liveAccount.errPassword'))
       return
     }
+    if (!kycResidence || !kycId) {
+      setErrorMessage(t('liveAccount.errKycRequired'))
+      return
+    }
+    for (const file of [kycResidence, kycId]) {
+      if (!ALLOWED_KYC_TYPES.includes(file.type)) {
+        setErrorMessage(t('liveAccount.errKycType'))
+        return
+      }
+      if (file.size > MAX_KYC_BYTES) {
+        setErrorMessage(t('liveAccount.errKycSize'))
+        return
+      }
+    }
     if (findUserByEmail(em)) {
       setErrorMessage(t('auth.errRegisterExists'))
       return
@@ -202,6 +235,18 @@ export function LiveAccountForm() {
     const phoneVal = phone.trim()
     const refVal = referredBy.trim()
 
+    let attachments: FormAttachment[] = []
+    if (kycResidence && kycId) {
+      const [res64, id64] = await Promise.all([
+        fileToBase64(kycResidence),
+        fileToBase64(kycId),
+      ])
+      attachments = [
+        { filename: kycResidence.name, content: res64, contentType: kycResidence.type },
+        { filename: kycId.name, content: id64, contentType: kycId.type },
+      ]
+    }
+
     const mail = await submitFormCo(
       {
         form: 'live_account_register',
@@ -210,11 +255,14 @@ export function LiveAccountForm() {
         tc_kimlik_no: tcknDigits,
         telefon: phoneVal || '—',
         referans: refVal || '—',
+        kyc_ikamet_belgesi: kycResidence?.name ?? '—',
+        kyc_kimlik_belgesi: kycId?.name ?? '—',
       },
       {
         subject: t('liveAccount.registerEmailSubject'),
         replyTo: em,
         ccReplyTo: true,
+        attachments,
       },
     )
     if (!mail.ok) {
@@ -419,6 +467,48 @@ export function LiveAccountForm() {
               <EyeIcon hidden={showPwd} />
             </button>
           </div>
+        </div>
+
+        <div className="lp-field">
+          <label htmlFor="live-kyc-residence">{t('liveAccount.kycResidenceLabel')}</label>
+          <p className="lp-auth-hint" style={{ marginTop: 0, marginBottom: 6 }}>
+            {t('liveAccount.kycResidenceHint')}
+          </p>
+          <input
+            id="live-kyc-residence"
+            type="file"
+            name="kyc_ikamet"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            className="lp-file-input"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setKycResidence(e.target.files?.[0] ?? null)
+            }
+            required
+          />
+          {kycResidence && (
+            <p className="lp-file-name">{kycResidence.name}</p>
+          )}
+        </div>
+
+        <div className="lp-field">
+          <label htmlFor="live-kyc-id">{t('liveAccount.kycIdLabel')}</label>
+          <p className="lp-auth-hint" style={{ marginTop: 0, marginBottom: 6 }}>
+            {t('liveAccount.kycIdHint')}
+          </p>
+          <input
+            id="live-kyc-id"
+            type="file"
+            name="kyc_kimlik"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            className="lp-file-input"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setKycId(e.target.files?.[0] ?? null)
+            }
+            required
+          />
+          {kycId && (
+            <p className="lp-file-name">{kycId.name}</p>
+          )}
         </div>
       </div>
 
