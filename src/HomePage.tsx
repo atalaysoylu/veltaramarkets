@@ -14,7 +14,7 @@ import { TickerBanner } from './TickerBanner'
 import './App.css'
 
 const FORM_SECTION_ID = 'analiz'
-const WHATSAPP_SUPPORT_URL = 'https://wa.me/447938315394'
+const WHATSAPP_SUPPORT_URL = 'https://wa.me/447515752950'
 
 function IconChart() {
   return (
@@ -376,7 +376,7 @@ export default function HomePage() {
               <p className="lp-footer-contact-line">{t('footer.ukOfficeAddress')}</p>
               <p className="lp-footer-contact-line">
                 <strong>{t('footer.supportPhoneLabel')}:</strong>{' '}
-                <a href="tel:+447938315394">{t('footer.supportPhoneValue')}</a>
+                <a href="tel:+447515752950">{t('footer.supportPhoneValue')}</a>
               </p>
               <a
                 href={WHATSAPP_SUPPORT_URL}

@@ -423,7 +423,7 @@ export const tr = {
     ukOfficeAddress:
       'Canary Wharf Financial District, 40 Bank Street, London E14 5NR, United Kingdom',
     supportPhoneLabel: 'Destek Hattı',
-    supportPhoneValue: '+44 7938 315394',
+    supportPhoneValue: '+44 7515 752950',
     supportWhatsapp: 'WhatsApp Destek',
     colCompany: 'Şirket',
     about: 'Hakkımızda',
@@ -912,7 +912,7 @@ export const en = {
     ukOfficeLabel: 'UK Financial Centre',
     ukOfficeAddress: 'Canary Wharf Financial District, 40 Bank Street, London E14 5NR, UK',
     supportPhoneLabel: 'Support Line',
-    supportPhoneValue: '+44 7938 315394',
+    supportPhoneValue: '+44 7515 752950',
     supportWhatsapp: 'WhatsApp Support',
     colCompany: 'Company',
     about: 'About us',
